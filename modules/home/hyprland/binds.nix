@@ -6,42 +6,50 @@
     };
 
     bind = [
-      # show keybinds list
-      "$mainMod, F1, exec, show-keybinds"
+      # Terminal (i3: Mod1+t)
+      "$mainMod, T, exec, ghostty --gtk-single-instance=true"
 
-      # keybindings
-      "$mainMod, Return, exec, ghostty --gtk-single-instance=true"
-      "ALT, Return, exec, [float; size 1111 700] ghostty"
-      "$mainMod SHIFT, Return, exec, [fullscreen] ghostty"
-      "$mainMod, B, exec, [workspace 1 silent] zen-beta"
-      "$mainMod, Q, killactive,"
-      "$mainMod, F, fullscreen, 0"
-      "$mainMod SHIFT, F, fullscreen, 1"
-      "$mainMod, Space, exec, toggle-float"
-      "$mainMod, D, exec, vicinae vicinae://toggle"
-      "$mainMod SHIFT, D, exec, webcord --enable-features=UseOzonePlatform --ozone-platform=wayland"
-      "$mainMod SHIFT, S, exec, hyprctl dispatch exec '[workspace 5 silent] SoundWireServer'"
-      "$mainMod, Escape, exec, swaylock"
-      "ALT, Escape, exec, hyprlock"
+      # Application launchers (from i3)
+      "$mainMod, I, exec, firefox"  # i3: Mod1+i
+      "$mainMod, N, exec, nemo"  # i3: Mod1+n (file manager)
+      "$mainMod, M, exec, spotify-launcher"  # i3: Mod1+m
+      "$mainMod, E, exec, emacs"  # i3: Mod1+e
+      "$mainMod, D, exec, rofi -show drun"  # i3: Mod1+d (launcher)
+
+      # Bluetooth controls (from i3) - Connect/disconnect headphones
+      "$mainMod, B, exec, bluetoothctl connect 94:DB:56:F7:A5:C7"  # i3: Mod1+b
+      "$mainMod SHIFT, B, exec, bluetoothctl disconnect 94:DB:56:F7:A5:C7"  # i3: Mod1+Shift+b
+      "$mainMod CTRL, B, exec, overskride"  # Open Overskride for BT management
+
+      # Window management (from i3)
+      "$mainMod SHIFT, Q, killactive,"  # i3: Mod1+Shift+q
+      "$mainMod, F, fullscreen, 0"  # i3: Mod1+f
+      "$mainMod, Space, togglefloating,"  # i3: Mod1+Space (floating toggle)
+
+      # Split controls (from i3)
+      "$mainMod, V, layoutmsg, preselect d"  # i3: Mod1+v (split vertical)
+      "$mainMod SHIFT, V, layoutmsg, preselect r"  # i3: Mod1+Shift+v (split horizontal)
+
+      # Scratchpad (from i3)
+      "$mainMod, minus, togglespecialworkspace, scratchpad"  # i3: Mod1+minus (show)
+      "$mainMod SHIFT, minus, movetoworkspace, special:scratchpad"  # i3: Mod1+Shift+minus
+
+      # Workspace back and forth (from i3)
+      "$mainMod, Tab, workspace, previous"  # i3: Mod1+Tab
+
+      # Brightness controls (from i3)
+      "$mainMod, S, exec, brightnessctl set 5%-"  # i3: Mod1+s
+      "$mainMod, A, exec, brightnessctl set 5%+"  # i3: Mod1+a
+
+      # Utility bindings (from i3)
+      "$mainMod SHIFT, S, exec, hyprctl dispatch dpms off"  # i3: Mod1+Shift+s (screen off)
+
+      # Lock and power
+      "$mainMod, Escape, exec, hyprlock"
       "$mainMod SHIFT, Escape, exec, power-menu"
-      "$mainMod, P, pseudo,"
-      "$mainMod, X, togglesplit,"
-      "$mainMod, T, exec, toggle-oppacity"
-      "$mainMod, E, exec, nemo"
-      "ALT, E, exec, hyprctl dispatch exec '[float; size 1111 700] nemo'"
-      "$mainMod SHIFT, B, exec, toggle-waybar"
-      "$mainMod, C ,exec, hyprpicker -a"
-      "$mainMod, W,exec, wallpaper-picker"
-      "$mainMod SHIFT, W,exec, hyprctl dispatch exec '[float; size 925 615] waypaper'"
-      "$mainMod, N, exec, swaync-client -t -sw"
-      "CTRL SHIFT, Escape, exec, hyprctl dispatch exec '[workspace 9] missioncenter'"
-      "$mainMod, equal, exec, woomer"
-      # "$mainMod SHIFT, W, exec, vm-start"
 
-      # screenshot
+      # Screenshot (i3: Print key)
       ",Print, exec, screenshot --copy"
-      "$mainMod, Print, exec, screenshot --save"
-      "$mainMod SHIFT, Print, exec, screenshot --swappy"
 
       # switch focus
       "$mainMod, left,  movefocus, l"
@@ -128,12 +136,19 @@
       "$mainMod ALT, k, moveactive, 0 -80"
       "$mainMod ALT, l, moveactive, 80 0"
 
-      # media and volume controls
-      # ",XF86AudioMute,exec, pamixer -t"
-      ",XF86AudioPlay,exec, playerctl play-pause"
-      ",XF86AudioNext,exec, playerctl next"
-      ",XF86AudioPrev,exec, playerctl previous"
-      ",XF86AudioStop,exec, playerctl stop"
+      # media and volume controls (from i3)
+      ",XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
+      ",XF86AudioRaiseVolume, exec, swayosd-client --output-volume raise"
+      ",XF86AudioLowerVolume, exec, swayosd-client --output-volume lower"
+      ",XF86AudioPlay, exec, playerctl play-pause"
+      ",XF86AudioNext, exec, playerctl next"
+      ",XF86AudioPrev, exec, playerctl previous"
+      ",XF86AudioStop, exec, playerctl stop"
+      "$mainMod, semicolon, exec, playerctl play-pause"  # i3: Mod1+semicolon
+
+      # brightness controls with media keys
+      ",XF86MonBrightnessUp, exec, swayosd-client --brightness raise"
+      ",XF86MonBrightnessDown, exec, swayosd-client --brightness lower"
 
       "$mainMod, mouse_down, workspace, e-1"
       "$mainMod, mouse_up, workspace, e+1"

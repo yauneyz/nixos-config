@@ -19,7 +19,23 @@
     "init-wallpaper &"
 
     "ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=false"
-    "[workspace 1 silent] zen-beta"
-    "[workspace 2 silent] ghostty"
+
+    # === Browsers ===
+    "[workspace 2 silent] firefox --new-window"
+    "[workspace 11 silent] firefox --no-remote --new-window -P keep-profile"
+    "[workspace 11 silent] firefox --new-window -P music-youtube https://youtube.com"
+
+    # === Editors (Emacs) ===
+    "[workspace 3 silent] emacsclient -c -a \"\" ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs"
+    "[workspace 9 silent] emacsclient -c -a \"\" ~/development/owl/todo.org"
+    "[workspace 13 silent] emacsclient -c -a \"\" ~/development/org/misc/todo.org"
+    "[workspace 14 silent] emacsclient -c -a \"\" ~/development/org/working-memory.org"
+    "[workspace 15 silent] emacsclient -c -a \"\" ~/development/go/tutorial/"
+
+    # === Development Terminals ===
+    "[workspace 9 silent] ghostty --class go-services -e bash -c 'cd /home/zac/development/go/wikidex; bash start-dev.sh'"
+
+    # === Media ===
+    "[workspace 12 silent] spotify-launcher"
   ];
 }

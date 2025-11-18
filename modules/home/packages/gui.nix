@@ -19,6 +19,7 @@
     dconf-editor
     gnome-disk-utility
     mission-center # GUI resources monitor
+    overskride # Modern Bluetooth manager
     zenity
 
     ## Level editor
