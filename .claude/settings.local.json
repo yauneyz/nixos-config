@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(hyprctl monitors:*)",
+      "Bash(wlr-randr:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -52,15 +52,14 @@
     g = "lazygit";
     gf = "onefetch --number-of-file-churns 0 --no-color-palette";
 
-    gs = "git status";
+    gs = "git status --ignore-submodules";
     gcl = "git clone";
     gd = "git diff";
 
     ga = "git add";
     gaa = "git add --all";
 
-    gc = "git commit";
-    gcm = "git commit -m";
+    gc = "git commit -m";
 
     gpl = "git pull";
     gplo = "git pull origin";
