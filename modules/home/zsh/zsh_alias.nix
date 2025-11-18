@@ -141,6 +141,7 @@
       treeacl = "tree -A -C -L 2";
 
       grep = "grep -n --color=auto";
+      gg   = "grep -rn --color=auto";
 
 
       ############################

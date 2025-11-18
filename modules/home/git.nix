@@ -57,7 +57,6 @@
     gd = "git diff";
 
     ga = "git add --all";
-
     gc = "git commit -m";
 
     gpl = "git pull";

@@ -20,7 +20,6 @@
     enable = true;
     package = null;
     portalPackage = null;
-
     xwayland = {
       enable = true;
       # hidpi = true;

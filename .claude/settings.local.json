@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(hyprctl monitors:*)",
-      "Bash(wlr-randr:*)"
+      "Bash(wlr-randr:*)",
+      "Bash(pactl info:*)",
+      "Bash(pactl list:*)",
+      "Bash(wpctl status:*)",
+      "Bash(pactl set-sink-mute:*)",
+      "WebSearch",
+      "WebFetch(domain:pipewire.pages.freedesktop.org)",
+      "WebFetch(domain:blog.zenlinux.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:forum.manjaro.org)",
+      "Bash(sudo ls:*)",
+      "Bash(sed:*)",
+      "Bash(sudo find:*)",
+      "Bash(sudo mkdir:*)",
+      "Bash(sudo mount:*)",
+      "Bash(mount:*)",
+      "Bash(namei:*)",
+      "Bash(nix search:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

@@ -7,7 +7,9 @@
     ./browser.nix                     # firefox based browser
     ./btop.nix                        # resouces monitor 
     ./cava.nix                        # audio visualizer
+    ./data-symlinks.nix               # symlinks to /data directories
     ./discord.nix                     # discord
+    ./emacs.nix                       # emacs editor
     ./fastfetch/fastfetch.nix         # fetch tool
     ./fzf.nix                         # fuzzy finder
     ./gaming.nix                      # packages related to gaming
@@ -17,6 +19,7 @@
     ./gtk.nix                         # gtk theme
     ./hyprland                        # window manager
     ./kitty.nix                       # terminal
+    ./languages                       # programming language tooling
     ./lazygit.nix
     ./micro.nix                       # nano replacement
     ./nemo.nix                        # file manager

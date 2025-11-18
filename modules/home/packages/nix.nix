@@ -7,7 +7,7 @@
   programs = {
     nix-index = {
       enable = true;
-      symlinkToCacheHome = true;
+      symlinkToCacheHome = false;
       enableZshIntegration = false;
     };
 
