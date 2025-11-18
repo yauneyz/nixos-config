@@ -13,7 +13,8 @@
       "$mainMod, I, exec, firefox"  # i3: Mod1+i
       "$mainMod, N, exec, nemo"  # i3: Mod1+n (file manager)
       "$mainMod, M, exec, spotify-launcher"  # i3: Mod1+m
-      "$mainMod, E, exec, emacs"  # i3: Mod1+e
+      "$mainMod, E, exec, emacsclient -c -a 'emacs'"  # i3: Mod1+e
+      "$mainMod SHIFT, E, exec, restart-emacs-daemon.sh" # restart emacs daemon
       "$mainMod, D, exec, rofi -show drun"  # i3: Mod1+d (launcher)
 
       # Bluetooth controls (from i3) - Connect/disconnect headphones

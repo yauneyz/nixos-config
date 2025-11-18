@@ -21,6 +21,7 @@
     mission-center # GUI resources monitor
     overskride # Modern Bluetooth manager
     zenity
+    zoom-us
 
     ## Level editor
     ldtk

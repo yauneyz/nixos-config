@@ -29,6 +29,12 @@
       fsType = "btrfs";
     };
 
+  fileSystems."/data" =
+    { device = "/dev/disk/by-uuid/1fbcdbdc-b077-49a5-ab09-b0974fc52f15";
+      fsType = "ext4";
+      options = [ "defaults" ];
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
