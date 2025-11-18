@@ -13,6 +13,11 @@
     ripgrep                           # grep replacement
     tldr
 
+    ## Coding agents
+    gemini-cli
+    claude-code
+    codex
+
     ## Tools / useful cli
     aoc-cli                           # Advent of Code command-line tool
     asciinema

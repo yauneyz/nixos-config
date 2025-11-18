@@ -25,14 +25,22 @@
     backupFileExtension = "hm-backup";
   };
 
-  users.users.${username} = {
+  users.users.zac = {
     isNormalUser = true;
-    description = "${username}";
+    description = "zac";
     extraGroups = [
       "networkmanager"
       "wheel"
     ];
     shell = pkgs.zsh;
+hashedPassword="";
   };
+
+users.users.frostphoenix = {
+isNormalUser = true;
+extraGroups = ["wheel" "networkmanager"];
+shell = pkgs.zsh;
+hashedPassword = "";
+};
   nix.settings.allowed-users = [ "${username}" ];
 }
