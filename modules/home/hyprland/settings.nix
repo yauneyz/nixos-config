@@ -3,7 +3,7 @@
   wayland.windowManager.hyprland.settings = {
     input = {
       kb_layout = "us,fr";
-      kb_options = "grp:alt_caps_toggle";
+      kb_options = "grp:alt_caps_toggle,ctrl:nocaps";
       numlock_by_default = true;
       repeat_delay = 300;
       follow_mouse = 0;
@@ -15,8 +15,17 @@
       };
     };
 
+    # Device-specific configuration
+    device = [
+      {
+        name = "logitech-mx-ergo-multi-device-trackball-";
+        sensitivity = 1.0;  # Maximum acceleration (from i3 trackball script)
+        accel_profile = "adaptive";
+      }
+    ];
+
     general = {
-      "$mainMod" = "SUPER";
+      "$mainMod" = "ALT";
       layout = "dwindle";
       gaps_in = 6;
       gaps_out = 12;

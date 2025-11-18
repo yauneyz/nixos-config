@@ -56,8 +56,7 @@
     gcl = "git clone";
     gd = "git diff";
 
-    ga = "git add";
-    gaa = "git add --all";
+    ga = "git add --all";
 
     gc = "git commit -m";
 

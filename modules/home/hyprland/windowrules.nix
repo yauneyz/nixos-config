@@ -26,12 +26,21 @@
       "opacity 1.0 override 1.0 override, class:(Unity)"
       "opacity 1.0 override 1.0 override, class:(zen)"
       "opacity 1.0 override 1.0 override, class:(evince)"
+      # === Window assignments from i3 ===
+      "workspace 9, title:^(Shadow-CLJS)$"
+      "workspace 9, title:^(Go Services)$"
+      "workspace 9, class:^(go-services)$"
+      "workspace 10, title:^(Electron)$"
+      "workspace 12, class:^(Spotify)$"
+      "workspace 11, class:^(firefox)$,title:^(.*keep-profile.*)$"
+      "workspace 11, class:^(firefox)$,title:^(.*music-youtube.*)$"
+
+      # === Other workspace assignments ===
       "workspace 1, class:^(zen-beta)$"
       "workspace 3, class:^(evince)$"
       "workspace 4, class:^(Gimp-2.10)$"
       "workspace 4, class:^(Aseprite)$"
       "workspace 5, class:^(Audacious)$"
-      "workspace 5, class:^(Spotify)$"
       "workspace 8, class:^(com.obsproject.Studio)$"
       "workspace 10, class:^(discord)$"
       "workspace 10, class:^(WebCord)$"
