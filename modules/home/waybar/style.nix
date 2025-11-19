@@ -1,21 +1,22 @@
-{ ... }:
+{ config, ... }:
 let
+  colors = config.lib.stylix.colors.withHashtag;
   custom = {
-    font = "Maple Mono";
-    font_size = "18px";
+    font = config.stylix.fonts.monospace.name;
+    font_size = "${toString config.stylix.fonts.sizes.applications}px";
     font_weight = "bold";
-    text_color = "#FBF1C7";
-    background_0 = "#1D2021";
-    background_1 = "#282828";
-    border_color = "#A89984";
-    red = "#CC241D";
-    green = "#98971A";
-    yellow = "#FABD2F";
-    blue = "#458588";
-    magenta = "#B16286";
-    cyan = "#689D6A";
-    orange = "#D65D0E";
-    orange_bright = "#FE8019";
+    text_color = colors.base05;
+    background_0 = colors.base00;
+    background_1 = colors.base01;
+    border_color = colors.base04;
+    red = colors.base08;
+    green = colors.base0B;
+    yellow = colors.base0A;
+    blue = colors.base0D;
+    magenta = colors.base0E;
+    cyan = colors.base0C;
+    orange = colors.base09;
+    orange_bright = colors.base09;
     opacity = "1";
     indicator_height = "2px";
   };

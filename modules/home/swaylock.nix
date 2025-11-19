@@ -1,11 +1,14 @@
-{ pkgs, ... }:
+{ pkgs, config, lib, ... }:
+let
+  colors = config.lib.stylix.colors;
+in
 {
   programs.swaylock = {
     enable = true;
 
     package = pkgs.swaylock-effects;
 
-    settings = {
+    settings = lib.mkForce {
       clock = true;
       daemonize = true;
       # timestr="%H:%M";
@@ -21,29 +24,29 @@
       effect-vignette = "0.75:0.75";
       effect-pixelate = 5;
 
-      font = "Maple Mono";
+      font = config.stylix.fonts.monospace.name;
 
-      text-wrong-color = "FBF1C7FF";
-      text-ver-color = "FBF1C7FF";
-      text-clear-color = "FBF1C7FF";
-      key-hl-color = "fabd2fFF";
-      bs-hl-color = "fb4934FF";
-      ring-clear-color = "d65d0eFF";
-      ring-wrong-color = "cc241dff";
-      ring-ver-color = "b8bb26FF";
-      ring-color = "689d6aff";
+      text-wrong-color = "${colors.base05}FF";
+      text-ver-color = "${colors.base05}FF";
+      text-clear-color = "${colors.base05}FF";
+      key-hl-color = "${colors.base0A}FF";
+      bs-hl-color = "${colors.base08}FF";
+      ring-clear-color = "${colors.base09}FF";
+      ring-wrong-color = "${colors.base08}FF";
+      ring-ver-color = "${colors.base0B}FF";
+      ring-color = "${colors.base0C}FF";
       line-clear-color = "FFFFFF00";
       line-ver-color = "FFFFFF00";
       line-wrong-color = "FFFFFF00";
       separator-color = "FFFFFF00";
       line-color = "FFFFFF00";
-      text-color = "FBF1C7FF";
-      inside-color = "3C3836DD";
-      inside-ver-color = "3C3836DD";
-      inside-clear-color = "3C3836DD";
-      inside-wrong-color = "3C3836DD";
+      text-color = "${colors.base05}FF";
+      inside-color = "${colors.base02}DD";
+      inside-ver-color = "${colors.base02}DD";
+      inside-clear-color = "${colors.base02}DD";
+      inside-wrong-color = "${colors.base02}DD";
       layout-bg-color = "FFFFFF00";
-      layout-text-color = "FBF1C7FF";
+      layout-text-color = "${colors.base05}FF";
     };
   };
 }

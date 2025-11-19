@@ -1,4 +1,7 @@
-{ host, ... }:
+{ host, config, lib, ... }:
+let
+  colors = config.lib.stylix.colors;
+in
 {
   programs.hyprlock = {
     enable = true;
@@ -10,11 +13,11 @@
         fractional_scaling = 0;
       };
 
-      background = [
+      background = lib.mkForce [
         {
-          path = "${../../../wallpapers/otherWallpaper/gruvbox/forest_road.jpg}";
+          path = "${config.stylix.image}";
 
-          color = "rgba(29, 32, 33, 255)";
+          color = "rgba(${colors.base00-rgb-r}, ${colors.base00-rgb-g}, ${colors.base00-rgb-b}, 1.0)";
           blur_passes = 2;
           vibrancy_darkness = 0.0;
         }
@@ -27,8 +30,8 @@
 
           rounding = 0;
           border_size = 2;
-          color = "rgba(102, 92, 84, 0.33)";
-          border_color = "rgba(168, 153, 132, 0.95)";
+          color = "rgba(${colors.base01-rgb-r}, ${colors.base01-rgb-g}, ${colors.base01-rgb-b}, 0.33)";
+          border_color = "rgba(${colors.base04-rgb-r}, ${colors.base04-rgb-g}, ${colors.base04-rgb-b}, 0.95)";
 
           position = "0, ${if host == "laptop" then "120" else "270"}";
           halign = "center";
@@ -42,10 +45,10 @@
           text = ''cmd[update:1000] echo "$(date +'%k:%M')"'';
 
           font_size = 115;
-          font_family = "Maple Mono Bold";
+          font_family = "${config.stylix.fonts.monospace.name} Bold";
 
           shadow_passes = 3;
-          color = "rgba(235, 219, 178, 0.9)";
+          color = "rgba(${colors.base05-rgb-r}, ${colors.base05-rgb-g}, ${colors.base05-rgb-b}, 0.9)";
 
           position = "0, ${if host == "laptop" then "-25" else "-150"}";
           halign = "center";
@@ -56,10 +59,10 @@
           text = ''cmd[update:1000] echo "- $(date +'%A, %B %d') -" '';
 
           font_size = 18;
-          font_family = "Maple Mono";
+          font_family = "${config.stylix.fonts.monospace.name}";
 
           shadow_passes = 3;
-          color = "rgba(235, 219, 178, 0.9)";
+          color = "rgba(${colors.base05-rgb-r}, ${colors.base05-rgb-g}, ${colors.base05-rgb-b}, 0.9)";
 
           position = "0, ${if host == "laptop" then "-225" else "-350"}";
           halign = "center";
@@ -70,9 +73,9 @@
           text = "  $USER";
 
           font_size = 15;
-          font_family = "Maple Mono Bold";
+          font_family = "${config.stylix.fonts.monospace.name} Bold";
 
-          color = "rgba(235, 219, 178, 1)";
+          color = "rgba(${colors.base05-rgb-r}, ${colors.base05-rgb-g}, ${colors.base05-rgb-b}, 1)";
 
           position = "0, ${if host == "laptop" then "134" else "284"}";
           halign = "center";
@@ -80,7 +83,7 @@
         }
       ];
 
-      input-field = [
+      input-field = lib.mkForce [
         {
           size = "300, 50";
           rounding = 0;
@@ -88,19 +91,19 @@
 
           dots_spacing = 0.4;
 
-          font_color = "rgba(235, 219, 178, 0.9)";
-          font_family = "Maple Mono Bold";
+          font_color = "rgba(${colors.base05-rgb-r}, ${colors.base05-rgb-g}, ${colors.base05-rgb-b}, 0.9)";
+          font_family = "${config.stylix.fonts.monospace.name} Bold";
 
-          outer_color = "rgba(168, 153, 132, 0.95)";
-          inner_color = "rgba(102, 92, 84, 0.33)";
-          check_color = "rgba(152, 151, 26, 0.95)";
-          fail_color = "rgba(204, 36, 29, 0.95)";
-          capslock_color = "rgba(215, 153, 33, 0.95)";
-          bothlock_color = "rgba(215, 153, 33, 0.95)";
+          outer_color = "rgba(${colors.base04-rgb-r}, ${colors.base04-rgb-g}, ${colors.base04-rgb-b}, 0.95)";
+          inner_color = "rgba(${colors.base01-rgb-r}, ${colors.base01-rgb-g}, ${colors.base01-rgb-b}, 0.33)";
+          check_color = "rgba(${colors.base0B-rgb-r}, ${colors.base0B-rgb-g}, ${colors.base0B-rgb-b}, 0.95)";
+          fail_color = "rgba(${colors.base08-rgb-r}, ${colors.base08-rgb-g}, ${colors.base08-rgb-b}, 0.95)";
+          capslock_color = "rgba(${colors.base0A-rgb-r}, ${colors.base0A-rgb-g}, ${colors.base0A-rgb-b}, 0.95)";
+          bothlock_color = "rgba(${colors.base0A-rgb-r}, ${colors.base0A-rgb-g}, ${colors.base0A-rgb-b}, 0.95)";
 
           hide_input = false;
           fade_on_empty = false;
-          placeholder_text = ''<i><span foreground="##fbf1c7">Enter Password</span></i>'';
+          placeholder_text = ''<i><span foreground="##${colors.base05}">Enter Password</span></i>'';
 
           position = "0, ${if host == "laptop" then "50" else "200"}";
           halign = "center";

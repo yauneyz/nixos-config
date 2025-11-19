@@ -7,6 +7,7 @@
     ./xserver.nix
     ./network.nix
     ./nh.nix
+    ./stylix.nix
     ./pipewire.nix
     ./program.nix
     ./security.nix

@@ -5,6 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nur.url = "github:nix-community/NUR";
 
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -30,7 +35,7 @@
   };
 
   outputs =
-    { nixpkgs, self, ... }@inputs:
+    { nixpkgs, self, stylix, ... }@inputs:
     let
       username = "zac";
       system = "x86_64-linux";
@@ -44,7 +49,10 @@
       nixosConfigurations = {
         desktop = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [ ./hosts/desktop ];
+          modules = [
+            ./hosts/desktop
+            stylix.nixosModules.stylix
+          ];
           specialArgs = {
             host = "desktop";
             inherit self inputs username;
@@ -52,7 +60,10 @@
         };
         laptop = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [ ./hosts/laptop ];
+          modules = [
+            ./hosts/laptop
+            stylix.nixosModules.stylix
+          ];
           specialArgs = {
             host = "laptop";
             inherit self inputs username;
@@ -60,7 +71,10 @@
         };
         vm = nixpkgs.lib.nixosSystem {
           inherit system;
-          modules = [ ./hosts/vm ];
+          modules = [
+            ./hosts/vm
+            stylix.nixosModules.stylix
+          ];
           specialArgs = {
             host = "vm";
             inherit self inputs username;

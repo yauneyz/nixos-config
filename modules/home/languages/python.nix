@@ -39,6 +39,7 @@
     # Utilities
     poetry # Modern dependency management
     python312Packages.pipx # Install Python applications in isolated environments
+    uv # Astral's fast Python package installer/runner
   ];
 
   # Set up Python environment

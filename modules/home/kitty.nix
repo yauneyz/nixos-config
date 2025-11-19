@@ -1,12 +1,13 @@
-{ host, ... }:
+{ host, config, ... }:
 {
   programs.kitty = {
     enable = true;
 
-    themeFile = "gruvbox-dark-hard";
+    # Theme managed by Stylix
+    # themeFile = "gruvbox-dark-hard";
 
     font = {
-      name = "Maple Mono";
+      name = config.stylix.fonts.monospace.name;
       size = if (host == "laptop") then 15 else 16;
     };
 
@@ -19,7 +20,7 @@
 
     settings = {
       confirm_os_window_close = 0;
-      background_opacity = "0.66";
+      # background_opacity is set by Stylix
       scrollback_lines = 10000;
       enable_audio_bell = false;
       mouse_hide_wait = 60;
@@ -31,10 +32,7 @@
       inactive_tab_font_style = "normal";
       tab_bar_style = "powerline";
       tab_powerline_style = "angled";
-      active_tab_foreground = "#FBF1C7";
-      active_tab_background = "#7C6F64";
-      inactive_tab_foreground = "#FBF1C7";
-      inactive_tab_background = "#3C3836";
+      # Tab colors managed by Stylix
     };
 
     keybindings = {
