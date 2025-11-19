@@ -360,7 +360,7 @@ in
       default = mkProfile {
         name = "default";
         id = 0;
-        homepage = "https://start.duckduckgo.com/";
+        homepage = "https://www.google.com/";
         extensionPackages = defaultExtensions;
       };
 

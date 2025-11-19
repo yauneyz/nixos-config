@@ -87,7 +87,7 @@ Catppuccin (EXPAND)
 | **Text Editor**             | [VSCodium][VSCodium] + [Neovim][Neovim] |
 | **network management tool** | [NetworkManager][NetworkManager] + [network-manager-applet][network-manager-applet] |
 | **System resource monitor** | [Btop][Btop] |
-| **File Manager**            | [nemo][nemo] + [yazi][yazi] |
+| **File Manager**            | [Nautilus][nautilus] + [yazi][yazi] |
 | **Fonts**                   | [Maple Mono][Maple Mono] |
 | **Color Scheme**            | [Gruvbox Dark Hard][Gruvbox] |
 | **GTK theme**               | [Colloid gtk theme][Colloid gtk theme] |
@@ -283,7 +283,7 @@ Keybindings
 - ```$mainMod, P, pseudo,```
 - ```$mainMod, J, togglesplit,```
 - ```$mainMod, T, exec, toggle_oppacity```
-- ```$mainMod, E, exec, nemo```
+- ```$mainMod, E, exec, nautilus```
 - ```$mainMod SHIFT, B, exec, toggle_waybar```
 - ```$mainMod, C ,exec, hyprpicker -a```
 - ```$mainMod, W,exec, wallpaper-picker```
@@ -491,7 +491,7 @@ Other dotfiles that I learned / copy from:
 [Waybar]: https://github.com/Alexays/Waybar
 [rofi]: https://github.com/lbonn/rofi
 [Btop]: https://github.com/aristocratos/btop
-[nemo]: https://github.com/linuxmint/nemo/
+[nautilus]: https://gitlab.gnome.org/GNOME/nautilus
 [yazi]: https://github.com/sxyazi/yazi
 [zsh]: https://ohmyz.sh/
 [Swaylock-effects]: https://github.com/mortie/swaylock-effects

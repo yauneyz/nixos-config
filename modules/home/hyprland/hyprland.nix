@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # swww  # Replaced by Stylix wallpaper management
+    swww  # Wallpaper daemon for per-monitor wallpaper support
     grimblast
     hyprpicker
     grim

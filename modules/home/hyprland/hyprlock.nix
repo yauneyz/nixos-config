@@ -13,15 +13,15 @@ in
         fractional_scaling = 0;
       };
 
-      background = lib.mkForce [
-        {
-          path = "${config.stylix.image}";
-
-          color = "rgba(${colors.base00-rgb-r}, ${colors.base00-rgb-g}, ${colors.base00-rgb-b}, 1.0)";
-          blur_passes = 2;
-          vibrancy_darkness = 0.0;
-        }
-      ];
+      #background = lib.mkForce [
+      #  {
+      #    path = "${config.stylix.image}";
+#
+#          color = "rgba(${colors.base00-rgb-r}, ${colors.base00-rgb-g}, ${colors.base00-rgb-b}, 1.0)";
+#          blur_passes = 2;
+#          vibrancy_darkness = 0.0;
+#        }
+      #];
 
       shape = [
         # User box

@@ -5,7 +5,7 @@ let
   useWallpaperColors = false;
 
   # Wallpaper path (always required)
-  wallpaperPath = ../../wallpapers/otherWallpaper/gruvbox/forest_road.jpg;
+  wallpaperPath = ../../wallpapers/otherWallpaper/zac/anime-style-mountains-landscape.jpg;
 in
 {
   stylix = {
@@ -15,11 +15,9 @@ in
     # Wallpaper (required)
     image = wallpaperPath;
 
-    # Color scheme (conditional)
-    # When useWallpaperColors = false, use Gruvbox
-    # When useWallpaperColors = true, colors derive from wallpaper
     base16Scheme = lib.mkIf (!useWallpaperColors)
-      "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+      #"${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+      "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
     # Polarity (matters for wallpaper-derived colors)
     polarity = "dark";
@@ -61,8 +59,8 @@ in
     # Opacity settings
     opacity = {
       terminal = 0.66;
-      applications = 0.9;
-      popups = 0.9;
+      applications = 1.0;
+      popups = 1.0;
       desktop = 1.0;
     };
   };

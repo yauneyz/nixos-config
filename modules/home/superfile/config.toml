@@ -1,7 +1,7 @@
 # ========== General ========== #
 theme = 'gruvbox-dark-hard'
 editor = "micro"
-dir_editor = "nemo"
+dir_editor = "nautilus"
 
 auto_check_update = false
 
