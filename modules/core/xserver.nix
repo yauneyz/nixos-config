@@ -6,9 +6,15 @@
       xkb.layout = "us,fr";
     };
 
-    displayManager.autoLogin = {
-      enable = true;
-      user = "${username}";
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+      autoLogin = {
+        enable = true;
+        user = "${username}";
+      };
     };
     libinput = {
       enable = true;

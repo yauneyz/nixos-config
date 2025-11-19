@@ -20,7 +20,12 @@
       "Bash(mount:*)",
       "Bash(namei:*)",
       "Bash(nix search:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "WebFetch(domain:nixos.wiki)",
+      "Bash(lsmod:*)",
+      "Bash(systemctl status:*)",
+      "Bash(nix-store:*)"
     ],
     "deny": [],
     "ask": []
