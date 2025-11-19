@@ -7,6 +7,8 @@
       ############################
 
       nc    = "cd ~/nixos-config";
+      mc  = "cd ~/nixos-config/modules/core";
+      mh  = "cd ~/nixos-config/modules/home";
       hypr  = "cd ~/nixos-config/modules/home/hyprland";
 
       res   = "cd ~/development/research/";

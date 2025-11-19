@@ -27,7 +27,18 @@
       "Bash(systemctl status:*)",
       "Bash(nix-store:*)",
       "WebFetch(domain:nix-community.github.io)",
-      "Bash(nix flake check:*)"
+      "Bash(nix flake check:*)",
+      "Bash(lsblk:*)",
+      "Bash(blkid:*)",
+      "Bash(sudo blkid:*)",
+      "WebFetch(domain:stylix.danth.me)",
+      "Bash(fc-list:*)",
+      "WebFetch(domain:discourse.nixos.org)",
+      "WebFetch(domain:wiki.nixos.org)",
+      "WebFetch(domain:mynixos.com)",
+      "Bash(git -C ~/development/tools/focus remote:*)",
+      "Bash(git -C ~/development/tools/focus status)",
+      "Bash(nix-build:*)"
     ],
     "deny": [],
     "ask": []

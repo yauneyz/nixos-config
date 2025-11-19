@@ -15,4 +15,8 @@
   home.file."Sheet Music".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Sheet Music";
   home.file."Main".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Main";
   home.file."dotfiles".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/dotfiles";
+  home.file.".tools".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.tools";
+  home.file."Games/Retroid".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Games/Retroid";
+  home.file."Games/Wii-U".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Games/Wii-U";
 }

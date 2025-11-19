@@ -32,7 +32,7 @@
 
   typeset -g POWERLEVEL9K_ICON_BEFORE_CONTENT=
 
-  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
 
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%242F┌─'
   typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%242F├─'
@@ -76,7 +76,7 @@
   typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
   typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_{LEFT,RIGHT}_WHITESPACE=
 
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND=4
+  typeset -g POWERLEVEL9K_DIR_BACKGROUND=160
   typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
@@ -98,11 +98,11 @@
   typeset -g POWERLEVEL9K_DIR_CLASSES=()
 
 
-  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=2
-  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=3
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=2
-  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=3
-  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=8
+  typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=231
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=231
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=231
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=231
+  typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=231
 
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON=
 
@@ -116,10 +116,10 @@
       return
     fi
 
-    local       meta='%7F' # white foreground
-    local      clean='%0F' # black foreground
-    local   modified='%0F' # black foreground
-    local  untracked='%0F' # black foreground
+    local       meta='%1F' # red foreground
+    local      clean='%1F' # red foreground
+    local   modified='%1F' # red foreground
+    local  untracked='%1F' # red foreground
     local conflicted='%1F' # red foreground
 
     local res
