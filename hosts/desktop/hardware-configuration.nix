@@ -35,6 +35,12 @@
       options = [ "defaults" ];
     };
 
+  fileSystems."/home/zac/Games" =
+    { device = "/dev/disk/by-uuid/f27a04c1-2043-4300-a8a6-2a5f2b95d4de";
+      fsType = "xfs";
+      options = [ "defaults" ];
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

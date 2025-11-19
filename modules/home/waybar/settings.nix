@@ -24,7 +24,7 @@ in
   programs.waybar.settings.mainBar = with custom; {
     position = "bottom";
     layer = "top";
-    height = 28;
+    height = 20;
     margin-top = 0;
     margin-bottom = 0;
     margin-left = 0;

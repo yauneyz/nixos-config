@@ -11,6 +11,6 @@
     };
 
     nix-ld.enable = true;
-    nix-ld.libraries = with pkgs; [ gtk3 ];
+    nix-ld.libraries = with pkgs; [ gtk3 glib ];
   };
 }

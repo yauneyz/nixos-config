@@ -8,6 +8,7 @@
     ./btop.nix                        # resouces monitor 
     ./cava.nix                        # audio visualizer
     ./data-symlinks.nix               # symlinks to /data directories
+    ./path.nix                        # custom PATH entries
     ./discord.nix                     # discord
     ./emacs.nix                       # emacs editor
     ./fastfetch/fastfetch.nix         # fetch tool
@@ -24,7 +25,7 @@
     ./micro.nix                       # nano replacement
     ./nautilus.nix                    # file manager
     ./nix-search/nix-search.nix       # TUI to search nixpkgs
-    ./nvim.nix                        # neovim editor
+    ./neovim                        # neovim editor
     ./obsidian.nix
     ./p10k/p10k.nix
     ./packages                        # other packages

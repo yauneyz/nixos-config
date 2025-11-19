@@ -5,12 +5,15 @@ let
   useWallpaperColors = false;
 
   # Wallpaper path (always required)
-  wallpaperPath = ../../wallpapers/otherWallpaper/zac/anime-style-mountains-landscape.jpg;
+  wallpaperPath = ../../wallpapers/otherWallpaper/zac/nixos_wave.png;
 in
 {
   stylix = {
     enable = true;
     autoEnable = true;  # Auto-theme installed applications
+
+    # Disable GRUB theming (using custom theme instead)
+    targets.grub.enable = false;
 
     # Wallpaper (required)
     image = wallpaperPath;

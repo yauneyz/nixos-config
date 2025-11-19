@@ -14,10 +14,13 @@
         22
         80
         443
+        22000 # Syncthing transfers
         59010
         59011
       ];
       allowedUDPPorts = [
+        21027 # Syncthing discovery
+        22000 # Syncthing QUIC
         59010
         59011
       ];
