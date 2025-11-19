@@ -22,7 +22,7 @@
     ./languages                       # programming language tooling
     ./lazygit.nix
     ./micro.nix                       # nano replacement
-    ./nemo.nix                        # file manager
+    ./nautilus.nix                    # file manager
     ./nix-search/nix-search.nix       # TUI to search nixpkgs
     ./nvim.nix                        # neovim editor
     ./obsidian.nix

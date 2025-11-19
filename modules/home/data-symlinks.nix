@@ -14,4 +14,5 @@
   home.file."org".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/org";
   home.file."Sheet Music".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Sheet Music";
   home.file."Main".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Main";
+  home.file."dotfiles".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/dotfiles";
 }

@@ -51,7 +51,7 @@ in
     clock = {
       calendar = {
         format = {
-          today = "<span color='#98971A'><b>{}</b></span>";
+          today = "<span color='${yellow}'><b>{}</b></span>";
         };
       };
       format = "  {:%H:%M}";
@@ -152,7 +152,7 @@ in
     "hyprland/language" = {
       tooltip = true;
       tooltip-format = "Keyboard layout";
-      format = "<span foreground='#FABD2F'> </span> {}";
+      format = "<span foreground='${yellow}'> </span> {}";
       format-fr = "FR";
       format-en = "US";
       on-click = "hyprctl switchxkblayout at-translated-set-2-keyboard next";
