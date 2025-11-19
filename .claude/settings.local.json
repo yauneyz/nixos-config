@@ -25,7 +25,9 @@
       "WebFetch(domain:nixos.wiki)",
       "Bash(lsmod:*)",
       "Bash(systemctl status:*)",
-      "Bash(nix-store:*)"
+      "Bash(nix-store:*)",
+      "WebFetch(domain:nix-community.github.io)",
+      "Bash(nix flake check:*)"
     ],
     "deny": [],
     "ask": []

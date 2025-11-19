@@ -4,7 +4,7 @@
     enable = true;
     config = {
       pager = "less -FR";
-      theme = "gruvbox-dark";
+      # theme is set by Stylix
     };
     extraPackages = with pkgs.bat-extras; [
       batman

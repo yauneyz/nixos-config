@@ -4,7 +4,7 @@
     enable = true;
 
     settings = {
-      "colorscheme" = "gruvbox";
+      # colorscheme is set by Stylix
       "*.nix" = {
         "tabsize" = 2;
       };

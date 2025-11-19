@@ -17,5 +17,10 @@
     gnumake
     valgrind
     llvmPackages_20.clang-tools
+
+    # Electron/GUI App Dependencies
+    gtk3
+    nss
+    alsa-lib
   ];
 }

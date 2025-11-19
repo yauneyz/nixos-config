@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    swww
+    # swww  # Replaced by Stylix wallpaper management
     grimblast
     hyprpicker
     grim

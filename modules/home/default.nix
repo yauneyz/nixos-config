@@ -39,7 +39,7 @@
     ./vicinae.nix                     # launcher
     ./vscodium                        # vscode fork
     ./waybar                          # status bar
-    ./waypaper.nix                    # GUI wallpaper picker
+    # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)
     ./xdg-mimes.nix                   # xdg config
     ./zsh                             # shell
   ];
