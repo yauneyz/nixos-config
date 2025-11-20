@@ -43,7 +43,7 @@
       "$mainMod, A, exec, brightnessctl set 5%+"  # i3: Mod1+a
 
       # Utility bindings (from i3)
-      "$mainMod SHIFT, S, exec, hyprctl dispatch dpms off"  # i3: Mod1+Shift+s (screen off)
+      "$mainMod SHIFT, S, exec, hyprctl dispatch dpms toggle"  # i3: Mod1+Shift+s (screen sleep toggle)
 
       # Lock and power
       "$mainMod, Escape, exec, hyprlock"

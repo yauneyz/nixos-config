@@ -33,7 +33,9 @@
     "[workspace 15 silent] emacsclient -c -a \"\" ~/development/go/tutorial/"
 
     # === Development Terminals ===
-    "[workspace 9 silent] ghostty --class go-services -e bash -c 'cd /home/zac/development/go/wikidex; bash start-dev.sh'"
+
+		# TODO - figure out how to make go-services work properly
+    #"[workspace 9 silent] ghostty --class go-services -e bash -c 'cd /home/zac/development/go/wikidex; bash start-dev.sh'"
 
     # === Media ===
     "[workspace 12 silent] spotify-launcher"
