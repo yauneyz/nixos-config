@@ -10,6 +10,7 @@
     ];
     firewall = {
       enable = true;
+      checkReversePath = false;
       allowedTCPPorts = [
         22
         80
@@ -19,6 +20,7 @@
         59011
       ];
       allowedUDPPorts = [
+        1194 # NordVPN
         21027 # Syncthing discovery
         22000 # Syncthing QUIC
         59010
