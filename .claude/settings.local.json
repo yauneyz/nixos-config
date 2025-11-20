@@ -40,7 +40,9 @@
       "Bash(git -C ~/development/tools/focus status)",
       "Bash(nix-build:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(nix-env:*)",
+      "Bash(nix-instantiate --eval --strict --expr:*)"
     ],
     "deny": [],
     "ask": []
