@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   colors = config.lib.stylix.colors;
   hexColors = colors.withHashtag;
@@ -308,6 +308,11 @@ let
   ];
 
   firefoxDesktopFile = "firefox.desktop";
+  firefoxProfiles = [
+    "default"
+    "keep-profile"
+    "music-youtube"
+  ];
 
   browserMimeTypes = [
     "application/x-extension-shtml"
@@ -394,9 +399,18 @@ in
     defaultApplications = firefoxAssociations;
   };
 
-  stylix.targets.firefox.profileNames = [
-    "default"
-    "keep-profile"
-    "music-youtube"
-  ];
+  home.file =
+    lib.mkMerge (
+      map
+        (profile:
+          {
+            ".mozilla/firefox/${profile}/search.json.mozlz4" = {
+              force = lib.mkForce true;
+            };
+          }
+        )
+        firefoxProfiles
+    );
+
+  stylix.targets.firefox.profileNames = firefoxProfiles;
 }
