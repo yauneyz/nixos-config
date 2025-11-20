@@ -3,6 +3,10 @@
   services = {
     gvfs.enable = true;
 
+    nordvpn = {
+      enable = true;
+    };
+
     gnome = {
       tinysparql.enable = true;
       gnome-keyring.enable = true;

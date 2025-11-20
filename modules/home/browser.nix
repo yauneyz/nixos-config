@@ -338,29 +338,6 @@ in
     enable = true;
     package = pkgs.firefox;
 
-    policies = {
-      DisableAppUpdate = true;
-      DisableFeedbackCommands = true;
-      DisableFirefoxStudies = true;
-      DisablePasswordReveal = true;
-      DisablePocket = true;
-      DisableTelemetry = true;
-      DontCheckDefaultBrowser = true;
-      OfferToSaveLogins = false;
-      PasswordManagerEnabled = false;
-      PromptForDownloadLocation = true;
-      SearchSuggestEnabled = false;
-      ExtensionSettings = {
-        "*" = {
-          installation_mode = "allowed";
-        };
-      };
-      Preferences = {
-        "browser.download.dir" = "${config.home.homeDirectory}/Downloads";
-        "browser.download.alwaysOpenPanel" = false;
-      };
-    };
-
     profiles = {
       default = mkProfile {
         name = "default";
