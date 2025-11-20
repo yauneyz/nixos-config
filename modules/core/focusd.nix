@@ -4,37 +4,13 @@ with lib;
 
 let
   cfg = config.services.focusd;
-  focusd = pkgs.callPackage ../../packages/focusd { };
-
-  # Generate base /etc/hosts from NixOS configuration
-  baseHostsFile = pkgs.writeText "nixos-base-hosts" ''
-    # NixOS generated base hosts file
-    127.0.0.1 localhost
-    ::1 localhost ip6-localhost ip6-loopback
-    fe00::0 ip6-localnet
-    ff00::0 ip6-mcastprefix
-    ff02::1 ip6-allnodes
-    ff02::2 ip6-allrouters
-    ff02::3 ip6-allhosts
-
-    ${optionalString (config.networking.hostName != "") ''
-    127.0.1.1 ${config.networking.hostName}
-    ''}
-
-    ${concatStringsSep "\n" (mapAttrsToList (host: addresses:
-      concatStringsSep "\n" (map (addr: "${addr} ${host}") addresses)
-    ) config.networking.hosts)}
-
-    ${config.networking.extraHosts}
-  '';
-
 in {
   options.services.focusd = {
     enable = mkEnableOption "focusd distraction blocker daemon";
 
     package = mkOption {
       type = types.package;
-      default = focusd;
+      default = pkgs.focusd;
       defaultText = literalExpression "pkgs.focusd";
       description = "The focusd package to use.";
     };
@@ -64,19 +40,13 @@ in {
     # Enable nftables
     networking.nftables.enable = true;
 
-    # Create configuration directory and copy base hosts
-    environment.etc = {
-      "focusd/.keep".text = "";
-      "nixos-base-hosts".source = baseHostsFile;
-    };
+    # Create configuration directory
+    environment.etc."focusd/.keep".text = "";
 
     # State and log directories
     systemd.tmpfiles.rules = [
       "d /var/lib/focusd 0755 root root -"
       "f /var/log/focusd.log 0644 root root -"
-      "f /var/lib/focusd/hosts-additions 0644 root root -"
-      "f /var/lib/focusd/firefox-excluded-domains 0644 root root -"
-      "d /etc/firefox/pref 0755 root root -"
     ];
 
     # Main focusd daemon service
@@ -107,76 +77,14 @@ in {
         AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
         CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
 
-        # Read-write paths
+        # Read-write paths - allow focusd to modify /etc/hosts directly
         ReadWritePaths = [
           "/etc/hosts"
           "/etc/focusd"
-          "/etc/firefox/pref"
           "/var/lib/focusd"
           "/var/log/focusd.log"
         ];
       };
-
-      # Ensure /etc/hosts is reset on service stop
-      preStop = ''
-        ${cfg.package}/bin/focusd-merge-hosts || true
-      '';
-    };
-
-    # Path watcher to trigger hosts merge when additions change
-    systemd.paths.focusd-hosts-watcher = {
-      description = "Watch for focusd hosts file changes";
-      wantedBy = [ "multi-user.target" ];
-
-      pathConfig = {
-        PathModified = "/var/lib/focusd/hosts-additions";
-        Unit = "focusd-merge-hosts.service";
-      };
-    };
-
-    # Service triggered by path watcher to merge hosts
-    systemd.services.focusd-merge-hosts = {
-      description = "Merge focusd hosts additions into /etc/hosts";
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/focusd-merge-hosts";
-        RemainAfterExit = false;
-      };
-    };
-
-    # Path watcher for Firefox DoH exclusions
-    systemd.paths.focusd-firefox-watcher = {
-      description = "Watch for focusd Firefox exclusions changes";
-      wantedBy = [ "multi-user.target" ];
-
-      pathConfig = {
-        PathModified = "/var/lib/focusd/firefox-excluded-domains";
-        PathChanged = "/var/lib/focusd/firefox-excluded-domains";
-        Unit = "focusd-update-firefox.service";
-      };
-    };
-
-    # Service to update Firefox DoH configuration
-    systemd.services.focusd-update-firefox = {
-      description = "Update Firefox DoH exclusions from focusd";
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/focusd-update-firefox";
-        RemainAfterExit = false;
-      };
-    };
-
-    # Activation script to set up initial /etc/hosts
-    system.activationScripts.focusd-setup = {
-      text = ''
-        # Ensure base hosts file exists and merge initially
-        if [ ! -f /etc/hosts ]; then
-          ${cfg.package}/bin/focusd-merge-hosts
-        fi
-      '';
-      deps = [];
     };
 
     # Load required kernel modules

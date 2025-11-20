@@ -5,7 +5,7 @@
     # Wrap Emacs with HiDPI environment variables for better scaling
     (pkgs.writeShellScriptBin "emacs" ''
       export GDK_SCALE=1.5
-      export GDK_DPI_SCALE=0.67  # Compensate for GDK_SCALE to avoid double-scaling fonts
+      export GDK_DPI_SCALE=2.0  # Compensate for GDK_SCALE to avoid double-scaling fonts
       exec ${pkgs.emacs}/bin/emacs "$@"
     '')
   ];

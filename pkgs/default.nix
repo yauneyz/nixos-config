@@ -8,6 +8,7 @@
 {
   _2048 = pkgs.callPackage ./2048 { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
+  focusd = pkgs.callPackage ./focusd { };
   alvr = prev.alvr.overrideAttrs (old: {
     postPatch =
       (old.postPatch or "")

@@ -15,7 +15,7 @@
         # DP-2: Right monitor (landscape, primary)
         # Position: offset by rotated DP-1's scaled width (2160/1.5 = 1440)
         # Scale: 1.2
-        "DP-2,3840x2160@60,1440x0,1.2"
+        "DP-2,3840x2160@60,1440x0,1.25"
 
         # Fallback for any other monitors
         ",preferred,auto,auto"

@@ -31,6 +31,9 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # Enable focusd distraction blocker
+  #services.focusd.enable = true;
+
   hardware = {
     graphics = {
       enable = true;

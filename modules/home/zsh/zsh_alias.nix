@@ -218,8 +218,8 @@
 
       smi        = "nvidia-smi";
       audio      = "wpctl status";
-      unmount    = "sudo umount -l /media/user/usb";
-      "mount-key" = "sudo mount /dev/sdc2 /media/user/usb";
+      unmount    = "sudo umount -l /media/usb";
+      "mount-key" = "sudo mount /dev/sdc2 /media/usb";
 
 
       ############################
