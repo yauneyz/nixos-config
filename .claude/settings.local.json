@@ -38,7 +38,9 @@
       "WebFetch(domain:mynixos.com)",
       "Bash(git -C ~/development/tools/focus remote:*)",
       "Bash(git -C ~/development/tools/focus status)",
-      "Bash(nix-build:*)"
+      "Bash(nix-build:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

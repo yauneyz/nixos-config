@@ -3,7 +3,6 @@
   imports = [
     ./nixpkgs.nix
     ./bootloader.nix
-    ./grub-theme.nix
     ./hardware.nix
     ./xserver.nix
     ./network.nix
@@ -20,7 +19,7 @@
     ./user.nix
     ./wayland.nix
     ./virtualization.nix
-    ./focusd.nix
-    ./vr.nix
+    #./focusd.nix
+    #./vr.nix
   ];
 }

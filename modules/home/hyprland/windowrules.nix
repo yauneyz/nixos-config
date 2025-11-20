@@ -29,7 +29,6 @@
       # === Window assignments from i3 ===
       "workspace 9, title:^(Shadow-CLJS)$"
       "workspace 9, title:^(Go Services)$"
-      "workspace 9, class:^(go-services)$"
       "workspace 10, title:^(Electron)$"
       "workspace 12, class:^(Spotify)$"
       "workspace 11, class:^(firefox)$,title:^(.*keep-profile.*)$"

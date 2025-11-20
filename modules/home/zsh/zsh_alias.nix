@@ -186,8 +186,8 @@
       # Misc config / apps
       ############################
 
-      # Hyperland-friendly display sleep (updated from xset)
-      slp = "sleep 3; hyprctl dispatch dpms off";
+      # Hyperland display sleep toggle (same key combo wakes it)
+      slp = "sleep 3; hyprctl dispatch dpms toggle";
 
       # Apps / shortcuts
       rg = "ranger";
@@ -232,4 +232,3 @@
     };
   };
 }
-
