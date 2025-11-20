@@ -19,6 +19,13 @@
       device = "nodev";
       useOSProber = true;
       efiInstallAsRemovable = false;
+      # theme = "${pkgs.kdePackages.breeze-grub}/grub/themes/breeze";
+      theme = "${pkgs.fetchFromGitHub {
+        owner = "sergoncano";
+        repo = "hollow-knight-grub-theme";
+        rev = "master";
+        sha256 = "sha256-0hn3MFC+OtfwtA//pwjnWz7Oz0Cos3YzbgUlxKszhyA=";
+      }}/hollow-grub";
     };
   };
 
