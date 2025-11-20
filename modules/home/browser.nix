@@ -9,7 +9,6 @@ let
     size:
     if builtins.isFloat size then builtins.floor (size + 0.5) else size;
   fontSize = "${toString (normalizeSize fonts.sizes.applications)}px";
-  firefoxAddons = pkgs.nur.repos.rycee.firefox-addons;
 
   userChromeBase = ''
     :root {
@@ -287,26 +286,6 @@ let
       extensions.packages = extensionPackages;
     };
 
-  defaultExtensions = with firefoxAddons; [
-    ublock-origin
-    bitwarden
-    darkreader
-    multi-account-containers
-    sponsorblock
-    enhancer-for-youtube
-  ];
-
-  keepExtensions = with firefoxAddons; [
-    ublock-origin
-  ];
-
-  musicExtensions = with firefoxAddons; [
-    ublock-origin
-    enhancer-for-youtube
-    sponsorblock
-    return-youtube-dislikes
-  ];
-
   firefoxDesktopFile = "firefox.desktop";
   firefoxProfiles = [
     "default"
@@ -343,14 +322,12 @@ in
         name = "default";
         id = 0;
         homepage = "https://www.google.com/";
-        extensionPackages = defaultExtensions;
       };
 
       "keep-profile" = mkProfile {
         name = "keep-profile";
         id = 1;
         homepage = "https://keep.google.com/u/0/";
-        extensionPackages = keepExtensions;
         extraSettings = {
           "browser.tabs.warnOnClose" = false;
           "ui.systemUsesDarkTheme" = 1;
@@ -361,7 +338,6 @@ in
         name = "music-youtube";
         id = 2;
         homepage = "https://music.youtube.com/";
-        extensionPackages = musicExtensions;
         extraSettings = {
           "media.block-autoplay-until-in-foreground" = false;
           "media.autoplay.default" = 0;

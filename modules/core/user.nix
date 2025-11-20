@@ -30,7 +30,6 @@
     description = "zac";
     extraGroups = [
       "networkmanager"
-      "nordvpn"
       "wheel"
     ];
     shell = pkgs.zsh;
@@ -39,7 +38,7 @@ hashedPassword="";
 
 users.users.frostphoenix = {
 isNormalUser = true;
-extraGroups = ["wheel" "networkmanager" "nordvpn"];
+extraGroups = ["wheel" "networkmanager"];
 shell = pkgs.zsh;
 hashedPassword = "";
 };

@@ -2,7 +2,6 @@
     "indexes": [
         "nixpkgs",
         "home-manager",
-        "nur",
         "nixos"
     ],
     "update_interval": "168h",

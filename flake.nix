@@ -2,12 +2,6 @@
   description = "FrostPhoenix's nixos configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nur-luischdev = {
-      url = "github:LuisChDev/nur-packages";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +32,7 @@
   };
 
   outputs =
-    { nixpkgs, self, nur-luischdev, stylix, ... }@inputs:
+    { nixpkgs, self, stylix, ... }@inputs:
     let
       username = "zac";
       system = "x86_64-linux";
@@ -55,14 +49,6 @@
           modules = [
             ./hosts/desktop
             stylix.nixosModules.stylix
-            "${nur-luischdev}/modules/nordvpn.nix"
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  nordvpn = nur-luischdev.packages.${system}.nordvpn;
-                })
-              ];
-            }
           ];
           specialArgs = {
             host = "desktop";
@@ -74,14 +60,6 @@
           modules = [
             ./hosts/laptop
             stylix.nixosModules.stylix
-            "${nur-luischdev}/modules/nordvpn.nix"
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  nordvpn = nur-luischdev.packages.${system}.nordvpn;
-                })
-              ];
-            }
           ];
           specialArgs = {
             host = "laptop";
@@ -93,14 +71,6 @@
           modules = [
             ./hosts/vm
             stylix.nixosModules.stylix
-            "${nur-luischdev}/modules/nordvpn.nix"
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  nordvpn = nur-luischdev.packages.${system}.nordvpn;
-                })
-              ];
-            }
           ];
           specialArgs = {
             host = "vm";
