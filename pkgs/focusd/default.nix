@@ -10,17 +10,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "focusd";
-  version = "0.1.0";
+  version = "unstable-2024-11-20";
   format = "other";  # We're not using setuptools/pyproject
 
-  # TODO: Replace with fetchFromGitHub when repository is published
-  # src = fetchFromGitHub {
-  #   owner = "your-github-username";
-  #   repo = "focusd";
-  #   rev = "v${version}";
-  #   sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  # };
-  src = /home/zac/development/tools/focus;
+  src = fetchFromGitHub {
+    owner = "yauneyz";
+    repo = "focusd";
+    rev = "294339763c79ccf2d2284d1cf30f61eaf18f7008";
+    sha256 = "sha256-iItSE8uGfbw/cEe6mBeKn0FEtChfZOzMCUmx93eERsE=";
+  };
 
   propagatedBuildInputs = with python3.pkgs; [
     pyyaml
@@ -53,7 +51,6 @@ python3.pkgs.buildPythonApplication rec {
     # Create wrapper scripts that set up Python path
     makeWrapper $out/libexec/focusd/focusd $out/bin/focusd \
       --set PYTHONPATH "$out/libexec/focusd:$PYTHONPATH" \
-      --set FOCUSD_NIXOS "1" \
       --prefix PATH : "${lib.makeBinPath [ nftables iproute2 conntrack-tools util-linux ]}"
 
     makeWrapper $out/libexec/focusd/focusctl $out/bin/focusctl \
@@ -63,10 +60,6 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $out/share/focusd/examples
     cp focusd/profiles/*.yml $out/share/focusd/examples/ || true
 
-    # Install NixOS helper scripts
-    install -Dm755 ${./merge-hosts.sh} $out/bin/focusd-merge-hosts
-    install -Dm755 ${./update-firefox.sh} $out/bin/focusd-update-firefox
-
     runHook postInstall
   '';
 
@@ -75,18 +68,14 @@ python3.pkgs.buildPythonApplication rec {
     # Update Python imports to work with our install layout
     substituteInPlace focusd/focusd.py \
       --replace-quiet 'sys.path.insert(0, str(_module_dir))' \
-                '# Module dir handled by wrapper' || true
+                'pass  # Module dir handled by wrapper' || true
 
     substituteInPlace focusd/cli/focusctl.py \
       --replace-quiet 'sys.path.insert(0, str(_install_path))' \
-                '# Install path handled by wrapper' || true
+                'pass  # Install path handled by wrapper' || true
     substituteInPlace focusd/cli/focusctl.py \
       --replace-quiet 'sys.path.insert(0, str(_source_path))' \
-                '# Source path handled by wrapper' || true
-
-    # Copy our NixOS-specific modified files
-    cp ${./nixos-dns.py} focusd/nixos_dns.py || true
-    cp ${./nixos-firefox.py} focusd/nixos_firefox.py || true
+                'pass  # Source path handled by wrapper' || true
   '';
 
   meta = with lib; {
@@ -99,7 +88,7 @@ python3.pkgs.buildPythonApplication rec {
       - Emergency recovery codes
       Works on any desktop environment (GNOME, KDE, i3, Wayland, X11).
     '';
-    homepage = "https://github.com/your-username/focusd"; # TODO: Update with actual URL
+    homepage = "https://github.com/yauneyz/focusd";
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "focusctl";

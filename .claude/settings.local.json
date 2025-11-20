@@ -42,7 +42,14 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(cat:*)",
       "Bash(nix-env:*)",
-      "Bash(nix-instantiate --eval --strict --expr:*)"
+      "Bash(nix-instantiate --eval --strict --expr:*)",
+      "Bash(nix-instantiate:*)",
+      "Bash(nix-channel --list:*)",
+      "Bash(nix show-config:*)",
+      "Bash(git add:*)",
+      "Bash(git ls-remote:*)",
+      "WebFetch(domain:gist.github.com)",
+      "Bash(sudo journalctl:*)"
     ],
     "deny": [],
     "ask": []

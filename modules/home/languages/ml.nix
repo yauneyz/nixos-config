@@ -1,35 +1,20 @@
-{ pkgs, host, ... }:
+{ pkgs, ... }:
 
-let
-  # Enable CUDA only on desktop (has NVIDIA GPU)
-  cudaEnabled = host == "desktop";
-
-  # Override Python packages with CUDA support when on desktop
-  pythonPackages = if cudaEnabled then
-    pkgs.python312Packages.override {
-      overrides = self: super: {
-        # Override PyTorch with CUDA support
-        pytorch = super.pytorch.override {
-          cudaSupport = true;
-        };
-
-        # Override vLLM with CUDA support
-        # vllm = super.vllm.override {
-        #   cudaSupport = true;
-        # };
-      };
-    }
-  else
-    pkgs.python312Packages;
-
-in
 {
-  home.packages = with pythonPackages; [
-    # Deep Learning Framework
+  # Machine Learning and AI packages
+  # Note: CUDA support is enabled on desktop only (modules/core/nixpkgs.nix)
+  # Desktop: PyTorch with CUDA | Laptop: PyTorch CPU-only
+  # Initial build on desktop: ~2 hours, but subsequent rebuilds use cache
+
+  home.packages = with pkgs.python312Packages; [
+    # Deep Learning Framework (with CUDA support via global config)
     torch
     torchvision
 
     # vLLM - High-performance LLM inference engine
+    # WARNING: Uncomment below to enable vLLM
+    # Initial build is ~2 hours, but only needs to happen once
+    # Once built, toggling vLLM on/off is fast
     # vllm
 
     # HuggingFace libraries
@@ -39,19 +24,19 @@ in
     tokenizers
 
     # Additional ML utilities
-    accelerate  # Distributed training and inference
-    safetensors # Safe tensor serialization
+    accelerate      # Distributed training and inference
+    safetensors     # Safe tensor serialization
   ];
 
-  # Set environment variables for ML work
+  # Environment variables for ML work
   home.sessionVariables = {
     # Optimize PyTorch for performance
     OMP_NUM_THREADS = "1";  # Prevent oversubscription in multiprocessing
 
     # HuggingFace cache location
     HF_HOME = "$HOME/.cache/huggingface";
-  } // (if cudaEnabled then {
-    # CUDA-specific environment variables
+
+    # CUDA cache location
     CUDA_CACHE_PATH = "$HOME/.cache/cuda";
-  } else {});
+  };
 }

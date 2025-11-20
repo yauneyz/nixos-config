@@ -124,6 +124,7 @@ in
 
     xwayland = {
       force_zero_scaling = true;
+      use_nearest_neighbor = true;  # optional, but helps avoid blur if scaling ever happens
     };
   };
 }
