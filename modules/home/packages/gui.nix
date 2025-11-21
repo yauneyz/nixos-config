@@ -7,6 +7,8 @@
     media-downloader
     obs-studio
     pavucontrol
+    simplescreenrecorder
+    spotify
     soundwireserver
     video-trimmer
     vlc

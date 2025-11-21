@@ -38,6 +38,6 @@
     #"[workspace 9 silent] ghostty --class go-services -e bash -c 'cd /home/zac/development/go/wikidex; bash start-dev.sh'"
 
     # === Media ===
-    "[workspace 12 silent] spotify-launcher"
+    "[workspace 12 silent] spotify"
   ];
 }
