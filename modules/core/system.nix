@@ -28,6 +28,7 @@
   environment.systemPackages = with pkgs; [
     wget
     git
+    #python3Packages.torch
   ];
 
   time.timeZone = "America/Los_Angeles";

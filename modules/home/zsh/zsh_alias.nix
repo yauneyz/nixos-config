@@ -83,6 +83,7 @@
       tt    = "gtrash put";
       cat   = "bat";
       nano  = "micro";
+      "mod+g" = "micro";
       code  = "codium";
       diff  = "delta --diff-so-fancy --side-by-side";
       less  = "bat";

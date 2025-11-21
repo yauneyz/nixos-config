@@ -79,6 +79,7 @@
     pamixer                           # pulseaudio command line mixer
     playerctl                         # controller for media players
     poweralertd
+    slop                              # select region on screen
     udiskie                           # Automounter for removable media
     unzip
     wget

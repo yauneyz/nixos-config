@@ -5,7 +5,10 @@ time=$(date +'%Y_%m_%d_at_%Hh%Mm%Ss')
 file="${dir}/Screenshot_${time}.png"
 
 copy() {
-    GRIMBLAST_HIDE_CURSOR=0 grimblast --notify --freeze copy area
+    if GRIMBLAST_HIDE_CURSOR=0 grimblast --notify --freeze save area "$file"; then
+        wl-copy < "$file"
+        notify-send "Screenshot" "Saved to $file and copied to clipboard"
+    fi
 }
 
 save() {

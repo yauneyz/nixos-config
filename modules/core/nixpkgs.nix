@@ -3,7 +3,7 @@
   nixpkgs = {
     config = {
       allowBroken = true;  # Allow broken packages (needed for vLLM/flashinfer)
-      # cudaSupport = (host == "desktop");  # Uncomment to enable CUDA on desktop (~2hr initial build)
+			cudaSupport = (host == "desktop");  # Uncomment to enable CUDA on desktop (~2hr initial build)
     };
 
     overlays = [
