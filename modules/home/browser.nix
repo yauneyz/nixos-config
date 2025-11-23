@@ -247,7 +247,7 @@ let
     "browser.tabs.firefox-view" = false;
     "browser.urlbar.quicksuggest.enabled" = false;
     "browser.urlbar.showSearchSuggestionsFirst" = false;
-    "browser.toolbars.bookmarks.visibility" = "never";
+    "browser.toolbars.bookmarks.visibility" = "always";
     "browser.shell.checkDefaultBrowser" = false;
     "general.autoScroll" = true;
     "signon.rememberSignons" = false;
@@ -266,7 +266,7 @@ let
     {
       name,
       id,
-      homepage,
+      homepage ? "about:home",
       extensionPackages ? [ ],
       extraSettings ? { },
       extraChrome ? "",
@@ -321,13 +321,11 @@ in
       default = mkProfile {
         name = "default";
         id = 0;
-        homepage = "https://www.google.com/";
       };
 
       "keep-profile" = mkProfile {
         name = "keep-profile";
         id = 1;
-        homepage = "https://keep.google.com/u/0/";
         extraSettings = {
           "browser.tabs.warnOnClose" = false;
           "ui.systemUsesDarkTheme" = 1;

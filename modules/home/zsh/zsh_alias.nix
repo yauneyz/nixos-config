@@ -1,4 +1,11 @@
-{ ... }:
+{ host, ... }:
+let
+  rebuildAlias =
+    if host == "desktop" then
+      "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#desktop"
+    else
+      "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#laptop";
+in
 {
   programs.zsh = {
     shellAliases = {
@@ -73,7 +80,7 @@
       enable  = "focusctl enable main";
 
       # NixOS
-      rebuild = "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#desktop";
+      rebuild = rebuildAlias;
 
       # Motion helpers
       cd = "z";

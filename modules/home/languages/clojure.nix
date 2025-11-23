@@ -7,7 +7,10 @@
     # Build tools
     leiningen # Traditional Clojure build tool
     clojure-lsp # Language Server Protocol
-    # Note: Install shadow-cljs globally via: npm install -g shadow-cljs
+
+    ###
+    # IMPORTANT = npm i -g shadow-cljs
+    ###
 
     # Linters and formatters
     clj-kondo # Linter for Clojure

@@ -5,8 +5,8 @@ in
 {
   wayland.windowManager.hyprland.settings = {
     input = {
-      kb_layout = "us,fr";
-      kb_options = "grp:alt_caps_toggle,ctrl:nocaps";
+      kb_layout = "us";
+      kb_options = "ctrl:nocaps";
       numlock_by_default = true;
       repeat_delay = 300;
       follow_mouse = 1;

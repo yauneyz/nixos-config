@@ -138,9 +138,9 @@
       "$mainMod ALT, l, moveactive, 80 0"
 
       # media and volume controls (from i3)
-      ",XF86AudioMute, exec, swayosd-client --output-volume mute-toggle"
-      ",XF86AudioRaiseVolume, exec, swayosd-client --output-volume raise"
-      ",XF86AudioLowerVolume, exec, swayosd-client --output-volume lower"
+      ",XF86AudioMute, exec, playerctl volume 0.0"
+      ",XF86AudioRaiseVolume, exec, playerctl volume 0.05+"
+      ",XF86AudioLowerVolume, exec, playerctl volume 0.05-"
       ",XF86AudioPlay, exec, playerctl play-pause"
       ",XF86AudioNext, exec, playerctl next"
       ",XF86AudioPrev, exec, playerctl previous"

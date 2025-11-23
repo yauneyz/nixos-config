@@ -51,6 +51,28 @@
   powerManagement.cpuFreqGovernor = "performance";
 
   boot = {
+    loader = {
+	systemd-boot.enable = false;
+	efi = {
+	    canTouchEfiVariables = true;
+	    efiSysMountPoint = "/boot";
+	};
+	grub = {
+	    enable = true;
+	efiSupport = true;
+	device = "nodev";
+	useOSProber = true;
+	efiInstallAsRemovable = false;
+
+		theme = "${pkgs.fetchFromGitHub {
+			owner = "sergoncano";
+			repo = "hollow-knight-grub-theme";
+			rev = "master";
+			sha256 = "sha256-0hn3MFC+OtfwtA//pwjnWz7Oz0Cos3YzbgUlxKszhyA=";
+		}}/hollow-grub";
+};
+
+    };
     kernelModules = [ "acpi_call" ];
     extraModulePackages =
       with config.boot.kernelPackages;
@@ -59,21 +81,5 @@
         cpupower
       ]
       ++ [ pkgs.cpupower-gui ];
-
-    # GRUB bootloader configuration
-    loader = {
-      systemd-boot.enable = false;
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-      grub = {
-        enable = true;
-        efiSupport = true;
-        device = "nodev";
-        useOSProber = true;
-        efiInstallAsRemovable = false;
-      };
-    };
   };
 }

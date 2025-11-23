@@ -7,7 +7,6 @@
     ./browser.nix                     # firefox based browser
     ./btop.nix                        # resouces monitor 
     ./cava.nix                        # audio visualizer
-    ./data-symlinks.nix               # symlinks to /data directories
     ./path.nix                        # custom PATH entries
     ./discord.nix                     # discord
     ./emacs.nix                       # emacs editor
@@ -19,7 +18,6 @@
     ./gnome.nix                       # gnome apps
     ./gtk.nix                         # gtk theme
     ./hyprland                        # window manager
-    ./kitty.nix                       # terminal
     ./languages                       # programming language tooling
     ./lazygit.nix
     ./micro.nix                       # nano replacement
