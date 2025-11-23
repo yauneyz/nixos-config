@@ -29,6 +29,12 @@
     vicinae.url = "github:vicinaehq/vicinae";
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
 
+    # Thinky source (private repo)
+    owl = {
+      url = "git+ssh://git@github.com/yauneyz/owl.git?ref=master";
+      flake = false;
+    };
+
   };
 
   outputs =

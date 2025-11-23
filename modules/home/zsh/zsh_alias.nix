@@ -82,6 +82,10 @@ in
       # NixOS
       rebuild = rebuildAlias;
 
+      # Thinky package management
+      thinky-hash = "bash ~/nixos-config/pkgs/thinky/update-hash.sh";
+      thinky-install = "bash ~/nixos-config/pkgs/thinky/update-hash.sh && ${rebuildAlias}";
+
       # Motion helpers
       cd = "z";
       c  = "z";

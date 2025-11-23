@@ -14,6 +14,7 @@
     nix-ld.libraries = with pkgs; [
       expat
       libgbm
+      libxkbcommon
       gtk3
       gdk-pixbuf
       pango

@@ -16,6 +16,7 @@
     ## Office
     libreoffice
     gnome-calculator
+    thinky
 
     ## Utility
     dconf-editor
