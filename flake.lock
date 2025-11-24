@@ -175,6 +175,22 @@
         "type": "github"
       }
     },
+    "focusd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763990486,
+        "narHash": "sha256-32LXYeIOtPBicMpGfE7cJRJTlk7TGF1R0rpLCkZFkzs=",
+        "ref": "refs/heads/main",
+        "rev": "7077cbca10dd9892ebd6de62fc38083a84e010b2",
+        "revCount": 9,
+        "type": "git",
+        "url": "file:///home/zac/development/tools/focusd-2"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/zac/development/tools/focusd-2"
+      }
+    },
     "fromYaml": {
       "flake": false,
       "locked": {
@@ -440,32 +456,15 @@
         "type": "github"
       }
     },
-    "owl": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1762834304,
-        "narHash": "sha256-HrKbDtijRYmxX8P/DRGXu+1xenNTwt9CO4P3HN4DxR8=",
-        "ref": "master",
-        "rev": "9004c60ce713396f7dcb3351680fa2b7878fb641",
-        "revCount": 693,
-        "type": "git",
-        "url": "ssh://git@github.com/yauneyz/owl.git"
-      },
-      "original": {
-        "ref": "master",
-        "type": "git",
-        "url": "ssh://git@github.com/yauneyz/owl.git"
-      }
-    },
     "root": {
       "inputs": {
+        "focusd": "focusd",
         "home-manager": "home-manager",
         "maple-mono": "maple-mono",
         "nix-flatpak": "nix-flatpak",
         "nix-gaming": "nix-gaming",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_2",
-        "owl": "owl",
         "stylix": "stylix",
         "superfile": "superfile",
         "vicinae": "vicinae",

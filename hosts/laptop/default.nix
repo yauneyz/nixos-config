@@ -15,6 +15,13 @@
   services = {
     power-profiles-daemon.enable = true;
 
+    # focusd distraction blocker
+    # Blocklist managed at ~/.config/focusd/blocklist.yml
+		focusd = {
+			enable = true;
+			tokenHashFile = ../../secrets/focusd-token.sha256;
+		};
+
     upower = {
       enable = true;
       percentageLow = 20;

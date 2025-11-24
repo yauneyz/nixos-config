@@ -32,6 +32,7 @@
     ./scripts/scripts.nix             # personal scripts
     ./ssh.nix                         # ssh config
     ./superfile/superfile.nix         # terminal file manager
+    ./thinky.nix                      # Thinky config/state
     ./swaylock.nix                    # lock screen
     ./swayosd.nix                     # brightness / volume wiget
     ./swaync/swaync.nix               # notification deamon

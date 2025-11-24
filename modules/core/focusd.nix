@@ -15,86 +15,109 @@ in {
       description = "The focusd package to use.";
     };
 
-    socketPath = mkOption {
-      type = types.str;
-      default = "/var/lib/focusd/daemon.sock";
-      description = "Path to the daemon UNIX socket.";
+    tokenHashFile = mkOption {
+      type = types.path;
+      description = ''
+        Path to the USB key token hash file (token.sha256).
+        This file contains the SHA256 hash of your USB authentication key.
+      '';
     };
 
-    logLevel = mkOption {
-      type = types.enum [ "DEBUG" "INFO" "WARNING" "ERROR" ];
-      default = "INFO";
-      description = "Log level for the daemon.";
+    refreshIntervalMinutes = mkOption {
+      type = types.int;
+      default = 60;
+      description = "How often to refresh IP addresses (in minutes)";
+    };
+
+    usbKeyPath = mkOption {
+      type = types.str;
+      default = "/run/media/zac/*/FOCUSD/focusd.key";
+      description = "Glob pattern for finding the USB key file";
     };
   };
 
   config = mkIf cfg.enable {
-    # Install the package system-wide and required dependencies
-    environment.systemPackages = with pkgs; [
-      cfg.package
-      nftables
-      iproute2
-      conntrack-tools
-    ];
-
     # Enable nftables
     networking.nftables.enable = true;
 
-    # Create configuration directory
-    environment.etc."focusd/.keep".text = "";
+    # Install the package system-wide
+    environment.systemPackages = [ cfg.package ];
 
-    # State and log directories
-    systemd.tmpfiles.rules = [
-      "d /var/lib/focusd 0755 root root -"
-      "f /var/log/focusd.log 0644 root root -"
-    ];
+    # Create config directory and files
+    environment.etc = {
+      "focusd/token.sha256" = {
+        source = cfg.tokenHashFile;
+      };
 
-    # Main focusd daemon service
-    systemd.services.focusd = {
-      description = "Focus mode daemon - distraction blocker";
-      documentation = [ "https://github.com/yauneyz/focusd" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      "focusd/config.yaml" = {
+        text = ''
+          # focusd system configuration
+          # Blocklist is managed by user at: ~/.config/focusd/blocklist.yml
+          # See: ${cfg.package}/share/doc/blocklist.example.yml
 
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${cfg.package}/bin/focusd";
-        Restart = "on-failure";
-        RestartSec = 5;
-
-        # Security settings
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectSystem = "strict";
-        ProtectHome = "read-only";
-
-        # State directories
-        StateDirectory = "focusd";
-        LogsDirectory = "focusd";
-
-        # Required capabilities for network manipulation
-        AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
-        CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
-
-        # Read-write paths - allow focusd to modify /etc/hosts directly
-        ReadWritePaths = [
-          "/etc/hosts"
-          "/etc/focusd"
-          "/var/lib/focusd"
-          "/var/log/focusd.log"
-        ];
+          refreshIntervalMinutes: ${toString cfg.refreshIntervalMinutes}
+          usbKeyPath: "${cfg.usbKeyPath}"
+          tokenHashPath: "/etc/focusd/token.sha256"
+          dnsmasqConfigPath: "/run/focusd/dnsmasq.conf"
+        '';
       };
     };
 
-    # Load required kernel modules
-    boot.kernelModules = [ "nf_conntrack" "xt_TPROXY" "nf_nat" ];
+    # State and runtime directories
+    systemd.tmpfiles.rules = [
+      "d /var/lib/focusd 0750 root root -"
+      "d /run/focusd 0755 root root -"
+    ];
 
-    # Ensure required kernel parameters for transparent proxy
-    boot.kernel.sysctl = {
-      "net.ipv4.ip_forward" = 1;
-      "net.ipv4.conf.all.route_localnet" = 1;
-      "net.ipv6.conf.all.forwarding" = 1;
+    # Configure dnsmasq to use our config directory
+    services.dnsmasq = {
+      enable = true;
+      settings = {
+        # Use conf-dir to ADD our config, not replace dnsmasq's config
+        conf-dir = [ "/run/focusd" ];
+      };
+    };
+
+    # Main focusd daemon service
+    systemd.services.focusd = {
+      description = "focusd - Distraction blocker daemon";
+      documentation = [ "https://github.com/yauneyz/focusd" ];
+      after = [ "network-online.target" "nftables.service" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+
+      # Ensure network tools are in PATH for transparent proxy setup
+      path = with pkgs; [ nftables iproute2 ];
+
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${cfg.package}/bin/focusd daemon --config /etc/focusd/config.yaml";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Restart = "on-failure";
+        RestartSec = "10s";
+
+        # Security hardening
+        User = "root";  # Required for nftables, dnsmasq, and transparent proxy
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = "read-only";  # Need to read user's blocklist at ~/.config/focusd/
+        ReadWritePaths = [
+          "/var/lib/focusd"
+          "/run/focusd"
+        ];
+        PrivateTmp = true;
+
+        # Transparent proxy needs network admin capabilities
+        # This allows setting up TPROXY rules and routing tables
+        AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+      };
+    };
+
+    # Reload dnsmasq when focusd config changes
+    systemd.services.dnsmasq = {
+      partOf = [ "focusd.service" ];
+      after = [ "focusd.service" ];
     };
   };
 }

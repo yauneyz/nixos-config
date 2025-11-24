@@ -25,6 +25,7 @@ in
 
       lando = "cd ~/development/Lando/lando-video";
 
+			f2    = "cd ~/development/go/focusd-2";
       gos   = "cd ~/development/go/gophercises";
       com   = "cd ~/development/go/compass";
       pylon = "cd ~/development/go/pylon";
@@ -74,6 +75,7 @@ in
       ############################
       # General commands / tooling
       ############################
+			cpy = "copy <";
 
       # Focus tool
       disable = "focusctl disable";

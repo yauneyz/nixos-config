@@ -1,96 +1,43 @@
 { lib
-, python3
-, fetchFromGitHub
-, makeWrapper
+, buildGoModule
 , nftables
-, iproute2
-, conntrack-tools
-, util-linux
+, focusdSrc
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildGoModule rec {
   pname = "focusd";
-  version = "unstable-2024-11-20";
-  format = "other";  # We're not using setuptools/pyproject
+  version = "0.1.0";
 
-  src = fetchFromGitHub {
-    owner = "yauneyz";
-    repo = "focusd";
-    rev = "294339763c79ccf2d2284d1cf30f61eaf18f7008";
-    sha256 = "sha256-iItSE8uGfbw/cEe6mBeKn0FEtChfZOzMCUmx93eERsE=";
-  };
+  # Use the focusd source from flake input
+  src = focusdSrc;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pyyaml
-    pynacl
+  vendorHash = "sha256-4MwBYiQBii4lE55qmGfsp/p9lqj1JlulGykd605+swg=";
+
+  # Build only the main binary
+  subPackages = [ "cmd/focusd" ];
+
+  ldflags = [
+    "-s"
+    "-w"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  # Disable checks as there are no tests
-  doCheck = false;
-
-  # Don't use the standard Python build process
-  dontUsePythonImportsCheck = true;
-  dontUsePythonCatchConflicts = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/libexec/focusd
-
-    # Install Python modules to libexec
-    cp -r focusd/*.py $out/libexec/focusd/
-
-    # Install main daemon
-    install -Dm755 focusd/focusd.py $out/libexec/focusd/focusd
-
-    # Install CLI tool
-    install -Dm755 focusd/cli/focusctl.py $out/libexec/focusd/focusctl
-
-    # Create wrapper scripts that set up Python path
-    makeWrapper $out/libexec/focusd/focusd $out/bin/focusd \
-      --set PYTHONPATH "$out/libexec/focusd:$PYTHONPATH" \
-      --prefix PATH : "${lib.makeBinPath [ nftables iproute2 conntrack-tools util-linux ]}"
-
-    makeWrapper $out/libexec/focusd/focusctl $out/bin/focusctl \
-      --set PYTHONPATH "$out/libexec/focusd:$PYTHONPATH"
-
-    # Install example configuration files
-    mkdir -p $out/share/focusd/examples
-    cp focusd/profiles/*.yml $out/share/focusd/examples/ || true
-
-    runHook postInstall
-  '';
-
-  # Patch shebangs and hardcoded paths
-  postPatch = ''
-    # Update Python imports to work with our install layout
-    substituteInPlace focusd/focusd.py \
-      --replace-quiet 'sys.path.insert(0, str(_module_dir))' \
-                'pass  # Module dir handled by wrapper' || true
-
-    substituteInPlace focusd/cli/focusctl.py \
-      --replace-quiet 'sys.path.insert(0, str(_install_path))' \
-                'pass  # Install path handled by wrapper' || true
-    substituteInPlace focusd/cli/focusctl.py \
-      --replace-quiet 'sys.path.insert(0, str(_source_path))' \
-                'pass  # Source path handled by wrapper' || true
-  '';
+  # Runtime dependencies
+  buildInputs = [ nftables ];
 
   meta = with lib; {
-    description = "Robust distraction blocking system for Linux with DNS sinkholing and transparent proxy";
+    description = "A distraction blocker with DNS and nftables integration";
     longDescription = ''
-      focusd is a distraction blocker for Linux that uses:
-      - DNS sinkholing via /etc/hosts modification
-      - Transparent proxy with SNI inspection for path-level filtering
-      - USB key authentication to disable focus mode
-      - Emergency recovery codes
-      Works on any desktop environment (GNOME, KDE, i3, Wayland, X11).
+      focusd is a distraction blocker for NixOS that uses:
+      - DNS blocking via dnsmasq
+      - IP-level blocking via nftables
+      - USB key authentication for enable/disable
+      - Persistent state across reboots
+
+      Blocks distracting websites at both DNS and network layers.
     '';
-    homepage = "https://github.com/yauneyz/focusd";
+    homepage = "https://github.yauneyz.com/focusd";
     license = licenses.mit;
+    mainProgram = "focusd";
     platforms = platforms.linux;
-    mainProgram = "focusctl";
   };
 }

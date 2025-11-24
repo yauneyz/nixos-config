@@ -19,7 +19,7 @@
     ./user.nix
     ./wayland.nix
     ./virtualization.nix
-    #./focusd.nix
+		./focusd.nix
     #./vr.nix
   ];
 }

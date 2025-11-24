@@ -29,9 +29,8 @@
     vicinae.url = "github:vicinaehq/vicinae";
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
 
-    # Thinky source (private repo)
-    owl = {
-      url = "git+ssh://git@github.com/yauneyz/owl.git?ref=master";
+    focusd = {
+      url = "git+file:///home/zac/development/tools/focusd-2";
       flake = false;
     };
 
@@ -45,10 +44,25 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [
+          (final: prev:
+            (import ./pkgs {
+              inherit inputs;
+              pkgs = final;
+              inherit prev;
+              inherit (prev) system;
+            })
+          )
+        ];
       };
       lib = nixpkgs.lib;
     in
     {
+      # Export custom packages for direct building
+      packages.${system} = {
+        inherit (pkgs) focusd thinky;
+      };
+
       nixosConfigurations = {
         desktop = nixpkgs.lib.nixosSystem {
           inherit system;
