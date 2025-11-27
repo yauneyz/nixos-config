@@ -46,6 +46,7 @@ in
       ou    = "cd ~/development/clojure/owl/electron";
       ob    = "cd ~/development/clojure/owl/site";
       thc   = "cd ~/.config/Thinky";
+      antei   = "cd ~/development/clojure/owl/antei";
 
       dot   = "cd ~/dotfiles";
       edot  = "cd ~/.emacs.d";
@@ -71,6 +72,9 @@ in
       # Emacs init
       ee   = "vim ~/.emacs.d/init.el";
 
+			blocklist = "sudo vim /root/.config/focusd/blocklist.yml";
+			focus-reload = "sudo systemctl restart focusd";
+
 
       ############################
       # General commands / tooling
@@ -78,8 +82,8 @@ in
 			cpy = "copy <";
 
       # Focus tool
-      disable = "focusctl disable";
-      enable  = "focusctl enable main";
+      disable = "sudo focusd disable && focus-reload";
+      enable  = "sudo focusd enable && focus-reload";
 
       # NixOS
       rebuild = rebuildAlias;
@@ -194,6 +198,7 @@ in
       # Keep nom/nh meanings for ns/nd/nb/nc; use separate names for Node
       ns   = "npm run start";
       nd = "npm run develop";
+      na = "shadow-cljs watch antei-lib";
 
 
       ############################

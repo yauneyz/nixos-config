@@ -4,6 +4,16 @@ let
 in
 {
   wayland.windowManager.hyprland.settings = {
+    cursor = {
+      no_hardware_cursors = false;
+      enable_hyprcursor = true;
+      warp_on_change_workspace = false;
+      no_warps = false;
+      persistent_warps = false;
+      # Cursor size workaround for scaling
+      default_monitor = "eDP-1";
+    };
+
     input = {
       kb_layout = "us";
       kb_options = "ctrl:nocaps";

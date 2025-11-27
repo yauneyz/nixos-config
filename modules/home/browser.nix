@@ -363,5 +363,8 @@ in
         firefoxProfiles
     );
 
-  stylix.targets.firefox.profileNames = firefoxProfiles;
+  stylix.targets.firefox = {
+    enable = false;
+    profileNames = firefoxProfiles;
+  };
 }

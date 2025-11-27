@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  # Keep Stylix from overriding the manually configured Neovim theme.
+  stylix.targets.neovim.enable = false;
+
   programs.neovim = {
     enable = true;
     vimAlias = true;
@@ -21,6 +24,12 @@
       vim-jsx-pretty
       vimtex
       semshi
+
+      # Themes
+      gruvbox
+      tokyonight-nvim
+      catppuccin-nvim
+      kanagawa-nvim
     ];
     extraConfig = ''
       let g:mapleader = " "
@@ -96,6 +105,11 @@
         autocmd User SmartfEnter :hi Conceal ctermfg=220 guifg=#6638F0
         autocmd User SmartfLeave :hi Conceal ctermfg=239 guifg=#504945
       augroup end
+
+      " Set colorscheme
+      " Other options: tokyonight, catppuccin, gruvbox
+      set background=dark
+      colorscheme kanagawa
     '';
   };
 }

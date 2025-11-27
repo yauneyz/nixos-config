@@ -1,7 +1,9 @@
 { pkgs, ... }:
 {
   wayland.windowManager.hyprland = {
-    settings.monitor = [ ",preferred,auto,auto" ];
+    settings = {
+      monitor = [ "eDP-1,3072x1920@60,0x0,2" ];
+    };
 
     extraConfig = ''
       # hyprlang noerror true

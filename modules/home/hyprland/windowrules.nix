@@ -30,9 +30,9 @@
       "workspace 9, title:^(Shadow-CLJS)$"
       "workspace 9, title:^(Go Services)$"
       "workspace 10, title:^(Electron)$"
-      "workspace 12, class:^(Spotify)$"
-      "workspace 11, class:^(firefox)$,title:^(.*keep-profile.*)$"
-      "workspace 11, class:^(firefox)$,title:^(.*music-youtube.*)$"
+      "workspace 13, class:^(firefox)$,title:^(.*keep-profile.*)$"
+      "workspace 13, class:^(firefox)$,title:^(.*music-youtube.*)$"
+      "workspace 14, class:^(Spotify)$"
 
       # === Other workspace assignments ===
       "float,class:^(file_progress)$"

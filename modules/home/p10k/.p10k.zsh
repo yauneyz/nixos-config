@@ -103,6 +103,11 @@
   typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=231
   typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=231
   typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=231
+  typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=0
+  typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=0
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=0
+  typeset -g POWERLEVEL9K_VCS_CONFLICTED_FOREGROUND=0
+  typeset -g POWERLEVEL9K_VCS_LOADING_FOREGROUND=0
 
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON=
 
@@ -116,11 +121,11 @@
       return
     fi
 
-    local       meta='%1F' # red foreground
-    local      clean='%1F' # red foreground
-    local   modified='%1F' # red foreground
-    local  untracked='%1F' # red foreground
-    local conflicted='%1F' # red foreground
+    local       meta='%0F' # black foreground
+    local      clean='%0F' # black foreground
+    local   modified='%0F' # black foreground
+    local  untracked='%0F' # black foreground
+    local conflicted='%0F' # black foreground
 
     local res
 

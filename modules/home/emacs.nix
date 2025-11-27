@@ -2,12 +2,17 @@
 
 {
   home.packages = with pkgs; [
-    # Wrap Emacs with HiDPI environment variables for better scaling
-    (pkgs.writeShellScriptBin "emacs" ''
-      export GDK_SCALE=1.5
-      export GDK_DPI_SCALE=2.0  # Compensate for GDK_SCALE to avoid double-scaling fonts
-      exec ${pkgs.emacs}/bin/emacs "$@"
-    '')
+    # Wrap the real Emacs binary so we retain emacsclient and other tools
+    (pkgs.symlinkJoin {
+      name = "emacs-hidpi";
+      paths = [ pkgs.emacs ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/emacs \
+          --set GDK_SCALE 1.5 \
+          --set GDK_DPI_SCALE 2.0
+      '';
+    })
   ];
 
   # Also provide unwrapped emacs binary as emacs-unwrapped if needed

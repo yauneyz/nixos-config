@@ -18,9 +18,11 @@ in
     # Wallpaper (required)
     image = wallpaperPath;
 
+# Pick themes at https://tinted-theming.github.io/tinted-gallery/
     base16Scheme = lib.mkIf (!useWallpaperColors)
-      #"${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-      "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+			"${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+      #"${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+      #"${pkgs.base16-schemes}/share/themes/icy.yaml";
 
     # Polarity (matters for wallpaper-derived colors)
     polarity = "dark";

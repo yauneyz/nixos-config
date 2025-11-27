@@ -51,7 +51,8 @@
       "WebFetch(domain:gist.github.com)",
       "Bash(sudo journalctl:*)",
       "WebFetch(domain:jlesquembre.github.io)",
-      "Bash(nix flake lock:*)"
+      "Bash(nix flake lock:*)",
+      "Bash(hyprctl clients:*)"
     ],
     "deny": [],
     "ask": []

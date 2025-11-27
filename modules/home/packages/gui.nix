@@ -17,7 +17,7 @@
     anki
     libreoffice
     gnome-calculator
-    #thinky
+    thinky
 
     ## Utility
     dconf-editor

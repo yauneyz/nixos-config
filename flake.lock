@@ -178,11 +178,11 @@
     "focusd": {
       "flake": false,
       "locked": {
-        "lastModified": 1763990486,
-        "narHash": "sha256-32LXYeIOtPBicMpGfE7cJRJTlk7TGF1R0rpLCkZFkzs=",
+        "lastModified": 1763992032,
+        "narHash": "sha256-CMt16xGjNytBhD7jCikK4qr4LuB3rFaL8B8qTNd8JUo=",
         "ref": "refs/heads/main",
-        "rev": "7077cbca10dd9892ebd6de62fc38083a84e010b2",
-        "revCount": 9,
+        "rev": "ce064f72ad848456dd474b401d5bb9bd17e2cdb4",
+        "revCount": 10,
         "type": "git",
         "url": "file:///home/zac/development/tools/focusd-2"
       },
