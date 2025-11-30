@@ -1,6 +1,7 @@
 { lib
 , appimageTools
 , makeBinaryWrapper  # not used here, but harmless to leave
+, requireFile
 }:
 
 let
@@ -11,9 +12,21 @@ let
   # Hyprland doesn't support per-window scaling, so we force the app to draw larger.
   scaleFactor = "3";
 
-  # Point directly at your local AppImage.
-  # NOTE: Nix doesn't understand "~", so this MUST be an absolute path.
-  src = ./thinky.AppImage;
+  # Use requireFile to reference AppImage from nix store
+  # After building in ~/development/clojure/owl/electron, run:
+  # nix-store --add-fixed sha256 dist/thinky.AppImage
+  src = requireFile {
+    name = "thinky.AppImage";
+    url = "file:///home/zac/development/clojure/owl/electron/dist/thinky.AppImage";
+    sha256 = "02wxgnbc1siklrq6qck3mqxb7536711hybf5zlv6l727y28fl2mp";
+    message = ''
+      The Thinky AppImage is not in the Nix store.
+      Please add it by running:
+        nix-store --add-fixed sha256 ~/development/clojure/owl/electron/dist/thinky.AppImage
+
+      Or rebuild it using: npm run dist:linux (which will automatically add it)
+    '';
+  };
 
   # Extract AppImage contents for desktop file and icons
   appimageContents = appimageTools.extractType2 {

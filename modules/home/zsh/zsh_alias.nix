@@ -25,7 +25,7 @@ in
 
       lando = "cd ~/development/Lando/lando-video";
 
-			f2    = "cd ~/development/go/focusd-2";
+			f2    = "cd ~/development/tools/focusd";
       gos   = "cd ~/development/go/gophercises";
       com   = "cd ~/development/go/compass";
       pylon = "cd ~/development/go/pylon";
@@ -72,7 +72,7 @@ in
       # Emacs init
       ee   = "vim ~/.emacs.d/init.el";
 
-			blocklist = "sudo vim /root/.config/focusd/blocklist.yml";
+			blocklist = "sudo vim /etc/blocklist.yml";
 			focus-reload = "sudo systemctl restart focusd";
 
 

@@ -2,7 +2,7 @@
 {
   imports = [
     ./default.nix
-    ./data-symlinks.nix
+    ./symlinks.nix
     ./hyprland/monitors-desktop.nix
   ];
 }

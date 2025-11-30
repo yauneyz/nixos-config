@@ -16,10 +16,21 @@ in {
     };
 
     tokenHashFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       description = ''
         Path to the USB key token hash file (token.sha256).
         This file contains the SHA256 hash of your USB authentication key.
+        If not set, expects token to be manually symlinked to /etc/focusd/token.sha256.
+      '';
+    };
+
+    blocklistFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Path to the blocklist.yml file containing domains to block.
+        If set, this will be symlinked to /etc/blocklist.yml.
       '';
     };
 
@@ -45,21 +56,26 @@ in {
 
     # Create config directory and files
     environment.etc = {
-      "focusd/token.sha256" = {
-        source = cfg.tokenHashFile;
-      };
-
       "focusd/config.yaml" = {
         text = ''
           # focusd system configuration
-          # Blocklist is managed by user at: ~/.config/focusd/blocklist.yml
+          # Blocklist is managed at: /etc/blocklist.yml
           # See: ${cfg.package}/share/doc/blocklist.example.yml
 
           refreshIntervalMinutes: ${toString cfg.refreshIntervalMinutes}
           usbKeyPath: "${cfg.usbKeyPath}"
           tokenHashPath: "/etc/focusd/token.sha256"
           dnsmasqConfigPath: "/run/focusd/dnsmasq.conf"
+          blocklistPath: "/etc/blocklist.yml"
         '';
+      };
+    } // optionalAttrs (cfg.tokenHashFile != null) {
+      "focusd/token.sha256" = {
+        source = cfg.tokenHashFile;
+      };
+    } // optionalAttrs (cfg.blocklistFile != null) {
+      "blocklist.yml" = {
+        source = cfg.blocklistFile;
       };
     };
 
@@ -100,7 +116,7 @@ in {
         User = "root";  # Required for nftables, dnsmasq, and transparent proxy
         NoNewPrivileges = true;
         ProtectSystem = "strict";
-        ProtectHome = "read-only";  # Need to read user's blocklist at ~/.config/focusd/
+        ProtectHome = "read-only";
         ReadWritePaths = [
           "/var/lib/focusd"
           "/run/focusd"

@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   wayland.windowManager.hyprland = {
     settings = {
+      cursor = {
+        no_hardware_cursors = lib.mkDefault false;
+      };
+
       # Set to 120Hz for smoother experience
       monitor = [ "eDP-1,3072x1920@120,0x0,2" ];
     };

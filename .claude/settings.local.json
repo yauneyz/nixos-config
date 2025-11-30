@@ -54,7 +54,9 @@
       "Bash(nix flake lock:*)",
       "Bash(hyprctl clients:*)",
       "Bash(cpupower frequency-info:*)",
-      "Bash(paste:*)"
+      "Bash(paste:*)",
+      "Bash(readlink:*)",
+      "Bash(ln:*)"
     ],
     "deny": [],
     "ask": []

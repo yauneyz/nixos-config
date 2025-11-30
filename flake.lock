@@ -178,17 +178,17 @@
     "focusd": {
       "flake": false,
       "locked": {
-        "lastModified": 1763992032,
-        "narHash": "sha256-CMt16xGjNytBhD7jCikK4qr4LuB3rFaL8B8qTNd8JUo=",
-        "ref": "refs/heads/main",
-        "rev": "ce064f72ad848456dd474b401d5bb9bd17e2cdb4",
-        "revCount": 10,
+        "lastModified": 1764506576,
+        "narHash": "sha256-LQFBlGgaVbg/3/hr85ufvPD+ZZ930gkFEwkNDxWI8A4=",
+        "ref": "refs/heads/master",
+        "rev": "7c602728de033ddb612f5243ea430f5ae863f9ec",
+        "revCount": 11,
         "type": "git",
-        "url": "file:///home/zac/development/tools/focusd-2"
+        "url": "file:///home/zac/development/tools/focusd"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/zac/development/tools/focusd-2"
+        "url": "file:///home/zac/development/tools/focusd"
       }
     },
     "fromYaml": {

@@ -1,8 +1,12 @@
 { config, ... }:
+let
+  homeDir = config.home.homeDirectory;
+in
 {
-  # Symlink directories from /data to home folder
+  # Home directory symlinks
   # Using mkOutOfStoreSymlink to create direct symlinks instead of copying to Nix store
 
+  # Symlink directories from /data to home folder
   home.file."Documents".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Documents";
   home.file."Downloads".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Downloads";
   home.file."development".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/development";
@@ -18,4 +22,10 @@
   home.file.".tools".source = config.lib.file.mkOutOfStoreSymlink "/home/zac/dotfiles/.tools";
   home.file."Games/Retroid".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Games/Retroid";
   home.file."Games/Wii-U".source = config.lib.file.mkOutOfStoreSymlink "/data/zac/zac/Games/Wii-U";
+
+  # Thinky app-state.edn symlink
+  # Real file lives in ~/development/org/thinky/app-state.edn
+  # Symlink from ~/.config/Thinky/app-state.edn points to it
+  home.file.".config/Thinky/app-state.edn".source =
+    config.lib.file.mkOutOfStoreSymlink "${homeDir}/development/org/thinky/app-state.edn";
 }

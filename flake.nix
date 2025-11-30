@@ -30,7 +30,7 @@
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
 
     focusd = {
-      url = "git+file:///home/zac/development/tools/focusd-2";
+      url = "git+file:///home/zac/development/tools/focusd";
       flake = false;
     };
 
