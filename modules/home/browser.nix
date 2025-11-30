@@ -217,12 +217,6 @@ let
     };
   };
 
-  stylixAwareSettings = {
-    "browser.display.background_color" = hexColors.base00;
-    "browser.display.foreground_color" = hexColors.base05;
-    "layout.css.prefers-color-scheme.content-override" = 0;
-  };
-
   privacySettings = {
     "privacy.donottrackheader.enabled" = true;
     "privacy.query_stripping.enabled" = true;
@@ -256,12 +250,6 @@ let
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
   };
 
-  baseSettings =
-    stylixAwareSettings
-    // privacySettings
-    // performanceSettings
-    // chromeSettings;
-
   mkProfile =
     {
       name,
@@ -276,11 +264,16 @@ let
       inherit id;
       isDefault = name == "default";
       search = searchConfig;
-      settings = baseSettings // {
-        "browser.startup.page" = 1;
-        "browser.startup.homepage" = homepage;
-        "browser.newtabpage.enable-state-for-interactions" = false;
-      } // extraSettings;
+      settings =
+        privacySettings
+        // performanceSettings
+        // chromeSettings
+        // {
+          "browser.startup.page" = 1;
+          "browser.startup.homepage" = homepage;
+          "browser.newtabpage.enable-state-for-interactions" = false;
+        }
+        // extraSettings;
       userChrome = userChromeBase + extraChrome;
       userContent = userContentBase + extraContent;
       extensions.packages = extensionPackages;

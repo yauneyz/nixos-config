@@ -34,7 +34,7 @@ in
       focus = "cd ~/development/tools/focus";
       dev   = "cd ~/development";
       llm   = "cd ~/development/llm";
-      sd    = "cd ~/development/stable-diffusion";
+      #sd    = "cd ~/development/stable-diffusion";
       comfy = "cd ~/development/stable-diffusion/ComfyUI";
 
       home  = "cd ~";
@@ -199,6 +199,8 @@ in
       ns   = "npm run start";
       nd = "npm run develop";
       na = "shadow-cljs watch antei-lib";
+			test = "npx shadow-cljs compile test";
+			tw = "npx shadow-cljs watch test";
 
 
       ############################

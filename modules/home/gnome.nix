@@ -5,6 +5,7 @@
     [
       evince # pdf
       file-roller # archive
+      gedit # classic gnome text editor
       gnome-text-editor # gedit
     ]
   );

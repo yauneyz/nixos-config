@@ -15,6 +15,7 @@
     # Linters and formatters
     clj-kondo # Linter for Clojure
     cljfmt # Code formatter
+    zprint # Data/code formatter
 
     # Fast-starting Clojure scripting environment
     babashka # Fast native Clojure interpreter for scripting

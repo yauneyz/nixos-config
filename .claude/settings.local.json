@@ -52,7 +52,9 @@
       "Bash(sudo journalctl:*)",
       "WebFetch(domain:jlesquembre.github.io)",
       "Bash(nix flake lock:*)",
-      "Bash(hyprctl clients:*)"
+      "Bash(hyprctl clients:*)",
+      "Bash(cpupower frequency-info:*)",
+      "Bash(paste:*)"
     ],
     "deny": [],
     "ask": []

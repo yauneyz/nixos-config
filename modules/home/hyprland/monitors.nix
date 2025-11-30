@@ -2,7 +2,8 @@
 {
   wayland.windowManager.hyprland = {
     settings = {
-      monitor = [ "eDP-1,3072x1920@60,0x0,2" ];
+      # Set to 120Hz for smoother experience
+      monitor = [ "eDP-1,3072x1920@120,0x0,2" ];
     };
 
     extraConfig = ''
