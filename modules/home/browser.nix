@@ -1,161 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
-  colors = config.lib.stylix.colors;
-  hexColors = colors.withHashtag;
-  fonts = config.stylix.fonts;
-  sansFont = fonts.sansSerif.name;
-  monoFont = fonts.monospace.name;
-  normalizeSize =
-    size:
-    if builtins.isFloat size then builtins.floor (size + 0.5) else size;
-  fontSize = "${toString (normalizeSize fonts.sizes.applications)}px";
-
-  userChromeBase = ''
-    :root {
-      color-scheme: dark;
-      --fp-bg: ${hexColors.base00};
-      --fp-surface: ${hexColors.base01};
-      --fp-surface-alt: ${hexColors.base02};
-      --fp-border: ${hexColors.base03};
-      --fp-muted: ${hexColors.base04};
-      --fp-fg: ${hexColors.base05};
-      --fp-accent: ${hexColors.base0D};
-      --fp-accent-soft: ${hexColors.base0C};
-      --fp-danger: ${hexColors.base08};
-    }
-
-    #nav-bar,
-    #TabsToolbar,
-    #navigator-toolbox,
-    #titlebar {
-      background-color: var(--fp-surface) !important;
-      color: var(--fp-fg) !important;
-      font-family: "${sansFont}", sans-serif !important;
-      font-size: ${fontSize} !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-
-    #nav-bar {
-      border-block-end: 1px solid var(--fp-border) !important;
-    }
-
-    toolbarbutton,
-    .toolbarbutton-text,
-    .toolbarbutton-icon {
-      color: var(--fp-fg) !important;
-      fill: var(--fp-fg) !important;
-    }
-
-    .toolbarbutton-icon,
-    .toolbarbutton-1 {
-      border-radius: 6px !important;
-    }
-
-    #urlbar-background,
-    #searchbar {
-      background-color: var(--fp-bg) !important;
-      color: var(--fp-fg) !important;
-      border: 1px solid var(--fp-border) !important;
-      border-radius: 8px !important;
-      box-shadow: none !important;
-    }
-
-    #urlbar-input,
-    #searchbar {
-      font-family: "${sansFont}", sans-serif !important;
-    }
-
-    #PopupAutoCompleteRichResult,
-    #urlbar-results {
-      background-color: var(--fp-bg) !important;
-      color: var(--fp-fg) !important;
-      border: 1px solid var(--fp-border) !important;
-    }
-
-    .urlbarView-row[selected],
-    .autocomplete-richlistitem[selected] {
-      background-color: color-mix(in srgb, var(--fp-accent) 25%, transparent) !important;
-    }
-
-    .tabbrowser-tab {
-      font-family: "${sansFont}", sans-serif !important;
-    }
-
-    .tabbrowser-tab .tab-background {
-      border-radius: 8px 8px 0 0 !important;
-      margin-block-end: 0 !important;
-    }
-
-    .tabbrowser-tab[selected] .tab-background {
-      background: var(--fp-accent) !important;
-      color: var(--fp-bg) !important;
-    }
-
-    .tabbrowser-tab[selected] .tab-label {
-      color: var(--fp-bg) !important;
-      font-variation-settings: "wght" 550;
-    }
-
-    .tabbrowser-tab:not([selected]) .tab-label {
-      color: var(--fp-muted) !important;
-    }
-
-    .tab-close-button:hover {
-      background-color: color-mix(in srgb, var(--fp-danger) 30%, transparent) !important;
-    }
-
-    menupopup,
-    panel,
-    panelview {
-      background-color: var(--fp-bg) !important;
-      color: var(--fp-fg) !important;
-      font-family: "${sansFont}", sans-serif !important;
-      font-size: ${fontSize} !important;
-      border: 1px solid var(--fp-border) !important;
-    }
-
-    toolbarseparator,
-    menuseparator {
-      border-color: var(--fp-border) !important;
-    }
-
-    :root {
-      scrollbar-width: thin !important;
-      scrollbar-color: ${hexColors.base05} ${hexColors.base01} !important;
-    }
-  '';
-
-  userContentBase = ''
-    :root {
-      color-scheme: dark !important;
-    }
-
-    html,
-    body {
-      background-color: ${hexColors.base00} !important;
-      color: ${hexColors.base05} !important;
-      font-family: "${sansFont}", sans-serif !important;
-      font-size: ${fontSize} !important;
-    }
-
-    code,
-    pre,
-    kbd {
-      font-family: "${monoFont}", monospace !important;
-    }
-
-    @-moz-document url("about:blank"),
-    url-prefix("about:home"),
-    url-prefix("about:newtab"),
-    url-prefix("about:privatebrowsing") {
-      body {
-        background-color: ${hexColors.base00} !important;
-        color: ${hexColors.base05} !important;
-        font-family: "${sansFont}", sans-serif !important;
-      }
-    }
-  '';
 
   searchConfig = {
     default = "google";
@@ -244,7 +88,6 @@ let
     "browser.toolbars.bookmarks.visibility" = "always";
     "browser.shell.checkDefaultBrowser" = false;
     "general.autoScroll" = true;
-    "signon.rememberSignons" = false;
     "devtools.chrome.enabled" = true;
     "svg.context-properties.content.enabled" = true;
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
@@ -256,9 +99,7 @@ let
       id,
       homepage ? "about:home",
       extensionPackages ? [ ],
-      extraSettings ? { },
-      extraChrome ? "",
-      extraContent ? ""
+      extraSettings ? { }
     }:
     {
       inherit id;
@@ -274,8 +115,6 @@ let
           "browser.newtabpage.enable-state-for-interactions" = false;
         }
         // extraSettings;
-      userChrome = userChromeBase + extraChrome;
-      userContent = userContentBase + extraContent;
       extensions.packages = extensionPackages;
     };
 
@@ -356,8 +195,5 @@ in
         firefoxProfiles
     );
 
-  stylix.targets.firefox = {
-    enable = false;
-    profileNames = firefoxProfiles;
-  };
+  stylix.targets.firefox.enable = false;
 }

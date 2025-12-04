@@ -45,8 +45,7 @@
       # Utility bindings (from i3)
       "$mainMod SHIFT, S, exec, hyprctl dispatch dpms toggle"  # i3: Mod1+Shift+s (screen sleep toggle)
 
-      # Lock and power
-      "$mainMod, Escape, exec, hyprlock"
+      # Power menu
       "$mainMod SHIFT, Escape, exec, power-menu"
 
       # Screenshot (i3: Print key)

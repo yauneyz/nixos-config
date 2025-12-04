@@ -1,8 +1,9 @@
 { host, config, lib, ... }:
 let
   colors = config.lib.stylix.colors;
+  lockScreenEnabled = false; # disable hyprlock so the session never prompts for a password
 in
-{
+lib.mkIf lockScreenEnabled {
   programs.hyprlock = {
     enable = true;
 

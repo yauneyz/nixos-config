@@ -6,7 +6,7 @@
     (pkgs.symlinkJoin {
       name = "emacs-hidpi";
       paths = [ pkgs.emacs ];
-      buildInputs = [ pkgs.makeWrapper ];
+      buildInputs = [ pkgs.makeWrapper pkgs.wl-clipboard ];
       postBuild = ''
         wrapProgram $out/bin/emacs \
           --set GDK_SCALE 1.5 \

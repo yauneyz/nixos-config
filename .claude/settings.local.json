@@ -56,7 +56,10 @@
       "Bash(cpupower frequency-info:*)",
       "Bash(paste:*)",
       "Bash(readlink:*)",
-      "Bash(ln:*)"
+      "Bash(ln:*)",
+      "Bash(emacs:*)",
+      "WebFetch(domain:evil.readthedocs.io)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []

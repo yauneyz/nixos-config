@@ -14,6 +14,11 @@
 
   services = {
     power-profiles-daemon.enable = true;
+    logind = {
+      # Explicitly suspend only when the lid closes
+      lidSwitch = "suspend";
+      lidSwitchExternalPower = "suspend";
+    };
 
     # focusd distraction blocker
     # Blocklist managed at ~/.config/focusd/blocklist.yml
