@@ -3,7 +3,8 @@ let
   colors = config.lib.stylix.colors.withHashtag;
 in
 {
-  wayland.windowManager.hyprland.settings = {
+  wayland.windowManager.hyprland = {
+    settings = {
     cursor = {
       enable_hyprcursor = true;
       warp_on_change_workspace = false;
@@ -26,15 +27,6 @@ in
         natural_scroll = true;
       };
     };
-
-    # Device-specific configuration
-    device = [
-      {
-        name = "logitech-mx-ergo-multi-device-trackball-";
-        sensitivity = 1.0;  # Maximum acceleration (from i3 trackball script)
-        accel_profile = "adaptive";
-      }
-    ];
 
     general = {
       "$mainMod" = "ALT";
@@ -135,5 +127,17 @@ in
       force_zero_scaling = true;
       use_nearest_neighbor = true;  # optional, but helps avoid blur if scaling ever happens
     };
+    };
+
+    # Device-specific configuration using extraConfig
+    # This is required because home-manager's Nix attribute ordering
+    # conflicts with Hyprland's requirement for device blocks
+    extraConfig = ''
+      device {
+        name = mx-ergo
+        sensitivity = 1.0
+        accel_profile = adaptive
+      }
+    '';
   };
 }

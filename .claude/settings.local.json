@@ -59,7 +59,9 @@
       "Bash(ln:*)",
       "Bash(emacs:*)",
       "WebFetch(domain:evil.readthedocs.io)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "WebFetch(domain:discourse.doomemacs.org)",
+      "WebFetch(domain:vi.stackexchange.com)"
     ],
     "deny": [],
     "ask": []

@@ -16,6 +16,7 @@
       "$mainMod, E, exec, emacs"  # i3: Mod1+e
       "$mainMod SHIFT, E, exec, restart-emacs-daemon.sh" # restart emacs daemon
       "$mainMod, D, exec, rofi -show drun"  # i3: Mod1+d (launcher)
+      "$mainMod, Z, exec, toggle-monitor"
 
       # Bluetooth controls (from i3) - Connect/disconnect headphones
       "$mainMod, B, exec, bluetoothctl connect 94:DB:56:F7:A5:C7"  # i3: Mod1+b

@@ -1,10 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # Go compiler and runtime
-    go
-
-    # Language Server Protocol
+    # Language Server Protocol + IDE helpers
     gopls
 
     # Debugger

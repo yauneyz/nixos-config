@@ -10,6 +10,8 @@
     ./stylix.nix
     ./pipewire.nix
     ./program.nix
+    ./python-packages.nix
+    ./go-packages.nix
     ./security.nix
     ./services.nix
     ./syncthing.nix
