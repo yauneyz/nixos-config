@@ -12,6 +12,8 @@
 
     nix-ld.enable = true;
     nix-ld.libraries = with pkgs; [
+      # C/C++ standard library for Python packages with native extensions
+      stdenv.cc.cc
       expat
       libgbm
       libxkbcommon

@@ -113,6 +113,7 @@ let
           "browser.startup.page" = 1;
           "browser.startup.homepage" = homepage;
           "browser.newtabpage.enable-state-for-interactions" = false;
+          "browser.download.useDownloadDir" = false;
         }
         // extraSettings;
       extensions.packages = extensionPackages;

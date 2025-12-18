@@ -23,4 +23,15 @@
           --replace 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
       '';
   });
+  wf-recorder = prev.wf-recorder.overrideAttrs (old: rec {
+    version = "0.6.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "ammen99";
+      repo = "wf-recorder";
+      rev = "v${version}";
+      hash = "sha256-CY0pci2LNeQiojyeES5323tN3cYfS3m4pECK85fpn5I=";
+    };
+    # Remove old patches - they're already applied in 0.6.0
+    patches = [ ];
+  });
 }

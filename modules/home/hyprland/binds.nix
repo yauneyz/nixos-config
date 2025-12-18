@@ -52,6 +52,13 @@
       # Screenshot (i3: Print key)
       ",Print, exec, screenshot --copy"
 
+      # Lando capture tools
+      "$mainMod CTRL, R, exec, record-lando-video"
+      "$mainMod CTRL, T, exec, get-lando-thumbnail"
+      "$mainMod CTRL, S, exec, get-lando-screenshot"
+      "$mainMod CTRL, bracketleft, exec, record-lando-prev"
+      "$mainMod CTRL, bracketright, exec, record-lando-next"
+
       # switch focus
       "$mainMod, left,  movefocus, l"
       "$mainMod, right, movefocus, r"

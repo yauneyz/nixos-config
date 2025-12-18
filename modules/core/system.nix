@@ -28,6 +28,8 @@
   environment.systemPackages = with pkgs; [
     wget
     git
+    maim                              # CLI screenshot tool
+    slop                              # region selector used with maim
     #python3Packages.torch
   ];
 

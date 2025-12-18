@@ -24,4 +24,10 @@
     python312Packages.pipx
     uv
   ];
+
+  # Python packages in virtualenvs need LD_LIBRARY_PATH for C extensions
+  # Use nix-ld's managed library path for clean, durable configuration
+  home.sessionVariables = {
+    LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
+  };
 }

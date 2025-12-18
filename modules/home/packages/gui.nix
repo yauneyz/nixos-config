@@ -8,6 +8,7 @@
     obs-studio
     pavucontrol
     simplescreenrecorder
+    wf-recorder   # Wayland screen recorder
     spotify
     soundwireserver
     video-trimmer
