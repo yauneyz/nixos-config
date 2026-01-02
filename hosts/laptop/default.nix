@@ -21,10 +21,10 @@
     };
 
     # focusd distraction blocker
-    # Blocklist managed at ~/.config/focusd/blocklist.yml
 		focusd = {
 			enable = true;
 			tokenHashFile = ../../secrets/focusd-token.sha256;
+			blocklistFile = ../../secrets/blocklist.yml;
 		};
 
     upower = {

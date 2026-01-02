@@ -16,12 +16,14 @@
         22
         80
         443
+        7777 # LAN gaming
         22000 # Syncthing transfers
         59010
         59011
       ];
       allowedUDPPorts = [
         1194 # NordVPN
+        7777 # LAN gaming
         21027 # Syncthing discovery
         22000 # Syncthing QUIC
         59010
