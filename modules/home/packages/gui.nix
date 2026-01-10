@@ -16,6 +16,8 @@
 
     ## Office
     anki
+    # calibre  # Temporarily disabled due to CUDA/PyTorch download issues
+    foliate
     libreoffice
     gnome-calculator
     thinky

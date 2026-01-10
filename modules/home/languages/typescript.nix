@@ -35,6 +35,10 @@
 
     # Code quality
     nodePackages.jshint
+    ripgrep
+
+    # Formatting utilities
+    zprint
 
     # Package managers
     nodePackages.yarn # Alternative package manager

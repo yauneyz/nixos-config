@@ -33,7 +33,7 @@
 
   # Enable focusd distraction blocker
   # Token and blocklist are symlinked from dotfiles via tmpfiles
-  services.focusd.enable = true;
+#  services.focusd.enable = true;
 
   # Create symlinks from /etc to dotfiles for focusd
   systemd.tmpfiles.rules = [
