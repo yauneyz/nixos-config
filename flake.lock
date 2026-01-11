@@ -175,6 +175,22 @@
         "type": "github"
       }
     },
+    "focusd": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767443717,
+        "narHash": "sha256-JvhwOpztRw3TtS3t3bmDtwp3V4YTqPZDHKX7vg/UzUA=",
+        "ref": "refs/heads/master",
+        "rev": "f38c833077e819da543ed75d5d5fa1a8f4689c2f",
+        "revCount": 13,
+        "type": "git",
+        "url": "file:///home/zac/development/tools/focusd"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/zac/development/tools/focusd"
+      }
+    },
     "fromYaml": {
       "flake": false,
       "locked": {
@@ -442,6 +458,7 @@
     },
     "root": {
       "inputs": {
+        "focusd": "focusd",
         "home-manager": "home-manager",
         "maple-mono": "maple-mono",
         "nix-flatpak": "nix-flatpak",

@@ -24,6 +24,7 @@ in
       mem   = "cd ~/development/research/ai/memory";
 
       lando = "cd ~/development/Lando/lando-video";
+      f2    = "cd ~/development/tools/focusd";
 
       gos   = "cd ~/development/go/gophercises";
       com   = "cd ~/development/go/compass";
@@ -71,11 +72,19 @@ in
       # Emacs init
       ee   = "vim ~/.emacs.d/init.el";
 
+      # focusd config
+      blocklist = "sudo vim /etc/blocklist.yml";
+      focus-reload = "sudo systemctl restart focusd";
+
 
       ############################
       # General commands / tooling
       ############################
 			cpy = "copy <";
+
+      # Focus tool
+      disable = "sudo focusd disable && focus-reload";
+      enable  = "sudo focusd enable && focus-reload";
 
       # NixOS
       rebuild = rebuildAlias;

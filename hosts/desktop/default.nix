@@ -31,6 +31,16 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # Enable focusd distraction blocker
+  # Token and blocklist are symlinked from dotfiles via tmpfiles
+  services.focusd.enable = true;
+
+  # Create symlinks from /etc to dotfiles for focusd
+  systemd.tmpfiles.rules = [
+    "L+ /etc/focusd/token.sha256 - - - - /data/zac/zac/dotfiles/focusd/token.sha256"
+    "L+ /etc/blocklist.yml - - - - /data/zac/zac/dotfiles/focusd/blocklist.yml"
+  ];
+
   hardware = {
     graphics = {
       enable = true;

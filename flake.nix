@@ -25,6 +25,11 @@
       flake = false;
     };
 
+    focusd = {
+      url = "git+file:///home/zac/development/tools/focusd";
+      flake = false;
+    };
+
     superfile.url = "github:yorukot/superfile";
     vicinae.url = "github:vicinaehq/vicinae";
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
@@ -55,7 +60,7 @@
     {
       # Export custom packages for direct building
       packages.${system} = {
-        inherit (pkgs) thinky;
+        inherit (pkgs) focusd thinky;
       };
 
       nixosConfigurations = {
