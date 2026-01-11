@@ -134,7 +134,7 @@ in
     # conflicts with Hyprland's requirement for device blocks
     extraConfig = ''
       device {
-        name = mx-ergo
+        name = logitech-mx-ergo-multi-device-trackball-
         sensitivity = 1.0
         accel_profile = adaptive
       }
