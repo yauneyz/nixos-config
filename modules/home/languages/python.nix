@@ -26,8 +26,11 @@
   ];
 
   # Python packages in virtualenvs need LD_LIBRARY_PATH for C extensions
-  # Use nix-ld's managed library path for clean, durable configuration
-  home.sessionVariables = {
-    LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
-  };
+  # Set in shell environment to avoid boot hangs from sessionVariables
+  # Uses nix-ld's managed library collection from modules/core/program.nix
+  programs.zsh.envExtra = ''
+    # Add nix-ld library path for Python virtualenv C extensions (pytest, etc.)
+    # Prepend to path and preserve any existing LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH="/run/current-system/sw/share/nix-ld/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  '';
 }
