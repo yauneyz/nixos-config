@@ -25,7 +25,6 @@ in
 
       lando = "cd ~/development/Lando/lando-video";
 
-			f2    = "cd ~/development/tools/focusd";
       gos   = "cd ~/development/go/gophercises";
       com   = "cd ~/development/go/compass";
       pylon = "cd ~/development/go/pylon";
@@ -72,18 +71,11 @@ in
       # Emacs init
       ee   = "vim ~/.emacs.d/init.el";
 
-			blocklist = "sudo vim /etc/blocklist.yml";
-			focus-reload = "sudo systemctl restart focusd";
-
 
       ############################
       # General commands / tooling
       ############################
 			cpy = "copy <";
-
-      # Focus tool
-      disable = "sudo focusd disable && focus-reload";
-      enable  = "sudo focusd enable && focus-reload";
 
       # NixOS
       rebuild = rebuildAlias;

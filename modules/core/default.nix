@@ -21,7 +21,6 @@
     ./user.nix
     ./wayland.nix
     ./virtualization.nix
-#		./focusd.nix
     #./vr.nix
   ];
 }

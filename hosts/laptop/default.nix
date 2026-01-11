@@ -20,13 +20,6 @@
       lidSwitchExternalPower = "suspend";
     };
 
-    # focusd distraction blocker
-		focusd = {
-			enable = true;
-			tokenHashFile = ../../secrets/focusd-token.sha256;
-			blocklistFile = ../../secrets/blocklist.yml;
-		};
-
     upower = {
       enable = true;
       percentageLow = 20;

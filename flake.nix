@@ -29,11 +29,6 @@
     vicinae.url = "github:vicinaehq/vicinae";
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
 
-    focusd = {
-      url = "git+file:///home/zac/development/tools/focusd";
-      flake = false;
-    };
-
   };
 
   outputs =
@@ -60,7 +55,7 @@
     {
       # Export custom packages for direct building
       packages.${system} = {
-        inherit (pkgs) focusd thinky;
+        inherit (pkgs) thinky;
       };
 
       nixosConfigurations = {
