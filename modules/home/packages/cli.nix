@@ -14,6 +14,7 @@ in
     man-pages                         # extra man pages
     ncdu                              # disk space
     ripgrep                           # grep replacement
+    grip                              # GitHub Markdown preview
     tldr
 
     ## Coding agents

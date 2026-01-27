@@ -14,10 +14,12 @@
     nix-ld.libraries = with pkgs; [
       # C/C++ standard library for Python packages with native extensions
       stdenv.cc.cc
+      libglvnd
       expat
       libgbm
       libxkbcommon
       gtk3
+      gsettings-desktop-schemas
       gdk-pixbuf
       pango
       cairo

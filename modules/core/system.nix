@@ -31,6 +31,7 @@
     libxcrypt-legacy
     p7zip
     steam-run
+    gsettings-desktop-schemas
     maim                              # CLI screenshot tool
     slop                              # region selector used with maim
     usbutils                          # provides lsusb
