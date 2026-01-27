@@ -28,8 +28,14 @@
   environment.systemPackages = with pkgs; [
     wget
     git
+    libxcrypt-legacy
+    p7zip
+    steam-run
     maim                              # CLI screenshot tool
     slop                              # region selector used with maim
+    usbutils                          # provides lsusb
+    wineWowPackages.stable
+    winetricks
     #python3Packages.torch
   ];
 

@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
+let
+  codexLatest = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+in
 {
   home.packages = with pkgs; [
     ## Better core utils
@@ -16,10 +19,11 @@
     ## Coding agents
     gemini-cli
     claude-code
-    codex
+    codexLatest                       # codex CLI (fast-updating flake)
 
     ## Tools / useful cli
     aoc-cli                           # Advent of Code command-line tool
+    awscli2
     asciinema
     asciinema-agg
     binsider
@@ -29,6 +33,7 @@
     hyperfine                         # benchmarking tool
     pastel                            # cli to manipulate colors
     scooter                           # Interactive find and replace in the terminal
+    stripe-cli                        # Stripe CLI
     swappy                            # snapshot editing tool
     tdf                               # cli pdf viewer
     tokei                             # project line counter
@@ -72,6 +77,7 @@
     enchant2                          # spellchecking utilities
     ffmpeg
     file                              # Show file information
+    firebase-tools                    # Firebase CLI
     jq                                # JSON processor
     killall
     libnotify
@@ -79,6 +85,7 @@
     openssl
     pamixer                           # pulseaudio command line mixer
     playerctl                         # controller for media players
+    postgresql                        # PostgreSQL client tools (psql, etc.)
     poweralertd
     slurp                             # select region on screen (Wayland)
     grim                              # screenshot utility (Wayland)

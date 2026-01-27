@@ -46,6 +46,7 @@
       cups
       alsa-lib
       libpulseaudio
+      libxcrypt-legacy
     ];
   };
 }

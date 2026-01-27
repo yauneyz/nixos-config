@@ -19,5 +19,10 @@
 
 
     udisks2.enable = true;
+
+    postgresql = {
+      enable = true;
+      package = pkgs.postgresql_16;
+    };
   };
 }

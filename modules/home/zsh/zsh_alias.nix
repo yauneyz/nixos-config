@@ -133,6 +133,9 @@ in
       piv = "python -m venv .venv";
       psv = "source .venv/bin/activate";
 
+			cl = "claude";
+			clr = "claude --resume";
+
 
       ############################
       # Safety
@@ -158,7 +161,6 @@ in
       ".."    = "cd ..";
       "..."   = "cd ..; cd ..";
       md      = "mkdir";
-      cl      = "clear";
       du      = "du -ch --max-depth=1";
       treeacl = "tree -A -C -L 2";
 
@@ -202,6 +204,8 @@ in
       na = "shadow-cljs watch antei-lib";
 			test = "npx shadow-cljs compile test";
 			tw = "npx shadow-cljs watch test";
+      ac = "npm run antei:compile";
+      at = "npm run antei";
 
 
       ############################

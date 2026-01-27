@@ -26,8 +26,18 @@
     };
 
     focusd = {
-      url = "git+file:///home/zac/development/tools/focusd";
+      url = "git+file:///data/zac/zac/development/tools/focusd";
       flake = false;
+    };
+
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     superfile.url = "github:yorukot/superfile";
@@ -45,6 +55,7 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
+          inputs.claude-code.overlays.default
           (final: prev:
             (import ./pkgs {
               inherit inputs;

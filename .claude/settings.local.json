@@ -64,7 +64,9 @@
       "WebFetch(domain:vi.stackexchange.com)",
       "Bash(nix --extra-experimental-features 'nix-command flakes' build --print-out-paths '.#nixosConfigurations.\"\"desktop\"\".config.system.build.toplevel' --no-link)",
       "Bash(nix log:*)",
-      "Bash(nix-hash --type sha256 --flat --base32:*)"
+      "Bash(nix-hash --type sha256 --flat --base32:*)",
+      "Bash(hyprctl devices:*)",
+      "Bash(git -C /data/zac/zac/development/tools/focusd remote:*)"
     ],
     "deny": [],
     "ask": []

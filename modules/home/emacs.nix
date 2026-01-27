@@ -32,6 +32,7 @@
     multimarkdown         # For markdown-mode preview
     pandoc                # For markdown export
     ripgrep               # Already in cli.nix, used by deadgrep/consult
+
   ];
 
   # Also provide unwrapped emacs binary as emacs-unwrapped if needed

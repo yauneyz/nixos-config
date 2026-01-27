@@ -28,7 +28,7 @@
     ## Emulation
     sameboy
     snes9x
-    # cemu
+    cemu
     # dolphin-emu
   ];
 }
