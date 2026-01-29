@@ -6,7 +6,7 @@
 
   xdg.portal = {
     enable = true;
-    xdgOpenUsePortal = true;
+    xdgOpenUsePortal = false;
     config = {
       common.default = [ "gtk" ];
       hyprland.default = [
@@ -15,6 +15,9 @@
       ];
     };
 
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+    ];
   };
 }

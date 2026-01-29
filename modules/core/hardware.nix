@@ -11,7 +11,6 @@
         libvdpau-va-gl
       ];
     };
-    opengl.driSupport32Bit = true;
 
     bluetooth = {
       enable = true;

@@ -16,8 +16,12 @@
     power-profiles-daemon.enable = true;
     logind = {
       # Explicitly suspend only when the lid closes
-      lidSwitch = "suspend";
-      lidSwitchExternalPower = "suspend";
+      settings = {
+        Login = {
+          HandleLidSwitch = "suspend";
+          HandleLidSwitchExternalPower = "suspend";
+        };
+      };
     };
 
     # focusd distraction blocker

@@ -26,7 +26,7 @@
     };
 
     focusd = {
-      url = "git+file:///data/zac/zac/development/tools/focusd";
+      url = "git+file:///home/zac/development/tools/focusd";
       flake = false;
     };
 

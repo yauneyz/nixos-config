@@ -3,7 +3,7 @@
   wayland.windowManager.hyprland = {
     settings = {
       cursor = {
-        no_hardware_cursors = lib.mkDefault false;
+        no_hardware_cursors = true;
       };
 
       # Set to 120Hz for smoother experience
