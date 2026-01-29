@@ -66,7 +66,15 @@
       "Bash(nix log:*)",
       "Bash(nix-hash --type sha256 --flat --base32:*)",
       "Bash(hyprctl devices:*)",
-      "Bash(git -C /data/zac/zac/development/tools/focusd remote:*)"
+      "Bash(git -C /data/zac/zac/development/tools/focusd remote:*)",
+      "Bash(systemctl:*)",
+      "Bash(git -C /home/zac/nixos-config status)",
+      "Bash(source /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh)",
+      "Bash(echo:*)",
+      "Bash(. /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh)",
+      "Bash(bash -c 'source /etc/profiles/per-user/zac/etc/profile.d/hm-session-vars.sh && echo $USE_SYSTEM_FPM')",
+      "Bash(zsh -c:*)",
+      "Bash(export USE_SYSTEM_FPM=\"true\")"
     ],
     "deny": [],
     "ask": []

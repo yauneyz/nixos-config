@@ -5,8 +5,9 @@
     ./audacious/audacious.nix         # music player
     ./bat.nix                         # better cat command
     ./browser.nix                     # firefox based browser
-    ./btop.nix                        # resouces monitor 
+    ./btop.nix                        # resouces monitor
     ./cava.nix                        # audio visualizer
+    ./envars.nix                      # misc environment variables
     ./path.nix                        # custom PATH entries
     ./discord.nix                     # discord
     ./emacs.nix                       # emacs editor
@@ -27,7 +28,7 @@
     ./obsidian.nix
     ./p10k/p10k.nix
     ./packages                        # other packages
-    ./retroarch.nix  
+    ./retroarch.nix
     ./rofi/rofi.nix                   # launcher
     ./scripts/scripts.nix             # personal scripts
     ./ssh.nix                         # ssh config

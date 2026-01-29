@@ -79,6 +79,7 @@ in
     ffmpeg
     file                              # Show file information
     firebase-tools                    # Firebase CLI
+    fpm                               # Effing Package Management
     jq                                # JSON processor
     killall
     libnotify
