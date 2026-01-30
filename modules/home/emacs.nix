@@ -12,7 +12,7 @@
           --set GDK_SCALE 1.5 \
           --set GDK_DPI_SCALE 2.0 \
           --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.pkg-config pkgs.gcc pkgs.gnumake ]} \
-          --prefix PKG_CONFIG_PATH : "${pkgs.enchant2.dev}/lib/pkgconfig"
+          --prefix PKG_CONFIG_PATH : "${pkgs.enchant_2.dev}/lib/pkgconfig"
       '';
     })
 
@@ -21,8 +21,8 @@
     pkg-config            # Required for jinx compilation
     gcc                   # C compiler for building native modules
     gnumake               # Build tool
-    enchant2              # Runtime library (also in cli.nix)
-    enchant2.dev          # Development headers - CRITICAL for pkg-config!
+    enchant_2             # Runtime library (also in cli.nix)
+    enchant_2.dev         # Development headers - CRITICAL for pkg-config!
     aspell                # Spell checker backend for enchant
     aspellDicts.en        # English dictionary
     aspellDicts.en-computers  # Computer terms dictionary

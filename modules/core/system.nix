@@ -25,6 +25,25 @@
     };
   };
 
+  systemd.services.nixos-flake-update = {
+    description = "Update nixpkgs flake input for nixos-config";
+    serviceConfig = {
+      Type = "oneshot";
+      WorkingDirectory = "/home/zac/nixos-config";
+      ExecStart = "/run/current-system/sw/bin/nix flake lock --update-input nixpkgs --update-input claude-code --update-input codex-cli-nix";
+      User = "zac";
+    };
+  };
+
+  systemd.timers.nixos-flake-update = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10m";
+      OnUnitActiveSec = "12h";
+      Persistent = true;
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     wget
     git
@@ -39,6 +58,7 @@
     usbutils                          # provides lsusb
     wineWowPackages.stable
     winetricks
+    llama-cpp
     #python3Packages.torch
   ];
 

@@ -10,6 +10,14 @@
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
   focusd = pkgs.callPackage ./focusd { focusdSrc = inputs.focusd; };
   thinky = pkgs.callPackage ./thinky { };
+  python312Packages = prev.python312Packages.overrideScope (finalPy: prevPy: {
+    jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
+      doCheck = false;
+    });
+  });
+  firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {
+    buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_20; };
+  };
   alvr = prev.alvr.overrideAttrs (old: {
     postPatch =
       (old.postPatch or "")

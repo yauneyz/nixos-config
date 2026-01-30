@@ -10,6 +10,7 @@ in
 {
   stylix = {
     enable = true;
+    enableReleaseChecks = false;
     autoEnable = true;  # Auto-theme installed applications
 
     # Disable GRUB theming (using custom theme instead)

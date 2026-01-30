@@ -40,6 +40,7 @@
     ./vscodium                        # vscode fork
     ./waybar                          # status bar
     # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)
+    ./xresources.nix                  # X resources (xterm font, etc.)
     ./xdg-mimes.nix                   # xdg config
     ./zsh                             # shell
   ];

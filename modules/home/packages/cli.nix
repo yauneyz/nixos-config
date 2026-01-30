@@ -75,7 +75,7 @@ in
 
     ## Utilities
     entr                              # perform action when file change
-    enchant2                          # spellchecking utilities
+    enchant_2                         # spellchecking utilities
     ffmpeg
     file                              # Show file information
     firebase-tools                    # Firebase CLI

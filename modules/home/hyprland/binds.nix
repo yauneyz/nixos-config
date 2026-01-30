@@ -1,6 +1,7 @@
 { ... }:
 {
   wayland.windowManager.hyprland.settings = {
+		"$mainMod" = "ALT";
     binds = {
       movefocus_cycles_fullscreen = true;
     };

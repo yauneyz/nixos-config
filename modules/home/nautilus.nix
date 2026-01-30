@@ -3,12 +3,6 @@
   home.packages = with pkgs; [ nautilus ];
 
   dconf.settings = {
-    # follow GNOME's documented interface schema to prefer a dark theme so Nautilus
-    # and other libadwaita apps stay consistent
-    "org/gnome/desktop/interface" = {
-      color-scheme = "prefer-dark";
-    };
-
     "org/gnome/nautilus/preferences" = {
       always-use-location-entry = true;
       default-folder-viewer = "list-view";

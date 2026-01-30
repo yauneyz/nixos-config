@@ -36,7 +36,6 @@ in
       border_size = 2;
       # Border colors are set by Stylix
       # border_part_of_window = false;
-      no_border_on_floating = false;
     };
 
     misc = {
@@ -46,7 +45,7 @@ in
       animate_manual_resizes = false;
       enable_swallow = true;
       focus_on_activate = true;
-      new_window_takes_over_fullscreen = 2;
+      on_focus_under_fullscreen = 2;
       middle_click_paste = false;
     };
 

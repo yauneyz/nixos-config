@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ... }:
+{ stdenv, fetchFromGitHub, perl, ... }:
 
 stdenv.mkDerivation {
   pname = "2048";
@@ -11,7 +11,13 @@ stdenv.mkDerivation {
     sha256 = "sha256-DqOSfKQC7WdslEknzFByZPc20AsjX6+5PwKR3gqucOM=";
   };
 
-  buildInputs = [ ];
+  nativeBuildInputs = [ perl ];
+
+  postPatch = ''
+    substituteInPlace src/main.c \
+      --replace-warn 'void signal_callback_handler()' 'void signal_callback_handler(int signum)'
+    perl -0777 -i -pe 's/(void signal_callback_handler\\(int signum\\)\\s*\\{)/$1\\n    (void)signum;/s' src/main.c
+  '';
 
   buildPhase = ''
     make release
