@@ -32,6 +32,8 @@
     p7zip
     steam-run
     gsettings-desktop-schemas
+    lsof
+    psmisc
     maim                              # CLI screenshot tool
     slop                              # region selector used with maim
     usbutils                          # provides lsusb

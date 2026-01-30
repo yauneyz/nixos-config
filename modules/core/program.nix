@@ -1,5 +1,13 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
+  # Environment variables for AppImage support
+  environment.sessionVariables = {
+    XDG_DATA_DIRS = lib.mkAfter [
+      "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+      "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+    ];
+  };
+
   programs = {
     dconf.enable = true;
     zsh.enable = true;
