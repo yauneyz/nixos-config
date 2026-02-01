@@ -27,11 +27,13 @@
       "opacity 1.0 override 1.0 override, match:class (zen)"
       "opacity 1.0 override 1.0 override, match:class (evince)"
       # === Window assignments from i3 ===
+      "workspace 1, match:class ^.*[Tt][Hh][Ii][Nn][Kk][Yy].*$"
       "workspace 9, match:title ^(Shadow-CLJS)$"
       "workspace 9, match:title ^(Go Services)$"
       "workspace 10, match:title ^(Electron)$"
       "workspace 13, match:class ^(firefox)$, match:title ^(.*keep-profile.*)$"
       "workspace 13, match:class ^(firefox)$, match:title ^(.*music-youtube.*)$"
+      # o -> workspace 14
       "workspace 14, match:class ^(Spotify)$"
 
       # === Other workspace assignments ===
