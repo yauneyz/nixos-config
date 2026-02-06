@@ -26,8 +26,8 @@
     # === Editors (Emacs) ===
     "[workspace 3 silent] emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs"
     "[workspace 9 silent] emacs ~/development/clojure/owl/todo.org"
-    "[workspace 11 silent] emacs ~/development/org/working-memory.org"
-    "[workspace 12 silent] emacs ~/development/go/tutorial/"
+    #"[workspace 11 silent] emacs ~/development/org/working-memory.org"
+    #"[workspace 12 silent] emacs ~/development/go/tutorial/"
     "[workspace 15 silent] emacs ~/development/org/misc/todo.org"
 
     # === Development Terminals ===
@@ -35,7 +35,7 @@
 		# TODO - figure out how to make go-services work properly
     #"[workspace 9 silent] ghostty --class go-services -e bash -c 'cd /home/zac/development/go/wikidex; bash start-dev.sh'"
     "[workspace 9 silent] ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop'"
-    "[workspace 10 silent] ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run start'"
+    #"[workspace 10 silent] ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run start'"
 
     # === Media ===
     "[workspace 14 silent] spotify"

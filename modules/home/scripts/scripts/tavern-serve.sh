@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-models_dir="${LLAMA_MODELS_DIR:-$HOME/.local/share/llama.cpp/models}"
+models_dir="${LLAMA_TAVERN_MODELS_DIR:-$HOME/.local/share/llama.cpp/tavern}"
 mkdir -p "$models_dir"
 
 model="${1:-}"
@@ -24,15 +24,7 @@ fi
 port="${LLAMA_PORT:-11434}"
 threads="${LLAMA_THREADS:-$(nproc)}"
 ctx="64000"
-ngl=""
-fit=""
-
-host="$(hostname)"
-if [[ "$host" == "desktop" ]]; then
-  fit="on"
-else
-  ngl="0"
-fi
+fit="auto"
 
 extra_args=()
 if [[ -n "${LLAMA_SERVER_ARGS:-}" ]]; then
@@ -47,15 +39,8 @@ cmd=(
   --port "$port"
   --ctx-size "$ctx"
   --threads "$threads"
+  --fit "$fit"
 )
-
-if [[ -n "$ngl" ]]; then
-  cmd+=(--n-gpu-layers "$ngl")
-fi
-
-if [[ -n "$fit" ]]; then
-  cmd+=(--fit "$fit")
-fi
 
 cmd+=("${extra_args[@]}")
 

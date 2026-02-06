@@ -27,6 +27,7 @@
     gnome-disk-utility
     mission-center # GUI resources monitor
     overskride # Modern Bluetooth manager
+    sillytavern
     zenity
     zoom-us
 

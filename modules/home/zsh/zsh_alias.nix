@@ -5,11 +5,7 @@ let
       "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#desktop"
     else
       "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#laptop";
-  llamaServeAlias =
-    if host == "desktop" then
-      "LLAMA_N_GPU_LAYERS=999 llama-serve"
-    else
-      "LLAMA_N_GPU_LAYERS=0 llama-serve";
+  llamaServeAlias = "llama-serve";
 in
 {
   programs.zsh = {

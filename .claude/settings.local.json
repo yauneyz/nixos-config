@@ -74,7 +74,11 @@
       "Bash(. /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh)",
       "Bash(bash -c 'source /etc/profiles/per-user/zac/etc/profile.d/hm-session-vars.sh && echo $USE_SYSTEM_FPM')",
       "Bash(zsh -c:*)",
-      "Bash(export USE_SYSTEM_FPM=\"true\")"
+      "Bash(export USE_SYSTEM_FPM=\"true\")",
+      "Bash(nix show-derivation:*)",
+      "Bash(sha256sum:*)",
+      "Bash(nix-prefetch-url:*)",
+      "Bash(nix-hash:*)"
     ],
     "deny": [],
     "ask": []

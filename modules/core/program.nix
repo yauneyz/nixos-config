@@ -57,6 +57,7 @@
       alsa-lib
       libpulseaudio
       libxcrypt-legacy
+      libcap
     ];
   };
 }

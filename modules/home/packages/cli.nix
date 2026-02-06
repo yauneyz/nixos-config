@@ -1,6 +1,32 @@
 { pkgs, inputs, ... }:
 let
-  codexLatest = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  codexOriginal = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  codexLatest = pkgs.stdenv.mkDerivation {
+    name = "codex-patched";
+    src = codexOriginal;
+    dontUnpack = true;
+
+    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+    buildInputs = [
+      pkgs.libcap.lib
+      pkgs.openssl
+      pkgs.stdenv.cc.cc.lib
+    ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      # Copy the actual binary
+      cp $src/bin/codex-raw $out/bin/codex-raw
+      # Create a new wrapper that points to our patched binary
+      cat > $out/bin/codex <<EOF
+      #!/usr/bin/env bash
+      export CODEX_EXECUTABLE_PATH="\$HOME/.local/bin/codex"
+      export DISABLE_AUTOUPDATER=1
+      exec "$out/bin/codex-raw" "\$@"
+      EOF
+      chmod +x $out/bin/codex
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
