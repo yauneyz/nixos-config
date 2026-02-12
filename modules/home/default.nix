@@ -1,6 +1,7 @@
-{ ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
+    inputs.whisper-overlay.homeManagerModules.default
     ./aseprite/aseprite.nix           # pixel art editor
     ./audacious/audacious.nix         # music player
     ./bat.nix                         # better cat command
@@ -40,9 +41,15 @@
     ./vscodium                        # vscode fork
     ./waybar                          # status bar
     # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)
-    ./whisper-overlay.nix             # wayland voice dictation
     ./xresources.nix                  # X resources (xterm font, etc.)
     ./xdg-mimes.nix                   # xdg config
     ./zsh                             # shell
   ];
+
+  home.packages = with pkgs; [
+    whisper-overlay
+    wtype
+  ];
+
+  services.realtime-stt-server.enable = true;
 }
