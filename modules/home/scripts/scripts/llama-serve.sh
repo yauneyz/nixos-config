@@ -29,9 +29,11 @@ fit=""
 
 host="$(hostname)"
 if [[ "$host" == "desktop" ]]; then
+  # Let llama.cpp pick the maximum offload that fits VRAM for this model/device.
+  ngl="${LLAMA_N_GPU_LAYERS:-auto}"
   fit="on"
 else
-  ngl="0"
+  ngl="${LLAMA_N_GPU_LAYERS:-0}"
 fi
 
 extra_args=()

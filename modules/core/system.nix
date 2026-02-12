@@ -1,4 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, host, ... }:
+let
+  llamaCppPackage =
+    if host == "desktop" then
+      pkgs.llama-cpp.override { cudaSupport = true; }
+    else
+      pkgs.llama-cpp;
+in
 {
   # imports = [ inputs.nix-gaming.nixosModules.default ];
   nix = {
@@ -58,7 +65,7 @@
     usbutils                          # provides lsusb
     wineWowPackages.stable
     winetricks
-    llama-cpp
+    llamaCppPackage
     #python3Packages.torch
   ];
 

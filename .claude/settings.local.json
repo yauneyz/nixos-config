@@ -78,7 +78,12 @@
       "Bash(nix show-derivation:*)",
       "Bash(sha256sum:*)",
       "Bash(nix-prefetch-url:*)",
-      "Bash(nix-hash:*)"
+      "Bash(nix-hash:*)",
+      "WebFetch(domain:wiki.hypr.land)",
+      "WebFetch(domain:wiki.mozilla.org)",
+      "WebFetch(domain:wiki.hyprland.org)",
+      "WebFetch(domain:code.hyprland.org)",
+      "WebFetch(domain:linuxiac.com)"
     ],
     "deny": [],
     "ask": []

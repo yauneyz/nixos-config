@@ -3,10 +3,19 @@
   nixpkgs = {
     config = {
       allowBroken = true;  # Allow broken packages (needed for vLLM/flashinfer)
-			cudaSupport = (host == "desktop");  # Uncomment to enable CUDA on desktop (~2hr initial build)
+      # Keep CUDA disabled globally; enabling it here forces unrelated packages
+      # (e.g. Firefox -> onnxruntime -> cutlass) into expensive CUDA builds.
+      cudaSupport = false;
     };
 
     overlays = [
+      # Home Manager still references deprecated xorg aliases in some modules.
+      (final: prev: {
+        xorg = prev.xorg // {
+          xrdb = prev.xrdb;
+          lndir = prev.lndir;
+        };
+      })
       (
         final: prev:
         (import ../../pkgs {

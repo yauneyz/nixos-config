@@ -27,14 +27,20 @@
       "opacity 1.0 override 1.0 override, match:class (zen)"
       "opacity 1.0 override 1.0 override, match:class (evince)"
       # === Window assignments from i3 ===
-      "workspace 1, match:class ^.*[Tt][Hh][Ii][Nn][Kk][Yy].*$"
-      "workspace 9, match:title ^(Shadow-CLJS)$"
-      "workspace 9, match:title ^(Go Services)$"
-      "workspace 10, match:title ^(Electron)$"
-      "workspace 13, match:class ^(firefox)$, match:title ^(.*keep-profile.*)$"
-      "workspace 13, match:class ^(firefox)$, match:title ^(.*music-youtube.*)$"
-      # o -> workspace 14
-      "workspace 14, match:class ^(Spotify)$"
+      "workspace 1, match:class (?i)thinky"
+      "workspace 14, match:class ^(spotify)$"
+
+      # === Firefox by title ===
+      "workspace 13, match:title .*Google Keep.*"
+      "workspace 13, match:title .*YouTube.*"
+
+      # === Emacs by title ===
+      "workspace 3, match:class ^(Emacs)$, match:title .*PdfWindow\\.cljs.*"
+      "workspace 9, match:class ^(Emacs)$, match:title .*owl/todo\\.org.*"
+      "workspace 15, match:class ^(Emacs)$, match:title .*misc/todo\\.org.*"
+
+      # === Development terminals ===
+      "workspace 9, match:class ^(owl-dev)$"
 
       # === Other workspace assignments ===
       "float on, match:class ^(file_progress)$"

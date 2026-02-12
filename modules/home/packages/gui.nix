@@ -7,6 +7,7 @@
     media-downloader
     obs-studio
     pavucontrol
+    shotcut
     simplescreenrecorder
     wf-recorder   # Wayland screen recorder
     spotify

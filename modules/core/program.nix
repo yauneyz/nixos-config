@@ -40,18 +40,18 @@
       libdrm
       mesa
       libxshmfence
-      xorg.libxcb
-      xorg.libX11
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libXcomposite
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXtst
-      xorg.libXext
-      xorg.libXrender
-      xorg.libXScrnSaver
+      libxcb
+      libx11
+      libxdamage
+      libxfixes
+      libxcomposite
+      libxrandr
+      libxcursor
+      libxi
+      libxtst
+      libxext
+      libxrender
+      libxscrnsaver
       dbus
       cups
       alsa-lib
