@@ -18,19 +18,7 @@
 
     "ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=false"
 
-    # === Browsers ===
-    "firefox --new-window https://keep.google.com"
-    "firefox --new-window https://youtube.com"
-
-    # === Editors (Emacs) ===
-    "emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs"
-    "emacs ~/development/clojure/owl/todo.org"
-    "emacs ~/development/org/misc/todo.org"
-
-    # === Development Terminals ===
-    "ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop'"
-
-    # === Media ===
-    "spotify"
+    # Launch apps on designated workspaces via hyprctl dispatch
+    "hypr-startup &"
   ];
 }

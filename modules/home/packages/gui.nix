@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    ## Browser
+    google-chrome
+
     ## Multimedia
     audacity
     gimp

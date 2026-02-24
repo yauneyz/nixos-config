@@ -40,11 +40,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    whisper-overlay = {
-      url = "github:oddlama/whisper-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     superfile.url = "github:yorukot/superfile";
     vicinae.url = "github:vicinaehq/vicinae";
     zen-browser.url = "github:0xc000022070/zen-browser-flake/beta";
@@ -61,7 +56,6 @@
         config.allowUnfree = true;
         overlays = [
           inputs.claude-code.overlays.default
-          inputs.whisper-overlay.overlays.default
           (final: prev:
             (import ./pkgs {
               inherit inputs;

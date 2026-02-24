@@ -30,15 +30,6 @@
       "workspace 1, match:class (?i)thinky"
       "workspace 14, match:class ^(spotify)$"
 
-      # === Firefox by title ===
-      "workspace 13, match:title .*Google Keep.*"
-      "workspace 13, match:title .*YouTube.*"
-
-      # === Emacs by title ===
-      "workspace 3, match:class ^(Emacs)$, match:title .*PdfWindow\\.cljs.*"
-      "workspace 9, match:class ^(Emacs)$, match:title .*owl/todo\\.org.*"
-      "workspace 15, match:class ^(Emacs)$, match:title .*misc/todo\\.org.*"
-
       # === Development terminals ===
       "workspace 9, match:class ^(owl-dev)$"
 

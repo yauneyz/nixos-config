@@ -1,7 +1,6 @@
-{ inputs, pkgs, ... }:
+{ ... }:
 {
   imports = [
-    inputs.whisper-overlay.homeManagerModules.default
     ./aseprite/aseprite.nix           # pixel art editor
     ./audacious/audacious.nix         # music player
     ./bat.nix                         # better cat command
@@ -45,11 +44,4 @@
     ./xdg-mimes.nix                   # xdg config
     ./zsh                             # shell
   ];
-
-  home.packages = with pkgs; [
-    whisper-overlay
-    wtype
-  ];
-
-  services.realtime-stt-server.enable = true;
 }

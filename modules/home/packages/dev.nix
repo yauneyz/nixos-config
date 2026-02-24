@@ -18,6 +18,9 @@
     valgrind
     llvmPackages_20.clang-tools
 
+    ## Android
+    android-studio
+
     # Electron/GUI App Dependencies
     gtk3
     nss

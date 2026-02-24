@@ -23,7 +23,7 @@
       vim-javascript
       vim-jsx-pretty
       vimtex
-      semshi
+      nvim-treesitter.withAllGrammars
 
       # Themes
       gruvbox
@@ -57,6 +57,12 @@
       " Indent
       set autoindent
       set smartindent
+
+      " Tree-sitter loads from Home Manager's packpath after init, so configure on VimEnter.
+      augroup TreesitterSetup
+        autocmd!
+        autocmd VimEnter * lua local ok, ts = pcall(require, 'nvim-treesitter.configs'); if ok then ts.setup({ highlight = { enable = true }, indent = { enable = true } }) end
+      augroup END
 
       "" Setup ale
       let g:ale_linters = {

@@ -118,6 +118,8 @@ in
       open  = "xdg-open";
       space = "ncdu";
       man   = "batman";
+			wc    = "wc -w";
+
 
       # Listing
       l    = "eza --icons -a --group-directories-first -1 --no-user --long"; # EZA_ICON_SPACING=2
