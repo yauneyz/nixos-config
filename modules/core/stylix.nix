@@ -5,7 +5,8 @@ let
   useWallpaperColors = false;
 
   # Wallpaper path (always required)
-  wallpaperPath = ../../wallpapers/otherWallpaper/zac/nixos_wave.png;
+  wallpaperPath = ../../wallpapers/nixos_wave.png;
+
 in
 {
   stylix = {

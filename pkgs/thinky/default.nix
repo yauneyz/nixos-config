@@ -18,7 +18,7 @@ let
   src = requireFile {
     name = "thinky.AppImage";
     url = "file:///home/zac/development/clojure/owl/electron/dist/thinky.AppImage";
-    sha256 = "02map4rl3mljizjk851q2xxmsg2l9g8l6hgnccx4pmr4qqp8jhdb";
+    sha256 = "1vjh4yg2jrypandg41c8qj70mf7gg3zanfd523cgx5s4rkap8nip";
     message = ''
       The Thinky AppImage is not in the Nix store.
       Please add it by running:

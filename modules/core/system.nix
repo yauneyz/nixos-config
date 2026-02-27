@@ -63,11 +63,15 @@ in
     maim                              # CLI screenshot tool
     slop                              # region selector used with maim
     usbutils                          # provides lsusb
-    wineWowPackages.stable
+    wineWow64Packages.stable
     winetricks
     llamaCppPackage
     #python3Packages.torch
   ];
+
+  # Upstream Python docs build is currently failing (Sphinx/docutils).
+  # Keep package docs out of system-path so rebuilds remain unblocked.
+  documentation.doc.enable = false;
 
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";

@@ -3,7 +3,7 @@ with lib;
 let
   defaultApps = {
     text = [ "org.gnome.TextEditor.desktop" ];
-    image = [ "imv-dir.desktop" ];
+    image = [ "org.gnome.Loupe.desktop" ];
     audio = [ "mpv.desktop" ];
     video = [ "mpv.desktop" ];
     directory = [ "org.gnome.Nautilus.desktop" ];

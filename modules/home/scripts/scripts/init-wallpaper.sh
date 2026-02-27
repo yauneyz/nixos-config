@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# Wallpaper paths (relative to nixos-config directory)
-NIXOS_CONFIG="${HOME}/nixos-config"
-WALLPAPER_LEFT="${NIXOS_CONFIG}/wallpapers/otherWallpaper/gruvbox/forest_road.jpg"
-WALLPAPER_RIGHT="${NIXOS_CONFIG}/wallpapers/otherWallpaper/gruvbox/japanese_pedestrian_street.png"
+# Wallpaper configuration
+WP_DIR="${HOME}/nixos-config/wallpapers"
+WP_LEFT="Portrait/red4.jpg"
+WP_RIGHT="red3.jpg"
 
 # Start swww daemon if not running
 if ! pgrep -x swww-daemon > /dev/null; then
@@ -20,9 +20,9 @@ HOSTNAME=$(hostname)
 
 if [ "$HOSTNAME" = "desktop" ]; then
     # Desktop: Set per-monitor wallpapers
-    swww img -t none --outputs DP-1 "$WALLPAPER_LEFT" &
-    swww img -t none --outputs DP-2 "$WALLPAPER_RIGHT" &
+    swww img -t none --outputs DP-1 "${WP_DIR}/${WP_LEFT}" &
+    swww img -t none --outputs DP-2 "${WP_DIR}/${WP_RIGHT}" &
 else
     # Laptop or other: Set single wallpaper
-    swww img -t none "$WALLPAPER_RIGHT" &
+    swww img -t none "${WP_DIR}/${WP_RIGHT}" &
 fi
