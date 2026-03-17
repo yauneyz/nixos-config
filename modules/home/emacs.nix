@@ -9,8 +9,6 @@
       buildInputs = [ pkgs.makeWrapper pkgs.wl-clipboard ];
       postBuild = ''
         wrapProgram $out/bin/emacs \
-          --set GDK_SCALE 1.5 \
-          --set GDK_DPI_SCALE 2.0 \
           --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.pkg-config pkgs.gcc pkgs.gnumake ]} \
           --prefix PKG_CONFIG_PATH : "${pkgs.enchant_2.dev}/lib/pkgconfig"
       '';
