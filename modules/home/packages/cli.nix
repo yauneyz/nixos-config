@@ -39,6 +39,7 @@ in
     gtrash                            # rm replacement, put deleted files in system trash
     hexyl                             # hex viewer
     man-pages                         # extra man pages
+    dust                              # disk usage tree
     ncdu                              # disk space
     ripgrep                           # grep replacement
     grip                              # GitHub Markdown preview
@@ -106,6 +107,7 @@ in
     ffmpeg
     file                              # Show file information
     firebase-tools                    # Firebase CLI
+    heroku                            # Heroku CLI
     fpm                               # Effing Package Management
     jq                                # JSON processor
     killall

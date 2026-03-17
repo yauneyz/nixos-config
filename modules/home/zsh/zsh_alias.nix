@@ -1,11 +1,14 @@
 { host, ... }:
 let
-  rebuildAlias =
-    if host == "desktop" then
-      "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#desktop"
-    else
-      "cd ~/nixos-config && sudo nixos-rebuild switch --flake .#laptop";
+  rebuildAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host}";
   llamaServeAlias = "llama-serve";
+  focusdSrcPath =
+    if host == "desktop" then
+      "/data/zac/zac/development/tools/focusd"
+    else
+      "/home/zac/development/tools/focusd";
+  updateFocusdAlias =
+    "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input focusd git+file://${focusdSrcPath}";
 in
 {
   programs.zsh = {
@@ -76,6 +79,7 @@ in
       # focusd config
       blocklist = "sudo vim /etc/blocklist.yml";
       focus-reload = "sudo systemctl restart focusd";
+      update-focusd = updateFocusdAlias;
 
 
       ############################

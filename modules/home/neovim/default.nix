@@ -1,37 +1,35 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-{
-  # Keep Stylix from overriding the manually configured Neovim theme.
-  stylix.targets.neovim.enable = false;
+let
+  plugins = with pkgs.vimPlugins; [
+    nerdtree
+    nerdcommenter
+    vim-surround
+    vim-fugitive
+    vim-tmux-navigator
+    emmet-vim
+    ultisnips
+    vim-snippets
+    ale
+    vim-airline
+    fzf-vim
+    bclose-vim
+    vim-javascript
+    vim-jsx-pretty
+    vimtex
+    nvim-treesitter.withAllGrammars
 
-  programs.neovim = {
-    enable = true;
+    # Themes
+    gruvbox
+    tokyonight-nvim
+    catppuccin-nvim
+    kanagawa-nvim
+  ];
+
+  neovimPackage = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped {
     vimAlias = true;
-    plugins = with pkgs.vimPlugins; [
-      nerdtree
-      nerdcommenter
-      vim-surround
-      vim-fugitive
-      vim-tmux-navigator
-      emmet-vim
-      ultisnips
-      vim-snippets
-      ale
-      vim-airline
-      fzf-vim
-      bclose-vim
-      vim-javascript
-      vim-jsx-pretty
-      vimtex
-      nvim-treesitter.withAllGrammars
-
-      # Themes
-      gruvbox
-      tokyonight-nvim
-      catppuccin-nvim
-      kanagawa-nvim
-    ];
-    extraConfig = ''
+    inherit plugins;
+    neovimRcContent = ''
       let g:mapleader = " "
       " This needs to go before plugins are loaded
       let g:ale_disable_lsp = 1
@@ -58,7 +56,6 @@
       set autoindent
       set smartindent
 
-      " Tree-sitter loads from Home Manager's packpath after init, so configure on VimEnter.
       augroup TreesitterSetup
         autocmd!
         autocmd VimEnter * lua local ok, ts = pcall(require, 'nvim-treesitter.configs'); if ok then ts.setup({ highlight = { enable = true }, indent = { enable = true } }) end
@@ -118,4 +115,10 @@
       colorscheme kanagawa
     '';
   };
+in
+{
+  # Keep Stylix from overriding the manually configured Neovim theme.
+  stylix.targets.neovim.enable = false;
+
+  home.packages = [ neovimPackage ];
 }

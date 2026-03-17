@@ -83,7 +83,10 @@
       "WebFetch(domain:wiki.mozilla.org)",
       "WebFetch(domain:wiki.hyprland.org)",
       "WebFetch(domain:code.hyprland.org)",
-      "WebFetch(domain:linuxiac.com)"
+      "WebFetch(domain:linuxiac.com)",
+      "Bash(sudo du:*)",
+      "Bash(grep:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

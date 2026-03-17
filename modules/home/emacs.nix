@@ -5,7 +5,7 @@
     # Wrap the real Emacs binary so we retain emacsclient and other tools
     (pkgs.symlinkJoin {
       name = "emacs-hidpi";
-      paths = [ pkgs.emacs ];
+      paths = [ pkgs.emacs-pgtk ];
       buildInputs = [ pkgs.makeWrapper pkgs.wl-clipboard ];
       postBuild = ''
         wrapProgram $out/bin/emacs \
@@ -37,6 +37,6 @@
 
   # Also provide unwrapped emacs binary as emacs-unwrapped if needed
   home.shellAliases = {
-    emacs-unwrapped = "${pkgs.emacs}/bin/emacs";
+    emacs-unwrapped = "${pkgs.emacs-pgtk}/bin/emacs";
   };
 }

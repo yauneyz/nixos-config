@@ -11,6 +11,10 @@
   programs = {
     dconf.enable = true;
     zsh.enable = true;
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
 
     gnupg.agent = {
       enable = true;
@@ -58,6 +62,7 @@
       libpulseaudio
       libxcrypt-legacy
       libcap
+      fuse # Provides libfuse.so.2 required by some AppImage runtimes
     ];
   };
 }

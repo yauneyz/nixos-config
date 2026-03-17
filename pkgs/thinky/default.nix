@@ -13,20 +13,22 @@ let
   scaleFactor = "3";
 
   # Use requireFile to reference AppImage from nix store
-  # After building in ~/development/clojure/owl/electron, run:
-  # nix-store --add-fixed sha256 dist/thinky.AppImage
+  # Add/update this hash with:
+  # thinky-hash /path/to/thinky.AppImage
   src = requireFile {
     name = "thinky.AppImage";
-    url = "file:///home/zac/development/clojure/owl/electron/dist/thinky.AppImage";
-    sha256 = "1vjh4yg2jrypandg41c8qj70mf7gg3zanfd523cgx5s4rkap8nip";
+    url = "https://www.thinky.dev";
+    sha256 = "15vdvlgx8qakl350lwj0mlkqcxfa31cibscsjiqpcc7kmxvrqlrq";
     message = ''
-      The Thinky AppImage is not in the Nix store.
-      Please add it by running:
-        nix-store --add-fixed sha256 ~/development/clojure/owl/electron/dist/thinky.AppImage
+      The Thinky AppImage is not in the Nix store for this hash.
+      Add it by running:
+        thinky-hash /path/to/thinky.AppImage
 
-      Or rebuild it using: npm run dist:linux (which will automatically add it)
+      Or manually:
+        nix-store --add-fixed sha256 /path/to/thinky.AppImage
     '';
   };
+  srcStorePath = builtins.unsafeDiscardStringContext src.outPath;
 
   # Extract AppImage contents for desktop file and icons
   appimageContents = appimageTools.extractType2 {
@@ -35,6 +37,12 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  # Expose the fixed-output source path so config can skip Thinky cleanly
+  # when the AppImage has not been added to the store yet.
+  passthru = {
+    appimageStorePath = srcStorePath;
+  };
 
   # This script is sourced inside the FHS env before running the AppImage.
   # We keep it simple to avoid ${...} conflicts with Nix interpolation.
