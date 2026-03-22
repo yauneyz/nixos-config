@@ -28,6 +28,8 @@ let
 
   neovimPackage = pkgs.wrapNeovimUnstable pkgs.neovim-unwrapped {
     vimAlias = true;
+    withPython3 = true;
+    extraPython3Packages = ps: [ ps.pynvim ];
     inherit plugins;
     neovimRcContent = ''
       let g:mapleader = " "

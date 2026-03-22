@@ -2,13 +2,13 @@
 let
   rebuildAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host}";
   llamaServeAlias = "llama-serve";
+  vllmServeAlias = "vllm-serve";
   focusdSrcPath =
     if host == "desktop" then
       "/data/zac/zac/development/tools/focusd"
     else
       "/home/zac/development/tools/focusd";
-  updateFocusdAlias =
-    "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input focusd git+file://${focusdSrcPath}";
+  updateFocusdAlias = "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input focusd git+file://${focusdSrcPath}";
 in
 {
   programs.zsh = {
@@ -17,79 +17,78 @@ in
       # Directory shortcuts
       ############################
 
-      nc    = "cd ~/nixos-config";
-      mc  = "cd ~/nixos-config/modules/core";
-      mh  = "cd ~/nixos-config/modules/home";
-      hypr  = "cd ~/nixos-config/modules/home/hyprland";
+      nc = "cd ~/nixos-config";
+      mc = "cd ~/nixos-config/modules/core";
+      mh = "cd ~/nixos-config/modules/home";
+      hypr = "cd ~/nixos-config/modules/home/hyprland";
 
-      res   = "cd ~/development/research/";
-      ai    = "cd ~/development/research/ai";
-      koop  = "cd ~/development/research/ai/koopman";
-      mem   = "cd ~/development/research/ai/memory";
+      res = "cd ~/development/research/";
+      ai = "cd ~/development/research/ai";
+      koop = "cd ~/development/research/ai/koopman";
+      mem = "cd ~/development/research/ai/memory";
 
       lando = "cd ~/development/Lando/lando-video";
-      f2    = "cd ~/development/tools/focusd";
+      f2 = "cd ~/development/tools/focusd";
 
-      gos   = "cd ~/development/go/gophercises";
-      com   = "cd ~/development/go/compass";
+      gos = "cd ~/development/go/gophercises";
+      com = "cd ~/development/go/compass";
       pylon = "cd ~/development/go/pylon";
-      dex   = "cd ~/development/go/wikidex";
+      dex = "cd ~/development/go/wikidex";
 
+      jir = "cd ~/development/jirachi";
       focus = "cd ~/development/tools/focus";
-      dev   = "cd ~/development";
-      llm   = "cd ~/development/llm";
+      dev = "cd ~/development";
+      llm = "cd ~/development/llm";
       #sd    = "cd ~/development/stable-diffusion";
       comfy = "cd ~/development/stable-diffusion/ComfyUI";
 
-      home  = "cd ~";
+      home = "cd ~";
 
-      anki  = "cd ~/development/anki";
-      org   = "cd ~/development/org";
+      anki = "cd ~/development/anki";
+      org = "cd ~/development/org";
 
-      owl   = "cd ~/development/clojure/owl";
-      ou    = "cd ~/development/clojure/owl/electron";
-      ob    = "cd ~/development/clojure/owl/site";
-      thc   = "cd ~/.config/Thinky";
-      antei   = "cd ~/development/clojure/owl/antei";
+      owl = "cd ~/development/clojure/owl";
+      ou = "cd ~/development/clojure/owl/electron";
+      ob = "cd ~/development/clojure/owl/site";
+      thc = "cd ~/.config/Thinky";
+      antei = "cd ~/development/clojure/owl/antei";
 
-      dot   = "cd ~/dotfiles";
-      edot  = "cd ~/.emacs.d";
-
+      dot = "cd ~/dotfiles";
+      edot = "cd ~/.emacs.d";
 
       ############################
       # Config / file editing shortcuts
       ############################
 
       # Edit zsh config in NixOS (updated from ~/.bashrc)
-      vbrc  = "vim ~/nixos-config/modules/home/zsh/zsh.nix";
-      valias  = "vim ~/nixos-config/modules/home/zsh/zsh_alias.nix";
+      vbrc = "vim ~/nixos-config/modules/home/zsh/zsh.nix";
+      valias = "vim ~/nixos-config/modules/home/zsh/zsh_alias.nix";
 
       # Hyperland config (was i3: ii → now hh, opens Hyprland nix)
-      hh   = "vim ~/nixos-config/modules/home/hyprland/hyprland.nix";
+      hh = "vim ~/nixos-config/modules/home/hyprland/hyprland.nix";
 
       # Waybar config (was polybar)
       wbar = "vim ~/nixos-config/modules/home/waybar/waybar.nix";
 
       # Neovim config via Nix (was ~/.config/nvim/init.vim)
-      vv   = "vim ~/nixos-config/modules/home/nvim.nix";
+      vv = "vim ~/nixos-config/modules/home/nvim.nix";
 
       # Emacs init
-      ee   = "vim ~/.emacs.d/init.el";
+      ee = "vim ~/.emacs.d/init.el";
 
       # focusd config
       blocklist = "sudo vim /etc/blocklist.yml";
       focus-reload = "sudo systemctl restart focusd";
       update-focusd = updateFocusdAlias;
 
-
       ############################
       # General commands / tooling
       ############################
-			cpy = "copy <";
+      cpy = "copy <";
 
       # Focus tool
       disable = "sudo focusd disable && focus-reload";
-      enable  = "sudo focusd enable && focus-reload";
+      enable = "sudo focusd enable && focus-reload";
 
       # NixOS
       rebuild = rebuildAlias;
@@ -100,33 +99,35 @@ in
 
       # LLM server
       llmserve = llamaServeAlias;
+      vllmserve = vllmServeAlias;
+      oss-serve = "llama-serve-gpt-oss-20b";
+      w-serve = "llama-serve-weirdcompound-24b";
 
       # Motion helpers
       cd = "z";
-      c  = "z";
+      c = "z";
 
       # Utils
-      tt    = "gtrash put";
-      cat   = "bat";
-      nano  = "micro";
+      tt = "gtrash put";
+      cat = "bat";
+      nano = "micro";
       "mod+g" = "micro";
-      code  = "codium";
-      diff  = "delta --diff-so-fancy --side-by-side";
-      less  = "bat";
-      copy  = "wl-copy";
-      f     = "superfile";
-      ipy   = "ipython";
-      icat  = "kitten icat";
+      code = "codium";
+      diff = "delta --diff-so-fancy --side-by-side";
+      less = "bat";
+      copy = "wl-copy";
+      f = "superfile";
+      ipy = "ipython";
+      icat = "kitten icat";
       dsize = "du -hs";
-      pdf   = "tdf";
-      open  = "xdg-open";
+      pdf = "tdf";
+      open = "xdg-open";
       space = "ncdu";
-      man   = "batman";
-			wc    = "wc -w";
-
+      man = "batman";
+      wc = "wc -w";
 
       # Listing
-      l    = "eza --icons -a --group-directories-first -1 --no-user --long"; # EZA_ICON_SPACING=2
+      l = "eza --icons -a --group-directories-first -1 --no-user --long"; # EZA_ICON_SPACING=2
       tree = "eza --icons --tree --group-directories-first";
 
       # Nix / nh / nom
@@ -143,9 +144,8 @@ in
       piv = "python -m venv .venv";
       psv = "source .venv/bin/activate";
 
-			cl = "claude";
-			clr = "claude --resume";
-
+      cl = "claude";
+      clr = "claude --resume";
 
       ############################
       # Safety
@@ -156,27 +156,25 @@ in
       cp = "cp -i";
       # alias rm="gio trash"
 
-
       ############################
       # Listing / directories / motion
       ############################
 
-      ls      = "ls --color";
-      ll      = "ls -alrtF --color";
-      la      = "ls -A";
-      lal     = "ls -al";
-      dir     = "ls --color=auto --format=vertical";
-      vdir    = "ls --color=auto --format=long";
-      m       = "less";
-      ".."    = "cd ..";
-      "..."   = "cd ..; cd ..";
-      md      = "mkdir";
-      du      = "du -ch --max-depth=1";
+      ls = "ls --color";
+      ll = "ls -alrtF --color";
+      la = "ls -A";
+      lal = "ls -al";
+      dir = "ls --color=auto --format=vertical";
+      vdir = "ls --color=auto --format=long";
+      m = "less";
+      ".." = "cd ..";
+      "..." = "cd ..; cd ..";
+      md = "mkdir";
+      du = "du -ch --max-depth=1";
       treeacl = "tree -A -C -L 2";
 
       grep = "grep -n --color=auto";
-      gg   = "grep -rn --color=auto";
-
+      gg = "grep -rn --color=auto";
 
       ############################
       # Standard dirs / language helpers
@@ -186,9 +184,9 @@ in
       # (home already defined above in directory section)
 
       # Python
-      p       = "python";
-      pip     = "pip3";
-      freeze  = "pip freeze";
+      p = "python";
+      pip = "pip3";
+      freeze = "pip freeze";
       freezer = "pip freeze >| requirements.txt";
 
       # Heroku Git
@@ -201,22 +199,20 @@ in
 
       # Editors
       vim = "nvim";
-      v   = "vim";
-
+      v = "vim";
 
       ############################
       # Node shortcuts
       ############################
 
       # Keep nom/nh meanings for ns/nd/nb/nc; use separate names for Node
-      ns   = "npm run start";
+      ns = "npm run start";
       nd = "npm run develop";
       na = "shadow-cljs watch antei-lib";
-			test = "npx shadow-cljs compile test";
-			tw = "npx shadow-cljs watch test";
+      test = "npx shadow-cljs compile test";
+      tw = "npx shadow-cljs watch test";
       ac = "npm run antei:compile";
       at = "npm run antei";
-
 
       ############################
       # Misc config / apps
@@ -236,7 +232,6 @@ in
       ho = "heroku open";
       hl = "heroku local";
 
-
       ############################
       # Projects / scripts
       ############################
@@ -247,24 +242,22 @@ in
       # Jekyll
       js = "bundle exec jekyll serve";
 
-
       ############################
       # System / misc tools
       ############################
 
-      smi        = "nvidia-smi";
-      audio      = "wpctl status";
-      unmount    = "sudo umount -l /media/usb";
+      smi = "nvidia-smi";
+      audio = "wpctl status";
+      unmount = "sudo umount -l /media/usb";
       "mount-key" = "sudo mount /dev/sdc2 /media/usb";
-
 
       ############################
       # Clojure
       ############################
 
-      cljs    = "shadow-cljs";
+      cljs = "shadow-cljs";
       default = "cp -f electron/resources/default-state.edn electron/resources/storage/app-state.edn";
-      ld      = "set -a; source .env; set +a; lein ring server-headless 3000";
+      ld = "set -a; source .env; set +a; lein ring server-headless 3000";
     };
   };
 }

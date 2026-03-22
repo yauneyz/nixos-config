@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     nodejs_22
+    bun
 
     nodePackages.typescript
     nodePackages.typescript-language-server

@@ -10,26 +10,43 @@
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
   focusd = pkgs.callPackage ./focusd { focusdSrc = inputs.focusd; };
   thinky = pkgs.callPackage ./thinky { };
-  python312Packages = prev.python312Packages.overrideScope (finalPy: prevPy: {
-    jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
-      doCheck = false;
-    });
-  });
+  python312Packages = prev.python312Packages.overrideScope (
+    finalPy: prevPy: {
+      jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
+        doCheck = false;
+      });
+      transformers = prevPy.transformers.overridePythonAttrs (_old: {
+        version = "main-2026-03-19";
+        src = pkgs.fetchFromGitHub {
+          owner = "huggingface";
+          repo = "transformers";
+          rev = "cecacd374f575ad7ffe37dcd69a98cf00b551011";
+          sha256 = "0w8mvsb30bn6p3kdjrghjd7q5y2i59rq0m3gqk2137swjasp8dyz";
+        };
+        doCheck = false;
+      });
+      vllm = prevPy.vllm.overridePythonAttrs (_old: {
+        doCheck = false;
+      });
+      flashinfer = prevPy.flashinfer.overridePythonAttrs (_old: {
+        doCheck = false;
+        doInstallCheck = false;
+      });
+    }
+  );
   firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {
     buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_20; };
   };
   alvr = prev.alvr.overrideAttrs (old: {
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
-          --replace 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
-          --replace 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
-          --replace 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
-          --replace 'FF_PROFILE_HEVC_MAIN_10' 'AV_PROFILE_HEVC_MAIN_10' \
-          --replace 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
-          --replace 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
-      '';
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
+        --replace 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
+        --replace 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
+        --replace 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
+        --replace 'FF_PROFILE_HEVC_MAIN_10' 'AV_PROFILE_HEVC_MAIN_10' \
+        --replace 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
+        --replace 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
+    '';
   });
   wf-recorder = prev.wf-recorder.overrideAttrs (old: rec {
     version = "0.6.0";

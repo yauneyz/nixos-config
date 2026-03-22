@@ -11,7 +11,22 @@ if [[ -n "$model" ]]; then
     exit 1
   fi
 else
-  model="$(ls -1t "$models_dir"/*.gguf 2>/dev/null | head -n 1 || true)"
+  preferred_models=(
+    "$models_dir/omnicoder-9b-q6_k.gguf"
+    "$models_dir/qwen2.5-7b-instruct-q6_k-00001-of-00002.gguf"
+  )
+
+  for candidate in "${preferred_models[@]}"; do
+    if [[ -f "$candidate" ]]; then
+      model="$candidate"
+      break
+    fi
+  done
+
+  if [[ -z "${model:-}" ]]; then
+    model="$(ls -1t "$models_dir"/*.gguf 2>/dev/null | head -n 1 || true)"
+  fi
+
   if [[ -z "$model" ]]; then
     cat >&2 <<EOF
 No .gguf models found in $models_dir
