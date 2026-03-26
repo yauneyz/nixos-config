@@ -9,7 +9,9 @@
     displayManager = {
       sddm = {
         enable = true;
-        wayland.enable = true;
+        # Keep the greeter on X11. Hyprland still runs as a Wayland session,
+        # but this avoids restarting a Weston-based greeter on NVIDIA.
+        wayland.enable = false;
         autoLogin = {
           relogin = true;
         };

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v vllm >/dev/null 2>&1; then
-	echo "vllm is not on PATH. Rebuild the desktop config after enabling the vLLM package." >&2
+if ! command -v ml-env >/dev/null 2>&1; then
+	echo "ml-env is not on PATH. Rebuild the desktop config to install the managed ML wrapper." >&2
 	exit 1
 fi
 
@@ -142,4 +142,4 @@ fi
 cmd+=("${default_args[@]}")
 cmd+=("${extra_args[@]}")
 
-exec "${cmd[@]}"
+exec ml-env run "${cmd[@]}"

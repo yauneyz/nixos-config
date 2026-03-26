@@ -2,7 +2,8 @@
 {
   nixpkgs = {
     config = {
-      allowBroken = true;  # Allow broken packages (needed for vLLM/flashinfer)
+      # Keep this permissive for overlays that may track ahead of nixpkgs.
+      allowBroken = true;
       # Keep CUDA disabled globally; enabling it here forces unrelated packages
       # (e.g. Firefox -> onnxruntime -> cutlass) into expensive CUDA builds.
       cudaSupport = false;

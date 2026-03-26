@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 let
-  hasThinky = builtins.pathExists pkgs.thinky.appimageStorePath;
+  hasThinky = (builtins.tryEval pkgs.thinky.appimageStorePath).success;
   metabasePort = "3010";
   metabaseWrapped = pkgs.symlinkJoin {
     name = "metabase-wrapped";

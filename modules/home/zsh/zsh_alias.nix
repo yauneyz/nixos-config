@@ -1,6 +1,7 @@
 { host, ... }:
 let
   rebuildAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host}";
+  rebuildBootAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host} boot";
   llamaServeAlias = "llama-serve";
   vllmServeAlias = "vllm-serve";
   focusdSrcPath =
@@ -63,6 +64,7 @@ in
       # Edit zsh config in NixOS (updated from ~/.bashrc)
       vbrc = "vim ~/nixos-config/modules/home/zsh/zsh.nix";
       valias = "vim ~/nixos-config/modules/home/zsh/zsh_alias.nix";
+      vstart = "vim ~/nixos-config/modules/home/scripts/scripts/hypr-startup.sh";
 
       # Hyperland config (was i3: ii → now hh, opens Hyprland nix)
       hh = "vim ~/nixos-config/modules/home/hyprland/hyprland.nix";
@@ -92,6 +94,7 @@ in
 
       # NixOS
       rebuild = rebuildAlias;
+      rebuild-boot = rebuildBootAlias;
 
       # Thinky package management
       thinky-hash = "bash ~/nixos-config/pkgs/thinky/update-hash.sh";

@@ -1,0 +1,8 @@
+# Pinned top-level ML runtime packages for the managed uv environment.
+#
+# vLLM chooses a compatible PyTorch wheel stack at install time. Keep these
+# pins aligned when updating the environment so ad-hoc PyTorch work and the
+# OpenAI-compatible server use the same versions.
+vllm==0.16.0
+torch==2.10.0
+torchvision==0.25.0

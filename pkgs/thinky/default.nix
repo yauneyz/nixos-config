@@ -18,7 +18,7 @@ let
   src = requireFile {
     name = "thinky.AppImage";
     url = "https://www.thinky.dev";
-    sha256 = "15vdvlgx8qakl350lwj0mlkqcxfa31cibscsjiqpcc7kmxvrqlrq";
+    sha256 = "1azr90hgzgwghghh8c8dyj4vlkpnxqy201yl1r2pikyf9lid4n3y";
     message = ''
       The Thinky AppImage is not in the Nix store for this hash.
       Add it by running:

@@ -15,23 +15,6 @@
       jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
         doCheck = false;
       });
-      transformers = prevPy.transformers.overridePythonAttrs (_old: {
-        version = "main-2026-03-19";
-        src = pkgs.fetchFromGitHub {
-          owner = "huggingface";
-          repo = "transformers";
-          rev = "cecacd374f575ad7ffe37dcd69a98cf00b551011";
-          sha256 = "0w8mvsb30bn6p3kdjrghjd7q5y2i59rq0m3gqk2137swjasp8dyz";
-        };
-        doCheck = false;
-      });
-      vllm = prevPy.vllm.overridePythonAttrs (_old: {
-        doCheck = false;
-      });
-      flashinfer = prevPy.flashinfer.overridePythonAttrs (_old: {
-        doCheck = false;
-        doInstallCheck = false;
-      });
     }
   );
   firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {

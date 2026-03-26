@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -48,7 +48,11 @@
     };
 
     nvidia = {
-      open = true;
+      package = config.boot.kernelPackages.nvidiaPackages.production;
+      open = false;
+      modesetting.enable = true;
+      nvidiaSettings = true;
+      nvidiaPersistenced = true;
     };
   };
 

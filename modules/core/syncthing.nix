@@ -6,8 +6,8 @@
     dataDir = "/home/zac";
     configDir = "/home/zac/.config/syncthing";
 
-    overrideDevices = true;
-    overrideFolders = true;
+    overrideDevices = false;
+    overrideFolders = false;
 
     settings = {
       options = {

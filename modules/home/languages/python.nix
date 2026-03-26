@@ -1,40 +1,4 @@
-{
-  pkgs,
-  host,
-  inputs,
-  ...
-}:
-let
-  cudaPkgs =
-    if host == "desktop" then
-      import inputs.nixpkgs {
-        inherit (pkgs.stdenv.hostPlatform) system;
-        config = {
-          allowUnfree = true;
-          allowBroken = true;
-          cudaSupport = true;
-        };
-        overlays = [
-          (final: prev: {
-            xorg = prev.xorg // {
-              xrdb = prev.xrdb;
-              lndir = prev.lndir;
-            };
-          })
-          (
-            final: prev:
-            (import ../../../pkgs {
-              inherit inputs;
-              pkgs = final;
-              inherit prev;
-              inherit (prev) system;
-            })
-          )
-        ];
-      }
-    else
-      null;
-in
+{ pkgs, ... }:
 {
   home.packages =
     with pkgs;
@@ -61,18 +25,5 @@ in
       poetry
       python312Packages.pipx
       uv
-    ]
-    ++ (
-      if host == "desktop" then
-        [
-          # GLM/vLLM runtime dependencies.
-          python312Packages.transformers
-          python312Packages.huggingface-hub
-
-          # CUDA-backed OpenAI-compatible server for local models.
-          cudaPkgs.python312Packages.vllm
-        ]
-      else
-        [ ]
-    );
+    ];
 }
