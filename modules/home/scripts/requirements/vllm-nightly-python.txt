@@ -1,0 +1,11 @@
+# Nightly vLLM environment for GLM-4.7-Flash / glm4_moe_lite models.
+#
+# Keep this separate from the stable managed ML environment.
+#
+# GLM-4.7 Flash declares `transformers_version: 5.0.0rc0` in its config, and
+# official Transformers release notes show GLM-Lite support landing in
+# `v5.0.0rc3`. Pin that tagged pre-release here so it still satisfies vLLM's
+# current `transformers<5` metadata while exposing the `glm4_moe_lite`
+# architecture.
+vllm==0.18.1rc1.dev228+gbea23536f
+transformers @ git+https://github.com/huggingface/transformers.git@v5.0.0rc3
