@@ -8,4 +8,5 @@
 # current `transformers<5` metadata while exposing the `glm4_moe_lite`
 # architecture.
 vllm==0.18.1rc1.dev228+gbea23536f
+orjson
 transformers @ git+https://github.com/huggingface/transformers.git@v5.0.0rc3

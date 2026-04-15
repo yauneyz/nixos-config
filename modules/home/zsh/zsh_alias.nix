@@ -4,6 +4,7 @@ let
   rebuildBootAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host} boot";
   llamaServeAlias = "llama-serve";
   vllmServeAlias = "vllm-serve";
+  vllmEmbeddingsServeAlias = "vllm-serve-embeddings";
   focusdSrcPath =
     if host == "desktop" then
       "/data/zac/zac/development/tools/focusd"
@@ -103,6 +104,7 @@ in
       # LLM server
       llmserve = llamaServeAlias;
       vllmserve = vllmServeAlias;
+      vllmembedserve = vllmEmbeddingsServeAlias;
       oss-serve = "llama-serve-gpt-oss-20b";
       w-serve = "llama-serve-weirdcompound-24b";
 
@@ -203,6 +205,11 @@ in
       # Editors
       vim = "nvim";
       v = "vim";
+
+      ############################
+      # Bun shortcuts
+      ############################
+			jdev = "cd ~/development/jirachi && bun run dev";
 
       ############################
       # Node shortcuts

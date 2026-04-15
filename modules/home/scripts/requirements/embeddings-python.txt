@@ -1,0 +1,8 @@
+# Pinned top-level packages for the CPU embeddings OpenAI-compatible server.
+#
+# Keep the transformer stack new enough for Qwen3 support, and force this
+# environment onto CPU wheels via ML_UV_TORCH_BACKEND=cpu in the launcher.
+orjson
+safetensors
+torch==2.9.1
+transformers==4.51.3

@@ -87,7 +87,7 @@ default_enforce_eager="0"
 default_max_num_seqs=""
 if (( tensor_parallel_size == 1 )); then
 	default_gpu_memory_utilization="0.82"
-	default_gpu_memory_headroom_mib="512"
+	default_gpu_memory_headroom_mib="2048"
 	default_enforce_eager="1"
 	default_max_model_len="2048"
 	default_max_num_seqs="32"
@@ -141,6 +141,8 @@ download_dir="${VLLM_DOWNLOAD_DIR:-$HF_HOME/hub}"
 api_key="${VLLM_API_KEY:-}"
 tokenizer="${VLLM_TOKENIZER:-}"
 hf_config_path="${VLLM_HF_CONFIG_PATH:-}"
+runner="${VLLM_RUNNER:-}"
+convert="${VLLM_CONVERT:-}"
 served_model_name="${VLLM_SERVED_MODEL_NAME:-qwen3-14b-awq}"
 reasoning_parser="${VLLM_REASONING_PARSER:-qwen3}"
 enable_qwen_defaults="${VLLM_ENABLE_QWEN_DEFAULTS:-1}"
@@ -173,6 +175,14 @@ cmd=(
 	--tensor-parallel-size "$tensor_parallel_size"
 	--gpu-memory-utilization "$gpu_memory_utilization"
 )
+
+if [[ -n "$runner" ]]; then
+	cmd+=(--runner "$runner")
+fi
+
+if [[ -n "$convert" ]]; then
+	cmd+=(--convert "$convert")
+fi
 
 if [[ -z "$enable_expert_parallel" ]]; then
 	if ((tensor_parallel_size >= 2)); then

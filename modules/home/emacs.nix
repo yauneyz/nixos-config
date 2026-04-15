@@ -9,7 +9,12 @@
       buildInputs = [ pkgs.makeWrapper pkgs.wl-clipboard ];
       postBuild = ''
         wrapProgram $out/bin/emacs \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.pkg-config pkgs.gcc pkgs.gnumake ]} \
+          --prefix PATH : ${pkgs.lib.makeBinPath [
+            pkgs.wl-clipboard
+            pkgs.pkg-config
+            pkgs.gcc
+            pkgs.gnumake
+          ]} \
           --prefix PKG_CONFIG_PATH : "${pkgs.enchant_2.dev}/lib/pkgconfig"
       '';
     })

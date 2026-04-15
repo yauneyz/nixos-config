@@ -2,8 +2,8 @@
 {
   wayland.windowManager.hyprland.settings.exec-once = [
     # "hash dbus-update-activation-environment 2>/dev/null"
-    "dbus-update-activation-environment --all --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-    "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+    "dbus-update-activation-environment --all --systemd PATH WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE"
+    "systemctl --user import-environment PATH WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE"
 
     "nm-applet &"
     "poweralertd &"

@@ -26,6 +26,7 @@
 
       # Window management (from i3)
       "$mainMod SHIFT, Q, killactive,"  # i3: Mod1+Shift+q
+      "$mainMod SHIFT, X, exec, hyprctl kill"  # Click a window to kill it
       "$mainMod, F, fullscreen, 0"  # i3: Mod1+f
       "$mainMod, Space, togglefloating,"  # i3: Mod1+Space (floating toggle)
 

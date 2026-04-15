@@ -9,7 +9,7 @@
         email = "67cyril6767@gmail.com";
       };
 
-      init.defaultBranch = "main";
+      init.defaultBranch = "master";
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
       pull.ff = "only";
