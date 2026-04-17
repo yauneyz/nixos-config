@@ -96,7 +96,8 @@ in
       # NixOS
       rebuild = rebuildAlias;
       rebuild-boot = rebuildBootAlias;
-      rebuild-update = "nh-notify nh os switch --update";
+      rebuild-update = "nix flake update claude-code codex-cli-nix && nh-notify nh os switch";
+      rebuild-update-all = "nh-notify nh os switch --update";
 
       # Thinky package management
       thinky-hash = "bash ~/nixos-config/pkgs/thinky/update-hash.sh";
