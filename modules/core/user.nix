@@ -28,7 +28,7 @@
 
   users.users.zac = {
     isNormalUser = true;
-    description = "zac";
+    description = "Zac Yauney";
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -37,11 +37,5 @@
 hashedPassword="";
   };
 
-users.users.frostphoenix = {
-isNormalUser = true;
-extraGroups = ["wheel" "networkmanager"];
-shell = pkgs.zsh;
-hashedPassword = "";
-};
   nix.settings.allowed-users = [ "${username}" ];
 }

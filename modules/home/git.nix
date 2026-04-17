@@ -5,8 +5,8 @@
 
     settings = {
       user = {
-        name = "Frost-Phoenix ";
-        email = "67cyril6767@gmail.com";
+        name = "Zac Yauney";
+        email = "zac.yauney@gmail.com";
       };
 
       init.defaultBranch = "master";
@@ -20,7 +20,7 @@
           "gh:"
           "https://github.com/"
         ];
-        "git@github.com:frost-phoenix/".insteadOf = "fp:";
+        "git@github.com:yauneyz/".insteadOf = "zy:";
       };
 
       core.excludesFile = "/home/${username}/.config/git/.gitignore";

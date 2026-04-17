@@ -4,25 +4,25 @@
     nodejs_22
     bun
 
-    nodePackages.typescript
-    nodePackages.typescript-language-server
+    typescript
+    typescript-language-server
     vscode-langservers-extracted
 
-    nodePackages.prettier
-    nodePackages.eslint
-    nodePackages.mocha
+    prettier
+    eslint
+    mocha
 
-    nodePackages.nodemon
-    nodePackages.webpack-cli
+    nodemon
+    webpack-cli
 
-    nodePackages.npm-check-updates
-    nodePackages.pnpm
-    nodePackages.jshint
+    npm-check-updates
+    pnpm
+    jshint
 
     ripgrep
     zprint
 
-    nodePackages.yarn
+    yarn
 
     # ✅ This is the Nix package that corresponds to npm: @github/copilot-language-server
     copilot-language-server

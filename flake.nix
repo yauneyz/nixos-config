@@ -1,5 +1,5 @@
 {
-  description = "FrostPhoenix's nixos configuration";
+  description = "Zac Yauney's nixos configuration";
 
   inputs = {
     stylix = {

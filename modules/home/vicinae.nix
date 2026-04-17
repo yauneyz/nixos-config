@@ -9,8 +9,13 @@ in
     enable = true;
     package = inputs.vicinae.packages.${system}.default;
 
-    autoStart = true;
-    useLayerShell = true;
+    systemd = {
+      enable = true;
+      autoStart = true;
+      environment = {
+        USE_LAYER_SHELL = true;
+      };
+    };
 
     settings = {
       font = {

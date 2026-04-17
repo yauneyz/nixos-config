@@ -62,7 +62,7 @@ echo -E "$CYAN
     |_| \_|_/_/\_\\\\___/|___/ |___|_| |_|___/\__\__,_|_|_|\___|_| 
 
 
-       ${BLUE} ─── https://github.com/Frost-Phoenix/nixos-config ─── ${RESET}
+       ${BLUE} ─── https://github.com/yauneyz/nixos-config ─── ${RESET}
 "
 
 #------------------#
@@ -178,8 +178,8 @@ fi
 #----------------------#
 
 echo -e "${INFO}Clearing git config"
-sed -i 's/"Frost-Phoenix"/""/g' modules/home/git.nix
-sed -i 's/"67cyril6767@gmail.com"/""/g' modules/home/git.nix
+sed -i 's/"yauneyz"/""/g' modules/home/git.nix
+sed -i 's/"zac.yauney@gmail.com"/""/g' modules/home/git.nix
 
 #------------------------------#
 #   Prepare the environement   #

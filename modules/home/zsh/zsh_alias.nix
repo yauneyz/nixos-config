@@ -96,6 +96,7 @@ in
       # NixOS
       rebuild = rebuildAlias;
       rebuild-boot = rebuildBootAlias;
+      rebuild-update = "nh-notify nh os switch --update";
 
       # Thinky package management
       thinky-hash = "bash ~/nixos-config/pkgs/thinky/update-hash.sh";
@@ -141,8 +142,6 @@ in
       #nb  = "nom build";
       #nc  = "nh-notify nh clean all --keep 5";
       #nft = "nh-notify nh os test";
-      #nfs = "nh-notify nh os switch";
-      #nfu = "nh-notify nh os switch --update";
       # nix-search = "nh search";
 
       # Python env helpers
