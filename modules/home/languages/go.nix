@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   home.packages = with pkgs; [
     # Language Server Protocol + IDE helpers
@@ -9,7 +9,7 @@
 
     # Linters and code quality
     golangci-lint
-    gotools # includes goimports, godoc, etc.
+    (lib.lowPrio gotools) # includes goimports, godoc, etc. (lowPrio to avoid conflict with gopls modernize)
 
     # REPL
     gore
