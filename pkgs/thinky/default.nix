@@ -1,17 +1,11 @@
 { lib
 , appimageTools
-, fetchurl
 }:
 
 let
-  # Release info is written by the electron repo's release script
-  # (scripts/release.js) into this same directory. Regenerate with
-  # `npm run release` in the electron repo.
-  jsonReleaseInfo = lib.importJSON ./release.json;
-  releaseInfo =
-    if builtins.pathExists ./release.nix
-    then import ./release.nix
-    else jsonReleaseInfo;
+  # Local release info is written by the electron repo's release:local script.
+  # The file is staged so flake evaluation sees the new AppImage store path.
+  releaseInfo = import ./release.nix;
 
   pname = "thinky";
   version = releaseInfo.version;
@@ -20,13 +14,7 @@ let
   # Hyprland doesn't support per-window scaling, so we force the app to draw larger.
   scaleFactor = "3";
 
-  src =
-    if releaseInfo ? storePath
-    then releaseInfo.storePath
-    else fetchurl {
-      url = releaseInfo.url;
-      sha256 = releaseInfo.sha256;
-    };
+  src = releaseInfo.storePath;
 
   # Extract AppImage contents for desktop file and icons
   appimageContents = appimageTools.extractType2 {

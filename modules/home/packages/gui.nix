@@ -15,9 +15,8 @@ in
 {
   warnings = lib.optional (!hasThinky) ''
     Skipping Thinky package: AppImage source is unavailable.
-    Rebuild it from the electron repo with `npm run release -- --no-upload`
-    (writes pkgs/thinky/release.nix), or publish a release with `npm run release`
-    (updates pkgs/thinky/release.json).
+    Rebuild it from the electron repo with `npm run release:local`
+    (writes and stages pkgs/thinky/release.nix), then rebuild NixOS.
   '';
 
   home.packages = with pkgs;
