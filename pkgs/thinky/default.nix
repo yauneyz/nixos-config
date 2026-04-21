@@ -1,34 +1,32 @@
 { lib
 , appimageTools
-, makeBinaryWrapper  # not used here, but harmless to leave
-, requireFile
+, fetchurl
 }:
 
 let
+  # Release info is written by the electron repo's release script
+  # (scripts/release.js) into this same directory. Regenerate with
+  # `npm run release` in the electron repo.
+  jsonReleaseInfo = lib.importJSON ./release.json;
+  releaseInfo =
+    if builtins.pathExists ./release.nix
+    then import ./release.nix
+    else jsonReleaseInfo;
+
   pname = "thinky";
-  version = "1.0.14";
+  version = releaseInfo.version;
 
   # Default fractional scale so the Electron UI isn't microscopic on HiDPI setups.
   # Hyprland doesn't support per-window scaling, so we force the app to draw larger.
   scaleFactor = "3";
 
-  # Use requireFile to reference AppImage from nix store
-  # Add/update this hash with:
-  # thinky-hash /path/to/thinky.AppImage
-  src = requireFile {
-    name = "thinky.AppImage";
-    url = "https://www.thinky.dev";
-    sha256 = "1x317l968imyvv7lg7gmjijkcamy8m814jhdxmkvq23k7drmv050";
-    message = ''
-      The Thinky AppImage is not in the Nix store for this hash.
-      Add it by running:
-        thinky-hash /path/to/thinky.AppImage
-
-      Or manually:
-        nix-store --add-fixed sha256 /path/to/thinky.AppImage
-    '';
-  };
-  srcStorePath = builtins.unsafeDiscardStringContext src.outPath;
+  src =
+    if releaseInfo ? storePath
+    then releaseInfo.storePath
+    else fetchurl {
+      url = releaseInfo.url;
+      sha256 = releaseInfo.sha256;
+    };
 
   # Extract AppImage contents for desktop file and icons
   appimageContents = appimageTools.extractType2 {
@@ -38,10 +36,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  # Expose the fixed-output source path so config can skip Thinky cleanly
-  # when the AppImage has not been added to the store yet.
   passthru = {
-    appimageStorePath = srcStorePath;
+    appimageStorePath = toString src;
   };
 
   # This script is sourced inside the FHS env before running the AppImage.

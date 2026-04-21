@@ -86,7 +86,13 @@
       "WebFetch(domain:linuxiac.com)",
       "Bash(sudo du:*)",
       "Bash(grep:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git *)",
+      "Bash(xargs -I{} grep -l \"\\\\\"thinky\\\\\"\\\\|thinky-app\\\\|Thinky\" {})",
+      "Read(//data/**)",
+      "Read(//mnt/**)",
+      "Bash(npx asar *)",
+      "WebFetch(domain:www.electron.build)"
     ],
     "deny": [],
     "ask": []

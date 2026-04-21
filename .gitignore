@@ -1,2 +1,3 @@
 pkgs/thinky/*.AppImage
+pkgs/thinky/release.nix
 wallpapers/otherWallpaper

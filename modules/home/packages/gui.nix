@@ -14,8 +14,10 @@ let
 in
 {
   warnings = lib.optional (!hasThinky) ''
-    Skipping Thinky package: AppImage is not available in the Nix store for the hash in pkgs/thinky/default.nix.
-    Add/update it with `thinky-hash /path/to/thinky.AppImage` and rebuild.
+    Skipping Thinky package: AppImage source is unavailable.
+    Rebuild it from the electron repo with `npm run release -- --no-upload`
+    (writes pkgs/thinky/release.nix), or publish a release with `npm run release`
+    (updates pkgs/thinky/release.json).
   '';
 
   home.packages = with pkgs;
@@ -44,6 +46,7 @@ in
       foliate
       libreoffice
       gnome-calculator
+      zotero
     ]
     ++ lib.optional hasThinky thinky
     ++ [

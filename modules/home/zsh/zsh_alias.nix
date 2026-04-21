@@ -99,10 +99,6 @@ in
       rebuild-update = "nix flake update claude-code codex-cli-nix && nh-notify nh os switch";
       rebuild-update-all = "nh-notify nh os switch --update";
 
-      # Thinky package management
-      thinky-hash = "bash ~/nixos-config/pkgs/thinky/update-hash.sh";
-      thinky-install = "bash ~/nixos-config/pkgs/thinky/update-hash.sh && ${rebuildAlias}";
-
       # LLM server
       llmserve = llamaServeAlias;
       vllmserve = vllmServeAlias;
