@@ -66,17 +66,6 @@ in
       ## Level editor
       ldtk
       tiled
-
-      ## Emulators
-      (symlinkJoin {
-        name = "ryubing-wrapped";
-        paths = [ ryubing ];
-        buildInputs = [ makeWrapper ];
-        postBuild = ''
-          wrapProgram $out/bin/Ryujinx \
-            --set GDK_BACKEND x11
-        '';
-      })
     ];
 
   home.file.".local/share/applications/metabase.desktop".text = ''

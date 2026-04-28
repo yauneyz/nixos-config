@@ -29,7 +29,15 @@
     sameboy
     snes9x
     cemu
-    ryubing
+    (symlinkJoin {
+      name = "ryubing-wrapped";
+      paths = [ ryubing ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/Ryujinx \
+          --set GDK_BACKEND x11
+      '';
+    })
     dolphin-emu
     mame
     simple64
