@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    swww  # Wallpaper daemon for per-monitor wallpaper support
+    awww  # Wallpaper daemon for per-monitor wallpaper support
     grimblast
     hyprpicker
     grim

@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   gtk = {
     enable = true;
+    gtk4.theme = config.gtk.theme;
     gtk3.extraConfig = {
       # Hint GTK3 apps to prefer a dark theme when available.
       gtk-application-prefer-dark-theme = 1;

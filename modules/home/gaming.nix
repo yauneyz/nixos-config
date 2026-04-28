@@ -29,7 +29,7 @@
     sameboy
     snes9x
     cemu
-    ryujinx
+    ryubing
     dolphin-emu
     mame
     simple64
