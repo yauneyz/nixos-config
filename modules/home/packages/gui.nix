@@ -27,6 +27,8 @@ in
       ## Multimedia
       audacity
       gimp
+      gpu-screen-recorder
+      gpu-screen-recorder-gtk
       loupe
       media-downloader
       obs-studio

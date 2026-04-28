@@ -10,6 +10,7 @@
 
   programs = {
     dconf.enable = true;
+    gpu-screen-recorder.enable = true;
     zsh.enable = true;
     appimage = {
       enable = true;

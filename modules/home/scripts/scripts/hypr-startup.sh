@@ -3,24 +3,24 @@
 
 # === Workspace 3: Emacs (PdfWindow) ===
 hyprctl dispatch workspace 3
-emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
-#emacs ~/development/jirachi/prompts/current.md &
+#emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
+emacs ~/development/indigo/prompts/current.md &
 sleep 2
 
 # === Workspace 9: Emacs (owl todo) + owl-dev terminal ===
-ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop; exec bash' &
+#ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop; exec bash' &
 #ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/jirachi && bun run dev; exec bash' &
 sleep 2
 
 hyprctl dispatch workspace 9
-emacs ~/development/clojure/owl/todo.org &
-#emacs ~/development/jirachi/todo.org &
+#emacs ~/development/clojure/owl/todo.org &
+#emacs ~/development/indigo/todo.org &
 sleep 2
 
 # === Workspace 10: owl start terminal ===
-hyprctl dispatch workspace 10
-ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run start; exec bash' &
-sleep 2
+#hyprctl dispatch workspace 10
+#ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run start; exec bash' &
+#sleep 2
 
 # === Workspace 13: Firefox ===
 hyprctl dispatch workspace 13

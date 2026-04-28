@@ -29,6 +29,9 @@
     sameboy
     snes9x
     cemu
-    # dolphin-emu
+    ryujinx
+    dolphin-emu
+    mame
+    simple64
   ];
 }

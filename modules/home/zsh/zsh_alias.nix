@@ -37,6 +37,9 @@ in
       pylon = "cd ~/development/go/pylon";
       dex = "cd ~/development/go/wikidex";
 
+      ind = "cd ~/development/indigo";
+      iu = "cd ~/development/indigo/app";
+      ib = "cd ~/development/indigo/server";
       jir = "cd ~/development/jirachi";
       focus = "cd ~/development/tools/focus";
       dev = "cd ~/development";
