@@ -48,25 +48,26 @@
 
   boot = {
     loader = {
-	systemd-boot.enable = false;
-	efi = {
-	    canTouchEfiVariables = true;
-	    efiSysMountPoint = "/boot";
-	};
-	grub = {
-	    enable = true;
-	efiSupport = true;
-	device = "nodev";
-	useOSProber = true;
-	efiInstallAsRemovable = false;
+      systemd-boot.enable = false;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+      grub = {
+        enable = true;
+        efiSupport = true;
+        device = "nodev";
+        useOSProber = true;
+        efiInstallAsRemovable = false;
+        configurationLimit = 3;
 
-		theme = "${pkgs.fetchFromGitHub {
-			owner = "sergoncano";
-			repo = "hollow-knight-grub-theme";
-			rev = "master";
-			sha256 = "sha256-0hn3MFC+OtfwtA//pwjnWz7Oz0Cos3YzbgUlxKszhyA=";
-		}}/hollow-grub";
-};
+        theme = "${pkgs.fetchFromGitHub {
+          owner = "sergoncano";
+          repo = "hollow-knight-grub-theme";
+          rev = "master";
+          sha256 = "sha256-0hn3MFC+OtfwtA//pwjnWz7Oz0Cos3YzbgUlxKszhyA=";
+        }}/hollow-grub";
+      };
 
     };
     kernelModules = [ "acpi_call" ];
