@@ -14,7 +14,7 @@ sleep 2
 
 hyprctl dispatch workspace 9
 #emacs ~/development/clojure/owl/todo.org &
-#emacs ~/development/indigo/todo.org &
+emacs ~/development/indigo/todo.org &
 sleep 2
 
 # === Workspace 10: owl start terminal ===

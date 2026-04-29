@@ -39,7 +39,6 @@
       '';
     })
     dolphin-emu
-    mame
     simple64
   ];
 }
