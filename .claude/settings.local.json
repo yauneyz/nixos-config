@@ -92,7 +92,10 @@
       "Read(//data/**)",
       "Read(//mnt/**)",
       "Bash(npx asar *)",
-      "WebFetch(domain:www.electron.build)"
+      "WebFetch(domain:www.electron.build)",
+      "Bash(docker info *)",
+      "Read(//nix/store/dfnqdzdn9z6i4vi1rj7gkhqwxzll516b-unit-docker.service/**)",
+      "Read(//nix/store/gj4wjpx5rb0f929wqrbg4482rcnwvc24-system-units/docker.service.d/**)"
     ],
     "deny": [],
     "ask": []

@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     nodejs_22
     bun
+    supabase-cli
 
     typescript
     typescript-language-server
@@ -17,6 +18,16 @@
 
     npm-check-updates
     pnpm
+    (writeShellApplication {
+      name = "vercel";
+      runtimeInputs = [
+        nodejs_22
+        pnpm
+      ];
+      text = ''
+        exec pnpm dlx vercel "$@"
+      '';
+    })
     jshint
 
     ripgrep

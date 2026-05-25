@@ -1,7 +1,7 @@
 { lib, pkgs, username, ... }:
 {
   # Add user to libvirtd group
-  users.users.${username}.extraGroups = [ "kvm" "libvirtd" ];
+  users.users.${username}.extraGroups = [ "kvm" "libvirtd" "docker" ];
 
   # Install necessary packages
   environment.systemPackages = with pkgs; [
@@ -19,6 +19,11 @@
 
   # Manage the virtualisation services
   virtualisation = {
+    docker = {
+      enable = true;
+      daemon.settings.data-root = "/data/docker";
+    };
+
     libvirtd = {
       enable = true;
       qemu = {

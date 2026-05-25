@@ -1,7 +1,7 @@
 {
   version = "1.0.42";
   storePath = builtins.fetchurl {
-    url = "file:///nix/store/afs3b0x6d9ggrn89wwhc407cwq3p3ff5-thinky.AppImage";
-    sha256 = "11ld29i5c0i4gxb211zi3h6rknbm8i85fdxg3pm9ad65cxzjazg0";
+    url = "file:///nix/store/315x6qc5svm9giqwng00y6l804qk3cvz-thinky.AppImage";
+    sha256 = "14cf7xffzf280as1zm2s1zk84rpba54m714nzwfc1ar09gsn8gd4";
   };
 }

@@ -149,6 +149,7 @@ in
       psv = "source .venv/bin/activate";
 
       cl = "claude";
+      co = "codex";
       clr = "claude --resume";
 
       ############################
@@ -223,6 +224,8 @@ in
       ac = "npm run antei:compile";
       at = "npm run antei";
 
+      pd = "pnpm dev";
+
       ############################
       # Misc config / apps
       ############################
@@ -231,7 +234,6 @@ in
       slp = "sleep 3; hyprctl dispatch dpms toggle";
 
       # Apps / shortcuts
-      rg = "ranger";
       ex = "exit";
 
       ############################
