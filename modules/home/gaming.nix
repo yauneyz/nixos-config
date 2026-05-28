@@ -6,6 +6,7 @@
     # gamescope
     # winetricks
     # inputs.nix-gaming.packages.${pkgs.stdenv.hostPlatform.system}.wine-ge
+    r2modman
 
     ## Minecraft
     # prismlauncher

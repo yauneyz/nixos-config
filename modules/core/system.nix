@@ -57,6 +57,7 @@ in
     libxcrypt-legacy
     p7zip
     steam-run
+    bubblewrap
     gsettings-desktop-schemas
     lsof
     psmisc

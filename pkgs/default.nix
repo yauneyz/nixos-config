@@ -15,6 +15,9 @@
       jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
         doCheck = false;
       });
+      pipx = prevPy.pipx.overridePythonAttrs (_old: {
+        doCheck = false;
+      });
     }
   );
   firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {
