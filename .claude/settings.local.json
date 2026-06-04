@@ -95,7 +95,17 @@
       "WebFetch(domain:www.electron.build)",
       "Bash(docker info *)",
       "Read(//nix/store/dfnqdzdn9z6i4vi1rj7gkhqwxzll516b-unit-docker.service/**)",
-      "Read(//nix/store/gj4wjpx5rb0f929wqrbg4482rcnwvc24-system-units/docker.service.d/**)"
+      "Read(//nix/store/gj4wjpx5rb0f929wqrbg4482rcnwvc24-system-units/docker.service.d/**)",
+      "Bash(nix eval *)",
+      "Bash(nix path-info *)",
+      "Bash(nix build *)",
+      "Bash(gamescope --help)",
+      "Bash(nix flake *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); s=d['locks']['nodes'].get\\('stylix',{}\\).get\\('locked',{}\\); print\\(s.get\\('rev'\\), s.get\\('lastModified'\\)\\)\")",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' build --print-out-paths '.#nixosConfigurations.\"desktop\".config.system.build.toplevel' --no-link)",
+      "Read(//nix/store/74rksn59wc0vbrh8zy5y6c5lrm4dfrhk-source/**)",
+      "Read(//nix/store/l4fqcf8a1d1a9p271xl28bi4lhyzcsj0-hyprland-0.55.2/bin/**)",
+      "WebFetch(domain:developers.openai.com)"
     ],
     "deny": [],
     "ask": []

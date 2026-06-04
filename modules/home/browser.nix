@@ -149,6 +149,7 @@ in
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
+    configPath = ".mozilla/firefox"; # keep legacy path; avoids migrating ~/.mozilla/firefox to XDG
 
     profiles = {
       default = mkProfile {

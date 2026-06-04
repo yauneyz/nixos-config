@@ -17,6 +17,11 @@ in
     # Disable GRUB theming (using custom theme instead)
     targets.grub.enable = false;
 
+    # Disable kmscon theming: stylix's kmscon module still sets the removed
+    # services.kmscon.{extraConfig,fonts} options, which newer nixpkgs rejects.
+    # We don't use kmscon, so just turn the target off.
+    targets.kmscon.enable = false;
+
     # Wallpaper (required)
     image = wallpaperPath;
 

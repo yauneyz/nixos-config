@@ -35,12 +35,8 @@
   services.focusd = {
     enable = true;
     tokenHashFile = ../../secrets/focusd-token.sha256;
+    blocklistFile = ../../secrets/blocklist.yml;
   };
-
-  # Create symlink from /etc to dotfiles for focusd blocklist
-  systemd.tmpfiles.rules = [
-    "L+ /etc/blocklist.yml - - - - /data/zac/zac/dotfiles/focusd/blocklist.yml"
-  ];
 
   hardware = {
     graphics = {

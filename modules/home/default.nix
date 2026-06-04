@@ -42,6 +42,7 @@
     # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)
     ./xresources.nix                  # X resources (xterm font, etc.)
     ./xdg-mimes.nix                   # xdg config
+    ./zathura.nix                     # PDF / document viewer
     ./zsh                             # shell
   ];
 }

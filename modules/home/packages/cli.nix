@@ -16,11 +16,9 @@ let
 
     installPhase = ''
       mkdir -p $out/bin
-      # Copy the actual binary
       cp $src/bin/codex-raw $out/bin/codex-raw
-      # Create a new wrapper that points to our patched binary
       cat > $out/bin/codex <<EOF
-      #!/usr/bin/env bash
+      #!${pkgs.bash}/bin/bash -e
       export CODEX_EXECUTABLE_PATH="\$HOME/.local/bin/codex"
       export DISABLE_AUTOUPDATER=1
       exec "$out/bin/codex-raw" "\$@"
@@ -49,6 +47,7 @@ in
     gemini-cli
     claude-code
     codexLatest                       # codex CLI (fast-updating flake)
+    bubblewrap                        # bwrap: sandbox backend codex looks for on PATH
 
     ## Tools / useful cli
     aoc-cli                           # Advent of Code command-line tool
