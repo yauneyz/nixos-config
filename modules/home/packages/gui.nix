@@ -26,6 +26,7 @@ in
 
       ## Multimedia
       audacity
+      easyeffects
       gimp
       gpu-screen-recorder
       gpu-screen-recorder-gtk
