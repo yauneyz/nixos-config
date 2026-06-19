@@ -251,22 +251,6 @@
         "type": "github"
       }
     },
-    "focusd": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1773736491,
-        "narHash": "sha256-1+qYlZlHp+oqNDtMIpS31OyoiERyqLaMcPBg8/tvKbo=",
-        "ref": "refs/heads/master",
-        "rev": "9eb215fba7b6c83fe09d19cc61f25d61df3eaaee",
-        "revCount": 16,
-        "type": "git",
-        "url": "file:///home/zac/development/tools/focusd"
-      },
-      "original": {
-        "type": "git",
-        "url": "file:///home/zac/development/tools/focusd"
-      }
-    },
     "fromYaml": {
       "flake": false,
       "locked": {
@@ -605,17 +589,32 @@
       "inputs": {
         "claude-code": "claude-code",
         "codex-cli-nix": "codex-cli-nix",
-        "focusd": "focusd",
         "home-manager": "home-manager",
         "maple-mono": "maple-mono",
         "nix-flatpak": "nix-flatpak",
         "nix-gaming": "nix-gaming",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_2",
+        "snorlax": "snorlax",
         "stylix": "stylix",
         "superfile": "superfile",
         "vicinae": "vicinae",
         "zen-browser": "zen-browser"
+      }
+    },
+    "snorlax": {
+      "flake": false,
+      "locked": {
+        "dirtyRev": "4d3f5f05ee966bca1b21f117d17d92e6c276df46-dirty",
+        "dirtyShortRev": "4d3f5f0-dirty",
+        "lastModified": 1781878363,
+        "narHash": "sha256-zdA46OSc2H7dabhHFbvYtj5aRp/fPoOcaKOG/h8vNuI=",
+        "type": "git",
+        "url": "file:///data/zac/zac/development/snorlax"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/zac/development/snorlax"
       }
     },
     "stylix": {

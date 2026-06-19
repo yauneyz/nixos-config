@@ -28,6 +28,8 @@
       "opacity 1.0 override 1.0 override, match:class (evince)"
       # === Window assignments from i3 ===
       "workspace 1, match:class (?i)thinky"
+      # FocusLock (snorlax) UI — confirm class with `hyprctl clients` and adjust if needed.
+      "workspace 1, match:class (?i)focuslock"
       "workspace 14, match:class ^(spotify)$"
 
       # === Development terminals ===

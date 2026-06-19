@@ -5,12 +5,13 @@ let
   llamaServeAlias = "llama-serve";
   vllmServeAlias = "vllm-serve";
   vllmEmbeddingsServeAlias = "vllm-serve-embeddings";
-  focusdSrcPath =
+  snorlaxSrcPath =
     if host == "desktop" then
-      "/data/zac/zac/development/tools/focusd"
+      "/data/zac/zac/development/snorlax"
     else
-      "/home/zac/development/tools/focusd";
-  updateFocusdAlias = "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input focusd git+file://${focusdSrcPath}";
+      "/home/zac/development/snorlax";
+  updateSnorlaxAlias = "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
+  snorlaxDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
 in
 {
   programs.zsh = {
@@ -30,7 +31,6 @@ in
       mem = "cd ~/development/research/ai/memory";
 
       lando = "cd ~/development/Lando/lando-video";
-      f2 = "cd ~/development/tools/focusd";
 
       gos = "cd ~/development/go/gophercises";
       com = "cd ~/development/go/compass";
@@ -83,19 +83,17 @@ in
       # Emacs init
       ee = "vim ~/.emacs.d/init.el";
 
-      # focusd config
-      blocklist = "sudo vim /etc/blocklist.yml";
-      focus-reload = "sudo systemctl restart focusd";
-      update-focusd = updateFocusdAlias;
+      # FocusLock (snorlax)
+      focus-reload = "sudo systemctl restart focuslock";
+      focus-status = "systemctl status focuslock";
+      update-snorlax = updateSnorlaxAlias;     # re-lock the snorlax flake input
+      snorlax-dist = snorlaxDistAlias;         # build AppImage + stage release.nix
+      recovery-code = "sudo focuslock-svcctl gen-code";
 
       ############################
       # General commands / tooling
       ############################
       cpy = "copy <";
-
-      # Focus tool
-      disable = "sudo focusd disable && focus-reload";
-      enable = "sudo focusd enable && focus-reload";
 
       # NixOS
       rebuild = rebuildAlias;

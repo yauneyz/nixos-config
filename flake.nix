@@ -25,8 +25,8 @@
       flake = false;
     };
 
-    focusd = {
-      url = "git+file:///home/zac/development/tools/focusd";
+    snorlax = {
+      url = "git+file:///home/zac/development/snorlax";
       flake = false;
     };
 
@@ -71,7 +71,7 @@
     {
       # Export custom packages for direct building
       packages.${system} = {
-        inherit (pkgs) focusd thinky;
+        inherit (pkgs) snorlax snorlax-daemon thinky;
       };
 
       nixosConfigurations = {

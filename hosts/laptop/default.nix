@@ -24,12 +24,8 @@
       };
     };
 
-    # focusd distraction blocker
-    focusd = {
-      enable = true;
-      tokenHashFile = ../../secrets/focusd-token.sha256;
-      blocklistFile = ../../secrets/blocklist.yml;
-    };
+    # FocusLock (snorlax) distraction blocker
+    focuslock.enable = true;
 
     upower = {
       enable = true;

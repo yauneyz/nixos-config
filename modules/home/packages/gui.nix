@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 let
   hasThinky = (builtins.tryEval pkgs.thinky.appimageStorePath).success;
+  hasSnorlax = (builtins.tryEval pkgs.snorlax.appimageStorePath).success;
   metabasePort = "3010";
   metabaseWrapped = pkgs.symlinkJoin {
     name = "metabase-wrapped";
@@ -17,6 +18,10 @@ in
     Skipping Thinky package: AppImage source is unavailable.
     Rebuild it from the electron repo with `npm run release:local`
     (writes and stages pkgs/thinky/release.nix), then rebuild NixOS.
+  '' ++ lib.optional (!hasSnorlax) ''
+    Skipping snorlax (FocusLock UI) package: AppImage source is unavailable.
+    Build it from the snorlax repo with `snorlax-dist` (pnpm run release:local)
+    (writes and stages pkgs/snorlax/release.nix), then rebuild NixOS.
   '';
 
   home.packages = with pkgs;
@@ -51,6 +56,7 @@ in
       zotero
     ]
     ++ lib.optional hasThinky thinky
+    ++ lib.optional hasSnorlax snorlax
     ++ [
       ## Utility
       dconf-editor

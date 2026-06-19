@@ -8,7 +8,8 @@
 {
   _2048 = pkgs.callPackage ./2048 { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
-  focusd = pkgs.callPackage ./focusd { focusdSrc = inputs.focusd; };
+  snorlax = pkgs.callPackage ./snorlax { };
+  snorlax-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
   thinky = pkgs.callPackage ./thinky { };
   python312Packages = prev.python312Packages.overrideScope (
     finalPy: prevPy: {

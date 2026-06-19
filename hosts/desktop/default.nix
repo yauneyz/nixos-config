@@ -31,12 +31,8 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # Enable focusd distraction blocker
-  services.focusd = {
-    enable = true;
-    tokenHashFile = ../../secrets/focusd-token.sha256;
-    blocklistFile = ../../secrets/blocklist.yml;
-  };
+  # Enable FocusLock (snorlax) distraction blocker
+  services.focuslock.enable = true;
 
   hardware = {
     graphics = {
