@@ -605,10 +605,10 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "dirtyRev": "4d3f5f05ee966bca1b21f117d17d92e6c276df46-dirty",
-        "dirtyShortRev": "4d3f5f0-dirty",
-        "lastModified": 1781878363,
-        "narHash": "sha256-zdA46OSc2H7dabhHFbvYtj5aRp/fPoOcaKOG/h8vNuI=",
+        "dirtyRev": "1ad2c7729b1da42cf7f7d1047ebef9bb4b5356e6-dirty",
+        "dirtyShortRev": "1ad2c77-dirty",
+        "lastModified": 1781857985,
+        "narHash": "sha256-hQhY4Gbi3XKpFRJZT1E7S8WuBRtPbLgGqreQCA1baT8=",
         "type": "git",
         "url": "file:///data/zac/zac/development/snorlax"
       },

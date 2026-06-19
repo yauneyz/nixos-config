@@ -42,7 +42,7 @@ in
       ib = "cd ~/development/indigo/server";
       jir = "cd ~/development/jirachi";
       sl = "cd ~/development/snorlax";
-      focus = "cd ~/development/tools/focus";
+      focusd = "cd ~/development/tools/focus";
       dev = "cd ~/development";
       llm = "cd ~/development/llm";
       #sd    = "cd ~/development/stable-diffusion";
@@ -84,6 +84,8 @@ in
       ee = "vim ~/.emacs.d/init.el";
 
       # FocusLock (snorlax)
+      focus = "focus-enable";                  # turn focus blocking on
+      unfocus = "focus-disable";               # turn focus blocking off (needs USB key)
       focus-reload = "sudo systemctl restart focuslock";
       focus-status = "systemctl status focuslock";
       update-snorlax = updateSnorlaxAlias;     # re-lock the snorlax flake input
