@@ -41,6 +41,7 @@ in
       iu = "cd ~/development/indigo/app";
       ib = "cd ~/development/indigo/server";
       jir = "cd ~/development/jirachi";
+      sl = "cd ~/development/snorlax";
       focus = "cd ~/development/tools/focus";
       dev = "cd ~/development";
       llm = "cd ~/development/llm";
@@ -224,7 +225,11 @@ in
       ac = "npm run antei:compile";
       at = "npm run antei";
 
+      ############################
+      # pnpm shortcuts
+      ############################
       pd = "pnpm dev";
+      pb = "pnpm build:dev";
 
       ############################
       # Misc config / apps
