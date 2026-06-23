@@ -105,6 +105,10 @@ in
 
       # LLM server
       llmserve = llamaServeAlias;
+      tabbyserve = "tabby-serve";
+      tavernserve = "tavern-serve";
+      cydonia-serve = "tabby-serve";
+      euryale-serve = "llama-serve-euryale-70b";
       vllmserve = vllmServeAlias;
       vllmembedserve = vllmEmbeddingsServeAlias;
       oss-serve = "llama-serve-gpt-oss-20b";
@@ -196,8 +200,8 @@ in
       freezer = "pip freeze >| requirements.txt";
 
       # Heroku Git
-      ph = "git push heroku master";
-      po = "git push origin master";
+      ph = "git push heroku";
+      po = "git push origin";
 
       # Virtual env
       va = "source .venv/bin/activate";

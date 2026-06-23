@@ -21,6 +21,7 @@
     ./hyprland                        # window manager
     ./languages                       # programming language tooling
     ./lazygit.nix
+    ./llm-roleplay.nix                # local roleplay model serving
     ./micro.nix                       # nano replacement
     ./nautilus.nix                    # file manager
     ./nix-search/nix-search.nix       # TUI to search nixpkgs
