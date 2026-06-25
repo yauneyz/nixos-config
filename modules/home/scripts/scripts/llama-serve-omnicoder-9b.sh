@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-models_dir="${LLAMA_MODELS_DIR:-/home/zac/Games/Models}"
+models_dir="${LLAMA_MODELS_DIR:-${ZAC_DATA_HOME:-$HOME}/Games/Models}"
 mkdir -p "$models_dir"
 
 model="${1:-${LLAMA_OMNICODER_9B_MODEL:-$models_dir/omnicoder-9b-q6_k.gguf}}"

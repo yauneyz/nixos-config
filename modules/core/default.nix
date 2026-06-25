@@ -2,6 +2,7 @@
 {
   imports = [
     ./nixpkgs.nix
+    ./paths.nix
     ./bootloader.nix
     ./hardware.nix
     ./xserver.nix

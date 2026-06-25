@@ -1,4 +1,9 @@
-{ pkgs, host, ... }:
+{
+  config,
+  pkgs,
+  host,
+  ...
+}:
 let
   llamaCppPackage =
     if host == "desktop" then
@@ -36,7 +41,7 @@ in
     description = "Update nixpkgs flake input for nixos-config";
     serviceConfig = {
       Type = "oneshot";
-      WorkingDirectory = "/home/zac/nixos-config";
+      WorkingDirectory = config.zac.paths.nixosConfig;
       ExecStart = "/run/current-system/sw/bin/nix flake lock --update-input nixpkgs --update-input claude-code --update-input codex-cli-nix";
       User = "zac";
     };

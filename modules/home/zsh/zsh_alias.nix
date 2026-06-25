@@ -1,16 +1,12 @@
-{ host, ... }:
+{ host, userPaths, ... }:
 let
-  rebuildAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host}";
-  rebuildBootAlias = "bash ~/nixos-config/scripts/rebuild.sh ${host} boot";
+  rebuildAlias = "bash ${userPaths.nixosConfig}/scripts/rebuild.sh ${host}";
+  rebuildBootAlias = "bash ${userPaths.nixosConfig}/scripts/rebuild.sh ${host} boot";
   llamaServeAlias = "llama-serve";
   vllmServeAlias = "vllm-serve";
   vllmEmbeddingsServeAlias = "vllm-serve-embeddings";
-  snorlaxSrcPath =
-    if host == "desktop" then
-      "/data/zac/zac/development/snorlax"
-    else
-      "/home/zac/development/snorlax";
-  updateSnorlaxAlias = "cd ~/nixos-config && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
+  snorlaxSrcPath = "${userPaths.development}/snorlax";
+  updateSnorlaxAlias = "cd ${userPaths.nixosConfig} && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
   snorlaxDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
 in
 {
@@ -214,7 +210,7 @@ in
       ############################
       # Bun shortcuts
       ############################
-			jdev = "cd ~/development/jirachi && bun run dev";
+      jdev = "cd ~/development/jirachi && bun run dev";
 
       ############################
       # Node shortcuts

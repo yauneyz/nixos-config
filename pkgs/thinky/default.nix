@@ -1,5 +1,6 @@
 { lib
 , appimageTools
+, stdenvNoCC
 }:
 
 let
@@ -9,12 +10,46 @@ let
 
   pname = "thinky";
   version = releaseInfo.version;
+  hasFetchSource = (releaseInfo ? url) && (releaseInfo ? sha256);
+  hasLegacyStorePath = releaseInfo ? storePath;
+  sourceAvailable =
+    (releaseInfo.available or hasLegacyStorePath)
+    && (hasFetchSource || hasLegacyStorePath);
 
   # Default fractional scale so the Electron UI isn't microscopic on HiDPI setups.
   # Hyprland doesn't support per-window scaling, so we force the app to draw larger.
   scaleFactor = "3";
 
-  src = releaseInfo.storePath;
+  unavailablePackage = stdenvNoCC.mkDerivation {
+    inherit pname version;
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p "$out"
+    '';
+    passthru = {
+      appimageAvailable = false;
+    };
+    meta = with lib; {
+      description = "Document annotation and ideation tool";
+      homepage = "https://www.thinky.dev";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      mainProgram = "thinky";
+      broken = true;
+    };
+  };
+in
+if !sourceAvailable then
+  unavailablePackage
+else
+let
+  src =
+    if hasFetchSource then
+      builtins.fetchurl {
+        inherit (releaseInfo) url sha256;
+      }
+    else
+      releaseInfo.storePath;
 
   # Extract AppImage contents for desktop file and icons
   appimageContents = appimageTools.extractType2 {
@@ -25,6 +60,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   passthru = {
+    appimageAvailable = true;
     appimageStorePath = toString src;
   };
 

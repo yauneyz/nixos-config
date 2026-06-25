@@ -1,10 +1,15 @@
-{ lib, host, ... }:
+{
+  config,
+  lib,
+  host,
+  ...
+}:
 {
   services.syncthing = lib.mkIf (host == "desktop" || host == "laptop") {
     enable = true;
     user = "zac";
-    dataDir = "/home/zac";
-    configDir = "/home/zac/.config/syncthing";
+    dataDir = config.zac.paths.dataHome;
+    configDir = "${config.zac.paths.home}/.config/syncthing";
 
     overrideDevices = false;
     overrideFolders = false;

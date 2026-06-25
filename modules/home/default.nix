@@ -38,6 +38,7 @@
     ./swaylock.nix                    # lock screen
     ./swayosd.nix                     # brightness / volume wiget
     ./swaync/swaync.nix               # notification deamon
+    ./symlinks.nix                    # host-aware data-home symlinks
     ./vicinae.nix                     # launcher
     ./vscodium                        # vscode fork
     ./waybar                          # status bar

@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 let
-  hasThinky = (builtins.tryEval pkgs.thinky.appimageStorePath).success;
-  hasSnorlax = (builtins.tryEval pkgs.snorlax.appimageStorePath).success;
+  hasThinky = pkgs.thinky.appimageAvailable or false;
+  hasSnorlax = pkgs.snorlax.appimageAvailable or false;
   metabasePort = "3010";
   metabaseWrapped = pkgs.symlinkJoin {
     name = "metabase-wrapped";

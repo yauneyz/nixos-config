@@ -14,10 +14,10 @@ fi
 
 export ML_UV_REQUIREMENTS_FILE="${ML_UV_REQUIREMENTS_FILE:-$repo_root/modules/home/scripts/requirements/ml-python.txt}"
 
-models_dir="${VLLM_MODELS_DIR:-${LLAMA_MODELS_DIR:-/home/zac/Games/Models}}"
+models_dir="${VLLM_MODELS_DIR:-${LLAMA_MODELS_DIR:-${ZAC_DATA_HOME:-$HOME}/Games/Models}}"
 vllm_state_root="${VLLM_STATE_ROOT:-}"
 if [[ -z "$vllm_state_root" ]]; then
-	for candidate in /data/zac/zac "$HOME/Games"; do
+	for candidate in "${ZAC_DATA_HOME:-}" "$HOME"; do
 		if [[ -d "$candidate" && -w "$candidate" ]]; then
 			vllm_state_root="$candidate"
 			break

@@ -76,11 +76,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781833989,
-        "narHash": "sha256-zLuv4n6C5ceFaLwYKV2uh8zK7Z6fFXx7FD398pi2GVU=",
+        "lastModified": 1782319182,
+        "narHash": "sha256-7XaA1T9MRRu8KMc77yQKOuJcT9dXes2kYoHWOtTghSM=",
         "owner": "sadjow",
         "repo": "claude-code-nix",
-        "rev": "a94e5e841e4992e8e173aba973cb9c41ec575bb8",
+        "rev": "c04cc114d17a49ca031d8b558dba1d7548d63ec8",
         "type": "github"
       },
       "original": {
@@ -97,11 +97,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781761441,
-        "narHash": "sha256-ZXJdWelt7SwbQTh18krnNgSS2SRveK4aoqO3xPdODD8=",
+        "lastModified": 1782167912,
+        "narHash": "sha256-2K3QoP1Y1ZFcWeHX+zVII5W1khgPN55AcfcbB7PnkQI=",
         "owner": "sadjow",
         "repo": "codex-cli-nix",
-        "rev": "e3e7751853ece92c2a05ba4e8feee54afdb668c8",
+        "rev": "780625c2f90c991def2132e0b734d8ebb7138ecc",
         "type": "github"
       },
       "original": {
@@ -500,11 +500,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1781607440,
-        "narHash": "sha256-rxO+uc/KFbSJp+pgyXRuAX6QlG9hJdnt0BXpEQRXY+U=",
+        "lastModified": 1782175435,
+        "narHash": "sha256-EMzXKmnOtBQ2MnvpiNOm7E+kOMvdPrIKaeg52Tip2Uk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "3e41b24abd260e8f71dbe2f5737d24122f972158",
+        "rev": "89570f24e97e614aa34aa9ab1c927b6578a43775",
         "type": "github"
       },
       "original": {
@@ -605,12 +605,13 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "dirtyRev": "1ad2c7729b1da42cf7f7d1047ebef9bb4b5356e6-dirty",
-        "dirtyShortRev": "1ad2c77-dirty",
-        "lastModified": 1781857985,
-        "narHash": "sha256-hQhY4Gbi3XKpFRJZT1E7S8WuBRtPbLgGqreQCA1baT8=",
+        "lastModified": 1782207857,
+        "narHash": "sha256-clfgLjyMPtZWpl2pp7euJgukT6X/eWn/6FOq3Ejgn5w=",
+        "ref": "refs/heads/main",
+        "rev": "f8a33f5761e4d67fdfcd9d8eb8501d9ba7d2df06",
+        "revCount": 15,
         "type": "git",
-        "url": "file:///data/zac/zac/development/snorlax"
+        "url": "file:///home/zac/development/snorlax"
       },
       "original": {
         "type": "git",

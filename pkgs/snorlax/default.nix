@@ -1,5 +1,6 @@
 { lib
 , appimageTools
+, stdenvNoCC
 }:
 
 let
@@ -10,12 +11,46 @@ let
 
   pname = "snorlax";
   version = releaseInfo.version;
+  hasFetchSource = (releaseInfo ? url) && (releaseInfo ? sha256);
+  hasLegacyStorePath = releaseInfo ? storePath;
+  sourceAvailable =
+    (releaseInfo.available or hasLegacyStorePath)
+    && (hasFetchSource || hasLegacyStorePath);
 
   # Force a larger device scale so the Electron UI isn't microscopic on HiDPI setups
   # (Hyprland doesn't do per-window scaling), matching how thinky is handled.
   scaleFactor = "3";
 
-  src = releaseInfo.storePath;
+  unavailablePackage = stdenvNoCC.mkDerivation {
+    inherit pname version;
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p "$out"
+    '';
+    passthru = {
+      appimageAvailable = false;
+    };
+    meta = with lib; {
+      description = "FocusLock (snorlax) distraction-blocker desktop UI";
+      homepage = "https://focuslock.app";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      mainProgram = "snorlax";
+      broken = true;
+    };
+  };
+in
+if !sourceAvailable then
+  unavailablePackage
+else
+let
+  src =
+    if hasFetchSource then
+      builtins.fetchurl {
+        inherit (releaseInfo) url sha256;
+      }
+    else
+      releaseInfo.storePath;
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -25,9 +60,7 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   passthru = {
-    # Forcing this attr is how modules detect whether a built AppImage is available
-    # (see modules/home/packages/gui.nix). Fails to evaluate when release.nix is the
-    # placeholder, so the package is skipped with a warning instead of erroring.
+    appimageAvailable = true;
     appimageStorePath = toString src;
   };
 

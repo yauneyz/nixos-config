@@ -12,10 +12,10 @@ else
 	exit 1
 fi
 
-models_dir="${VLLM_MODELS_DIR:-${LLAMA_MODELS_DIR:-/home/zac/Games/Models}}"
+models_dir="${VLLM_MODELS_DIR:-${LLAMA_MODELS_DIR:-${ZAC_DATA_HOME:-$HOME}/Games/Models}}"
 embeddings_state_root="${EMBEDDINGS_STATE_ROOT:-${VLLM_STATE_ROOT:-}}"
 if [[ -z "$embeddings_state_root" ]]; then
-	for candidate in /data/zac/zac "$HOME/Games"; do
+	for candidate in "${ZAC_DATA_HOME:-}" "$HOME"; do
 		if [[ -d "$candidate" && -w "$candidate" ]]; then
 			embeddings_state_root="$candidate"
 			break

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-models_dir="${LLAMA_TAVERN_MODELS_DIR:-/home/zac/Games/Models/tavern}"
+models_dir="${LLAMA_TAVERN_MODELS_DIR:-${ZAC_DATA_HOME:-$HOME}/Games/Models/tavern}"
 mkdir -p "$models_dir"
 
 model="${1:-}"

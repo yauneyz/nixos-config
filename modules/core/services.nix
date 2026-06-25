@@ -1,4 +1,9 @@
-{ pkgs, host, ... }:
+{
+  config,
+  pkgs,
+  host,
+  ...
+}:
 {
   services = {
     gvfs.enable = true;
@@ -17,7 +22,6 @@
       gnome-settings-daemon
     ];
 
-
     udisks2.enable = true;
 
     postgresql = {
@@ -30,7 +34,7 @@
     description = "Daily NixOS Rebuild";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /home/zac/nixos-config#${host}";
+      ExecStart = "${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ${config.zac.paths.nixosConfig}#${host}";
     };
     path = with pkgs; [ git ];
   };
