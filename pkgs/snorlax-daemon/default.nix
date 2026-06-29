@@ -4,7 +4,7 @@
 }:
 
 # Privileged Linux enforcement daemon for FocusLock (snorlax). Builds the Rust crate
-# at native/linux from the snorlax flake input and produces these binaries:
+# under native/linux from the snorlax flake input and produces these binaries:
 #   focuslock-svc      - the daemon started by the declarative systemd unit
 #   focuslock-svcctl   - service control + recovery-code generation CLI
 #   focuslock-recover  - out-of-band recovery killswitch
@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage {
   pname = "focuslock-daemon";
   version = "0.1.0";
 
-  src = snorlaxSrc + "/native/linux";
+  # Keep native/common beside native/linux so Cargo can resolve the
+  # focuslock_common path dependency declared as ../common.
+  src = snorlaxSrc + "/native";
+  cargoRoot = "linux";
+  buildAndTestSubdir = "linux";
 
   cargoLock.lockFile = snorlaxSrc + "/native/linux/Cargo.lock";
 
