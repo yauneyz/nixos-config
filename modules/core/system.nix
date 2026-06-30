@@ -58,6 +58,7 @@ in
 
   environment.systemPackages = with pkgs; [
     wget
+    curl
     git
     libxcrypt-legacy
     p7zip
@@ -81,5 +82,8 @@ in
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "pnpm-10.29.2"
+  ];
   system.stateVersion = "24.05";
 }

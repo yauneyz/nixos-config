@@ -48,5 +48,9 @@
     };
   };
 
+  # Avoid switch-time restarts when the NVIDIA userspace package changes but the
+  # old kernel module is still loaded. The daemon will start normally at boot.
+  systemd.services.nvidia-persistenced.restartIfChanged = false;
+
   powerManagement.cpuFreqGovernor = "performance";
 }

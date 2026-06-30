@@ -103,12 +103,14 @@ in
       llmserve = llamaServeAlias;
       tabbyserve = "tabby-serve";
       tavernserve = "tavern-serve";
+      textgenserve = "textgen-serve";
       cydonia-serve = "tabby-serve";
       euryale-serve = "llama-serve-euryale-70b";
       vllmserve = vllmServeAlias;
       vllmembedserve = vllmEmbeddingsServeAlias;
       oss-serve = "llama-serve-gpt-oss-20b";
       w-serve = "llama-serve-weirdcompound-24b";
+      c-serve = "llama-serve-cydonia-24b";
 
       # Motion helpers
       cd = "z";

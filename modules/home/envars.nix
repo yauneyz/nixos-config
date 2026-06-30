@@ -7,6 +7,9 @@
     LLAMA_MODELS_DIR = userPaths.models;
     ROLEPLAY_MODELS_DIR = "${userPaths.models}/roleplay";
     TABBYAPI_DIR = "${userPaths.dataHome}/Games/LLM/tabbyAPI";
+    TEXTGEN_DIR = "${userPaths.dataHome}/Games/LLM/textgen";
+    TEXTGEN_USER_DATA_DIR = "${userPaths.dataHome}/Games/LLM/textgen-user-data";
+    TEXTGEN_MODELS_DIR = userPaths.models;
     HF_HOME = "${userPaths.models}/huggingface";
     EMBEDDINGS_ENDPOINT = "http://127.0.0.1:11435/v1/embeddings";
     EMBEDDINGS_MODEL = "qwen3-embedding-0.6b";

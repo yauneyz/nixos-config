@@ -44,7 +44,9 @@ in
 
     models = lib.mkOption {
       type = lib.types.str;
-      default = "${cfg.dataHome}/Games/Models";
+      # Games is its own partition mounted under the login home, so model
+      # storage lives there rather than under the data partition (dataHome).
+      default = "${cfg.home}/Games/Models";
       description = "Local ML model storage.";
     };
 

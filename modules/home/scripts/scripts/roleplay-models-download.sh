@@ -2,6 +2,7 @@
 set -euo pipefail
 
 models_dir="${ROLEPLAY_MODELS_DIR:-/home/zac/Games/Models/roleplay}"
+llama_models_dir="${LLAMA_MODELS_DIR:-/home/zac/Games/Models}"
 cydonia_dir="$models_dir/Cydonia-24B-v4.3-EXL3-5.0bpw"
 
 if ! command -v uvx >/dev/null 2>&1; then
