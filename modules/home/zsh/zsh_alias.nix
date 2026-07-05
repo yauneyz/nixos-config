@@ -6,8 +6,8 @@ let
   vllmServeAlias = "vllm-serve";
   vllmEmbeddingsServeAlias = "vllm-serve-embeddings";
   snorlaxSrcPath = "${userPaths.development}/snorlax";
-  updateSnorlaxAlias = "cd ${userPaths.nixosConfig} && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
-  snorlaxDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
+  updateTalysmanAlias = "cd ${userPaths.nixosConfig} && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
+  talysmanDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
 in
 {
   programs.zsh = {
@@ -23,6 +23,8 @@ in
 
       res = "cd ~/development/research/";
       ai = "cd ~/development/research/ai";
+      rl = "cd ~/development/research/rl";
+      mt = "cd ~/development/research/rl/mewtwo";
       koop = "cd ~/development/research/ai/koopman";
       mem = "cd ~/development/research/ai/memory";
 
@@ -79,14 +81,20 @@ in
       # Emacs init
       ee = "vim ~/.emacs.d/init.el";
 
-      # FocusLock (snorlax)
+      # Talysman
       focus = "focus-enable";                  # turn focus blocking on
       unfocus = "focus-disable";               # turn focus blocking off (needs USB key)
-      focus-reload = "sudo systemctl restart focuslock";
-      focus-status = "systemctl status focuslock";
-      update-snorlax = updateSnorlaxAlias;     # re-lock the snorlax flake input
-      snorlax-dist = snorlaxDistAlias;         # build AppImage + stage release.nix
-      recovery-code = "sudo focuslock-svcctl gen-code";
+      focus-reload = "sudo systemctl restart talysman";
+      focus-status = "systemctl status talysman";
+      talysman-reload = "sudo systemctl restart talysman";
+      talysman-status = "systemctl status talysman";
+      vblock = "vim ~/nixos-config/state/talysman-policy.json";
+      blocklist-refresh = "command blocklist-refresh";
+      update-talysman = updateTalysmanAlias;   # re-lock the Talysman source flake input
+      talysman-dist = talysmanDistAlias;       # build AppImage + stage release.nix
+      update-snorlax = updateTalysmanAlias;    # source repo alias
+      snorlax-dist = talysmanDistAlias;        # source repo alias
+      recovery-code = "sudo talysman-svcctl gen-code";
 
       ############################
       # General commands / tooling

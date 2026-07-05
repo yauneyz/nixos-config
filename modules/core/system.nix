@@ -37,6 +37,12 @@ in
     };
   };
 
+  systemd.sleep.settings.Sleep = {
+    AllowHibernation = "no";
+    AllowHybridSleep = "no";
+    AllowSuspendThenHibernate = "no";
+  };
+
   systemd.services.nixos-flake-update = {
     description = "Update nixpkgs flake input for nixos-config";
     serviceConfig = {

@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.services.focuslock;
-  stateFile = "/var/lib/focuslock/state.json";
-  defaultStateFile = pkgs.writeText "focuslock-default-state.json" (builtins.toJSON {
+  cfg = config.services.talysman;
+  stateFile = "/var/lib/talysman/state.json";
+  defaultStateFile = pkgs.writeText "talysman-default-state.json" (builtins.toJSON {
     focusActive = false;
     focusSource = "boot";
     policy = {
@@ -16,15 +16,27 @@ let
     schedule = {
       windows = [ ];
     };
+    settings = {
+      browserHandshakeEnabled = false;
+    };
     pairedKeys = [ ];
   });
-  importPolicy = pkgs.writeShellScript "focuslock-import-policy" ''
+  importPolicy = pkgs.writeShellScript "talysman-import-policy" ''
     set -eu
 
     state_file=${escapeShellArg stateFile}
     policy_file=${escapeShellArg cfg.policyFile}
+    state_dir="$(dirname "$state_file")"
+    legacy_state_dir=/var/lib/focuslock
 
-    mkdir -p "$(dirname "$state_file")"
+    mkdir -p "$state_dir"
+
+    # One-time migration from the pre-rename state directory.
+    for name in state.json secure-store.json recovery-code.txt; do
+      if [ -e "$legacy_state_dir/$name" ] && [ ! -e "$state_dir/$name" ]; then
+        cp -a "$legacy_state_dir/$name" "$state_dir/$name"
+      fi
+    done
 
     if [ ! -s "$state_file" ]; then
       install -m 0644 ${escapeShellArg defaultStateFile} "$state_file"
@@ -35,7 +47,7 @@ let
     install -m 0644 "$tmp" "$state_file"
     rm -f "$tmp"
   '';
-  exportPolicy = pkgs.writeShellScript "focuslock-export-policy" ''
+  exportPolicy = pkgs.writeShellScript "talysman-export-policy" ''
     set -eu
 
     state_file=${escapeShellArg stateFile}
@@ -45,28 +57,28 @@ let
     [ -s "$state_file" ] || exit 0
 
     install -d -m 0755 -o ${escapeShellArg username} -g users "$policy_dir"
-    tmp="$(mktemp "$policy_dir/.focuslock-policy.json.XXXXXX")"
+    tmp="$(mktemp "$policy_dir/.talysman-policy.json.XXXXXX")"
     ${pkgs.jq}/bin/jq '.policy' "$state_file" > "$tmp"
     install -m 0644 -o ${escapeShellArg username} -g users "$tmp" "$policy_file"
     rm -f "$tmp"
   '';
 in {
-  options.services.focuslock = {
-    enable = mkEnableOption "FocusLock (snorlax) enforcement daemon";
+  options.services.talysman = {
+    enable = mkEnableOption "Talysman enforcement daemon";
 
     package = mkOption {
       type = types.package;
-      default = pkgs.snorlax-daemon;
-      defaultText = literalExpression "pkgs.snorlax-daemon";
-      description = "The FocusLock daemon package (provides focuslock-svc and the svcctl/recover/natmsg CLIs).";
+      default = pkgs.talysman-daemon;
+      defaultText = literalExpression "pkgs.talysman-daemon";
+      description = "The Talysman daemon package (provides talysman-svc and the svcctl/recover/natmsg CLIs).";
     };
 
     policyFile = mkOption {
       type = types.str;
-      default = "/home/${username}/nixos-config/state/focuslock-policy.json";
+      default = "/home/${username}/nixos-config/state/talysman-policy.json";
       description = ''
-        Version-controlled FocusLock policy file. The daemon imports this policy
-        into /var/lib/focuslock/state.json at startup, and policy edits made
+        Version-controlled Talysman policy file. The daemon imports this policy
+        into /var/lib/talysman/state.json at startup, and policy edits made
         through snorlax are exported back here by a systemd path watcher.
       '';
     };
@@ -76,26 +88,27 @@ in {
     # The daemon enforces IP-level blocking via nftables.
     networking.nftables.enable = true;
 
-    # Expose focuslock-svc/-svcctl/-recover/-natmsg system-wide (recovery, status, pairing).
+    # Expose talysman-svc/-svcctl/-recover/-natmsg system-wide (recovery, status, pairing).
     environment.systemPackages = [ cfg.package ];
 
-    # Declarative replacement for `focuslock-svcctl install`. The svcctl installer would
+    # Declarative replacement for `talysman-svcctl install`. The svcctl installer would
     # otherwise write this unit imperatively and drop binaries under /opt; here we point
     # ExecStart at the Nix-store binary and let systemd own the runtime/state dirs.
-    systemd.services.focuslock = {
-      description = "FocusLock enforcement daemon";
+    systemd.services.talysman = {
+      description = "Talysman enforcement daemon";
       after = [ "network-online.target" "nftables.service" ];
+      conflicts = [ "focuslock.service" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # focuslock-svc shells out to nft (IP blocking) and ip (routing) at runtime.
+      # talysman-svc shells out to nft (IP blocking) and ip (routing) at runtime.
       # The policy sync hooks use jq/coreutils.
       path = with pkgs; [ nftables iproute2 jq coreutils ];
 
       serviceConfig = {
         Type = "simple";
         ExecStartPre = importPolicy;
-        ExecStart = "${cfg.package}/bin/focuslock-svc";
+        ExecStart = "${cfg.package}/bin/talysman-svc";
         ExecStartPost = exportPolicy;
         Restart = "always";
         RestartSec = "1s";
@@ -108,17 +121,17 @@ in {
         # nftables. Do not add a CapabilityBoundingSet without auditing all of these.
         User = "root";
 
-        # RuntimeDirectory -> /run/focuslock (socket: /run/focuslock/focuslock.sock)
-        RuntimeDirectory = "focuslock";
+        # RuntimeDirectory -> /run/talysman (socket: /run/talysman/talysman.sock)
+        RuntimeDirectory = "talysman";
         RuntimeDirectoryMode = "0755";
-        # StateDirectory -> /var/lib/focuslock (state.json, secure-store.json, recovery-code.txt)
-        StateDirectory = "focuslock";
+        # StateDirectory -> /var/lib/talysman (state.json, secure-store.json, recovery-code.txt)
+        StateDirectory = "talysman";
         StateDirectoryMode = "0750";
       };
     };
 
-    systemd.services.focuslock-policy-sync = {
-      description = "Sync FocusLock policy from daemon state into nixos-config";
+    systemd.services.talysman-policy-sync = {
+      description = "Sync Talysman policy from daemon state into nixos-config";
       path = with pkgs; [ jq coreutils ];
       serviceConfig = {
         Type = "oneshot";
@@ -126,12 +139,12 @@ in {
       };
     };
 
-    systemd.paths.focuslock-policy-sync = {
-      description = "Watch FocusLock state for policy changes";
+    systemd.paths.talysman-policy-sync = {
+      description = "Watch Talysman state for policy changes";
       wantedBy = [ "multi-user.target" ];
       pathConfig = {
         PathChanged = stateFile;
-        Unit = "focuslock-policy-sync.service";
+        Unit = "talysman-policy-sync.service";
       };
     };
   };

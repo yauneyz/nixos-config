@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 let
   hasThinky = pkgs.thinky.appimageAvailable or false;
-  hasSnorlax = pkgs.snorlax.appimageAvailable or false;
+  hasTalysman = pkgs.talysman.appimageAvailable or false;
   metabasePort = "3010";
   metabaseWrapped = pkgs.symlinkJoin {
     name = "metabase-wrapped";
@@ -18,9 +18,9 @@ in
     Skipping Thinky package: AppImage source is unavailable.
     Rebuild it from the electron repo with `npm run release:local`
     (writes and stages pkgs/thinky/release.nix), then rebuild NixOS.
-  '' ++ lib.optional (!hasSnorlax) ''
-    Skipping snorlax (FocusLock UI) package: AppImage source is unavailable.
-    Build it from the snorlax repo with `snorlax-dist` (pnpm run release:local)
+  '' ++ lib.optional (!hasTalysman) ''
+    Skipping Talysman package: AppImage source is unavailable.
+    Build it from the Talysman source repo with `talysman-dist` (pnpm run release:local)
     (writes and stages pkgs/snorlax/release.nix), then rebuild NixOS.
   '';
 
@@ -56,7 +56,7 @@ in
       zotero
     ]
     ++ lib.optional hasThinky thinky
-    ++ lib.optional hasSnorlax snorlax
+    ++ lib.optional hasTalysman talysman
     ++ [
       ## Utility
       dconf-editor

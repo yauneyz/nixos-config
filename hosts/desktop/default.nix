@@ -31,8 +31,8 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # Enable FocusLock (snorlax) distraction blocker
-  services.focuslock.enable = true;
+  # Enable Talysman distraction blocker
+  services.talysman.enable = true;
 
   hardware = {
     graphics = {
@@ -43,6 +43,7 @@
       package = config.boot.kernelPackages.nvidiaPackages.production;
       open = false;
       modesetting.enable = true;
+      powerManagement.enable = true;
       nvidiaSettings = true;
       nvidiaPersistenced = true;
     };

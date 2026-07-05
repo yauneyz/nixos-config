@@ -4,12 +4,12 @@
 }:
 
 let
-  # Local release info is written by the snorlax repo's `pnpm run release:local`.
+  # Local release info is written by the Talysman source repo's `pnpm run release:local`.
   # That script builds the AppImage, adds it to /nix/store, and stages this file so
   # flake evaluation sees the new version/store path on the next rebuild.
   releaseInfo = import ./release.nix;
 
-  pname = "snorlax";
+  pname = "talysman";
   version = releaseInfo.version;
   hasFetchSource = (releaseInfo ? url) && (releaseInfo ? sha256);
   hasLegacyStorePath = releaseInfo ? storePath;
@@ -31,11 +31,11 @@ let
       appimageAvailable = false;
     };
     meta = with lib; {
-      description = "FocusLock (snorlax) distraction-blocker desktop UI";
-      homepage = "https://focuslock.app";
+      description = "Talysman distraction-blocker desktop UI";
+      homepage = "https://talysman.app";
       license = licenses.mit;
       platforms = platforms.linux;
-      mainProgram = "snorlax";
+      mainProgram = "talysman";
       broken = true;
     };
   };
@@ -73,10 +73,10 @@ appimageTools.wrapType2 {
     # Install the desktop file (electron-builder names it after the executable).
     for desktop in ${appimageContents}/*.desktop; do
       if [ -f "$desktop" ]; then
-        install -m 444 -D "$desktop" "$out/share/applications/snorlax.desktop"
+        install -m 444 -D "$desktop" "$out/share/applications/talysman.desktop"
         # Point Exec at the wrapped FHS binary name instead of the upstream AppRun.
-        substituteInPlace "$out/share/applications/snorlax.desktop" \
-          --replace-fail 'Exec=AppRun' 'Exec=snorlax' || true
+        substituteInPlace "$out/share/applications/talysman.desktop" \
+          --replace-fail 'Exec=AppRun' 'Exec=talysman' || true
         break
       fi
     done
@@ -88,7 +88,7 @@ appimageTools.wrapType2 {
       for icon in ${appimageContents}/*.png; do
         if [ -f "$icon" ]; then
           mkdir -p "$out/share/icons/hicolor/512x512/apps"
-          cp "$icon" "$out/share/icons/hicolor/512x512/apps/snorlax.png"
+          cp "$icon" "$out/share/icons/hicolor/512x512/apps/talysman.png"
           break
         fi
       done
@@ -96,10 +96,10 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "FocusLock (snorlax) distraction-blocker desktop UI";
-    homepage = "https://focuslock.app";
+    description = "Talysman distraction-blocker desktop UI";
+    homepage = "https://talysman.app";
     license = licenses.mit;
     platforms = platforms.linux;
-    mainProgram = "snorlax";
+    mainProgram = "talysman";
   };
 }

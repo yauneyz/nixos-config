@@ -5,11 +5,13 @@
   prev,
   ...
 }:
-{
+rec {
   _2048 = pkgs.callPackage ./2048 { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
-  snorlax = pkgs.callPackage ./snorlax { };
-  snorlax-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
+  talysman = pkgs.callPackage ./snorlax { };
+  talysman-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
+  snorlax = talysman;
+  snorlax-daemon = talysman-daemon;
   thinky = pkgs.callPackage ./thinky { };
   python312Packages = prev.python312Packages.overrideScope (
     finalPy: prevPy: {

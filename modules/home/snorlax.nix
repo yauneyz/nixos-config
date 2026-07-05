@@ -1,19 +1,19 @@
 { pkgs, ... }:
 
-# FocusLock (snorlax) browser integration: register the native-messaging host so the
-# FocusLock browser extension can stream live policy from the daemon and enforce
+# Talysman browser integration: register the native-messaging host so the
+# browser extension can stream live policy from the daemon and enforce
 # request-layer blocking (works under ECH/QUIC/VPN). The host binary is part of the
-# daemon package; it connects to the daemon's unix socket at /run/focuslock.
+# daemon package; it connects to the daemon's unix socket at /run/talysman.
 let
-  hostName = "com.focuslock.host";
+  hostName = "com.talysman.host";
   manifest = builtins.toJSON {
     name = hostName;
-    description = "FocusLock browser native-messaging host";
-    path = "${pkgs.snorlax-daemon}/bin/focuslock-natmsg";
+    description = "Talysman browser native-messaging host";
+    path = "${pkgs.talysman-daemon}/bin/talysman-natmsg";
     type = "stdio";
     # Firefox uses allowed_extensions; the extension id is set in its manifest.json
     # (browser_specific_settings.gecko.id).
-    allowed_extensions = [ "focuslock@focuslock.app" ];
+    allowed_extensions = [ "talysman@talysman.app" ];
   };
 in
 {

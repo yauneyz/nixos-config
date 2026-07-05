@@ -32,7 +32,7 @@
     ./retroarch.nix
     ./rofi/rofi.nix                   # launcher
     ./scripts/scripts.nix             # personal scripts
-    ./snorlax.nix                     # FocusLock browser native-messaging host
+    ./snorlax.nix                     # Talysman browser native-messaging host
     ./ssh.nix                         # ssh config
     ./superfile/superfile.nix         # terminal file manager
     ./swaylock.nix                    # lock screen

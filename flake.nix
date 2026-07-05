@@ -71,7 +71,7 @@
     {
       # Export custom packages for direct building
       packages.${system} = {
-        inherit (pkgs) snorlax snorlax-daemon thinky;
+        inherit (pkgs) talysman talysman-daemon snorlax snorlax-daemon thinky;
       };
 
       nixosConfigurations = {

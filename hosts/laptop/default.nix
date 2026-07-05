@@ -24,8 +24,8 @@
       };
     };
 
-    # FocusLock (snorlax) distraction blocker
-    focuslock.enable = true;
+    # Talysman distraction blocker
+    talysman.enable = true;
 
     upower = {
       enable = true;
