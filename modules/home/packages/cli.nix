@@ -107,6 +107,16 @@ in
     file                              # Show file information
     firebase-tools                    # Firebase CLI
     heroku                            # Heroku CLI
+    (writeShellApplication {
+      name = "vercel";
+      runtimeInputs = [
+        nodejs_22
+        pnpm
+      ];
+      text = ''
+        exec pnpm dlx vercel "$@"
+      '';
+    })
     fpm                               # Effing Package Management
     jq                                # JSON processor
     killall

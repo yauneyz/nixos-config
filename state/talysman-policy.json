@@ -10,5 +10,11 @@
     "theringer.com",
     "cnn.com"
   ],
-  "apps": []
+  "apps": [
+    {
+      "windowsImageName": "steam",
+      "linuxProcessName": "steam",
+      "label": "steam"
+    }
+  ]
 }

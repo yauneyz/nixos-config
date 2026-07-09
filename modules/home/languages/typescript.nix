@@ -18,16 +18,6 @@
 
     npm-check-updates
     pnpm
-    (writeShellApplication {
-      name = "vercel";
-      runtimeInputs = [
-        nodejs_22
-        pnpm
-      ];
-      text = ''
-        exec pnpm dlx vercel "$@"
-      '';
-    })
     jshint
 
     ripgrep

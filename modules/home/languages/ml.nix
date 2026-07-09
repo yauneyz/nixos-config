@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, userPaths, ... }:
 
 {
   # Machine Learning and AI packages
@@ -34,9 +34,9 @@
     OMP_NUM_THREADS = "1";  # Prevent oversubscription in multiprocessing
 
     # HuggingFace cache location
-    HF_HOME = "$HOME/.cache/huggingface";
+    HF_HOME = "${userPaths.models}/huggingface";
 
     # CUDA cache location
-    CUDA_CACHE_PATH = "$HOME/.cache/cuda";
+    CUDA_CACHE_PATH = "${userPaths.dataHome}/.cache/cuda";
   };
 }

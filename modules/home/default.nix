@@ -34,6 +34,7 @@
     ./scripts/scripts.nix             # personal scripts
     ./snorlax.nix                     # Talysman browser native-messaging host
     ./ssh.nix                         # ssh config
+    ./storage.nix                     # keep large caches off the root filesystem
     ./superfile/superfile.nix         # terminal file manager
     ./swaylock.nix                    # lock screen
     ./swayosd.nix                     # brightness / volume wiget
