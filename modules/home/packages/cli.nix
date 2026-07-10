@@ -1,6 +1,14 @@
 { pkgs, inputs, ... }:
 let
   codexOriginal = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  # Codex 0.144+ runs commands through a separate "code mode" host binary that it
+  # expects to find next to its own executable. codex-cli-nix doesn't package it,
+  # so fetch it from the matching upstream release. On version bumps the hash must
+  # be refreshed: nix-prefetch-url <url-with-new-version>
+  codexCodeModeHost = pkgs.fetchurl {
+    url = "https://github.com/openai/codex/releases/download/rust-v${codexOriginal.version}/codex-code-mode-host-x86_64-unknown-linux-musl.tar.gz";
+    sha256 = "0gcr30mf1mgfwqfpiqhmvjb0qyq23vwgfgjii7s2nz4lb9fcdn96";
+  };
   codexLatest = pkgs.stdenv.mkDerivation {
     name = "codex-patched";
     src = codexOriginal;
@@ -17,6 +25,9 @@ let
     installPhase = ''
       mkdir -p $out/bin
       cp $src/bin/codex-raw $out/bin/codex-raw
+      tar -xzf ${codexCodeModeHost} -C $out/bin
+      mv $out/bin/codex-code-mode-host-x86_64-unknown-linux-musl $out/bin/codex-code-mode-host
+      chmod +x $out/bin/codex-code-mode-host
       cat > $out/bin/codex <<EOF
       #!${pkgs.bash}/bin/bash -e
       export CODEX_EXECUTABLE_PATH="\$HOME/.local/bin/codex"

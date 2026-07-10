@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 # Sequential startup: switch workspace, launch app, wait, repeat.
 
-# === Workspace 3: Emacs (PdfWindow) ===
+# === Workspace 3: Emacs (Snorlax web prompt) ===
 hyprctl dispatch workspace 3
 #emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
-emacs ~/development/indigo/prompts/current.md &
+emacs ~/development/snorlax/apps/web/prompts/current.org &
 sleep 2
 
-# === Workspace 9: Emacs (owl todo) + owl-dev terminal ===
+# === Workspace 9: Emacs (Snorlax current work) ===
 #ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop; exec bash' &
 #ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/jirachi && bun run dev; exec bash' &
 sleep 2
 
 hyprctl dispatch workspace 9
 #emacs ~/development/clojure/owl/todo.org &
-emacs ~/development/indigo/todo.org &
+emacs ~/development/snorlax/current.org &
 sleep 2
 
 # === Workspace 10: owl start terminal ===

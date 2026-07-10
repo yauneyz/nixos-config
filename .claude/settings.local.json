@@ -125,7 +125,19 @@
       "Bash(nohup ./installer_files/env/bin/python -c \"import one_click; one_click.update_requirements\\(initial_installation=True, pull=False\\)\")",
       "Bash(kill -0 37955)",
       "Bash(kill -0 40728)",
-      "Bash(timeout 300 sudo nixos-rebuild test --flake \".#$\\(hostname\\)\")"
+      "Bash(timeout 300 sudo nixos-rebuild test --flake \".#$\\(hostname\\)\")",
+      "Bash(file /nix/store/nxabzi4wxgap8pfmcifqbiama6gj6z3m-codex-0.144.0/bin/*)",
+      "Bash(tar tzf *)",
+      "Bash(nix derivation *)",
+      "Bash(jq -r '.[].env.installPhase // .[].env.buildCommand // \"no installPhase\"')",
+      "Bash(gh release *)",
+      "Bash(curl -s https://api.github.com/repos/openai/codex/releases/tags/rust-v0.144.0)",
+      "Bash(tar xzf *)",
+      "Bash(curl -sL \"https://registry.npmjs.org/@openai/codex/-/codex-0.144.0-linux-x64.tgz\" -o codex-linux.tgz)",
+      "Bash(curl -s \"https://api.github.com/repos/sadjow/codex-cli-nix/commits?per_page=10\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/sadjow/codex-cli-nix/be567a404cddca0c018b391b11e179ae968e7a27/flake.nix\")",
+      "Bash(curl *)",
+      "Bash(/nix/store/4qp9l8kcr156n6dbgvi9r699dlfiyzr1-codex-patched/bin/codex-code-mode-host --help)"
     ],
     "deny": [],
     "ask": []
