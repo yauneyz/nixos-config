@@ -2,6 +2,6 @@
 {
   home.packages = with pkgs; [
     discord
-    vesktop
+    (vesktop.override { electron_40 = electron_42; })
   ];
 }

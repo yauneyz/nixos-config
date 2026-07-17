@@ -125,7 +125,7 @@ in
         pnpm
       ];
       text = ''
-        exec pnpm dlx vercel "$@"
+        exec pnpm dlx vercel@54.21.1 "$@"
       '';
     })
     fpm                               # Effing Package Management
