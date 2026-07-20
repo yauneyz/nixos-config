@@ -7,7 +7,7 @@ let
   # be refreshed: nix-prefetch-url <url-with-new-version>
   codexCodeModeHost = pkgs.fetchurl {
     url = "https://github.com/openai/codex/releases/download/rust-v${codexOriginal.version}/codex-code-mode-host-x86_64-unknown-linux-musl.tar.gz";
-    sha256 = "0gcr30mf1mgfwqfpiqhmvjb0qyq23vwgfgjii7s2nz4lb9fcdn96";
+    hash = "sha256-NxBMQ/YnGXCTCdBuafAD6Oi+0Tl/TTZHaztl4l/ARJM=";
   };
   codexLatest = pkgs.stdenv.mkDerivation {
     name = "codex-patched";

@@ -76,11 +76,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784251880,
-        "narHash": "sha256-Lm9c8DZJHCkd6HcEEOwyh3cooo/hgqWFju1sn+Lq6lo=",
+        "lastModified": 1784484843,
+        "narHash": "sha256-DQpCBkh4J5yoBDKbWIxDqdicKU4nBjnX4Kx+404zD2I=",
         "owner": "sadjow",
         "repo": "claude-code-nix",
-        "rev": "d316ee38bc9966215bd487f9733ae75d483b6363",
+        "rev": "6ee481c21e1e069e465abe89bb722c3fcdb78a1f",
         "type": "github"
       },
       "original": {
@@ -97,11 +97,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784171300,
-        "narHash": "sha256-LiWzndOW88994z4SCnenv+2rKe/ryEgvWSsBjFpNvrc=",
+        "lastModified": 1784484188,
+        "narHash": "sha256-FM9Iwr775hfEdUwJsqRuKbi5QqR0JeYuWEyVrgF6C7s=",
         "owner": "sadjow",
         "repo": "codex-cli-nix",
-        "rev": "c4b3fc9d761797a813b5f8b1d38a9a81cdba6e45",
+        "rev": "fa13e0c1f4d0792481e68e057db31f26242de73b",
         "type": "github"
       },
       "original": {
@@ -500,11 +500,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1784210874,
-        "narHash": "sha256-keY82hYMWt1hWhFYWVNFYf/meYjxdMjs6AyePFzr+0I=",
-        "rev": "59682e0069f0ed0a452e2179a7f4c1f247027b9e",
+        "lastModified": 1784453100,
+        "narHash": "sha256-pMp70Dx62xa8XFOLvrcCLSyw22HCEoYyYd5W+bUfqsc=",
+        "rev": "b471514bed69eff5255c8e63c1f80e5fe56c616f",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1035929.59682e0069f0/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1037466.b471514bed69/nixexprs.tar.xz"
       },
       "original": {
         "id": "nixpkgs",
@@ -604,13 +604,12 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "lastModified": 1783025656,
-        "narHash": "sha256-qrCx8oRGM0d0S1l9t3hDPOfDKZXwrTsdnIBZ4y6jcWw=",
-        "ref": "refs/heads/main",
-        "rev": "21822220b1ee5afb5cefea00517396b124b1415b",
-        "revCount": 17,
+        "dirtyRev": "44fe8a1b59d2a488c80302d3b23301b2e55ecce0-dirty",
+        "dirtyShortRev": "44fe8a1-dirty",
+        "lastModified": 1784529855,
+        "narHash": "sha256-zpR6Z6iDUhvqMqeWzc2kAiST8Ir+3EmChpHtmUXB+9A=",
         "type": "git",
-        "url": "file:///home/zac/development/snorlax"
+        "url": "file:///data/zac/zac/development/snorlax"
       },
       "original": {
         "type": "git",

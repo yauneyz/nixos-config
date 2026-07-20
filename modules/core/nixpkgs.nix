@@ -18,6 +18,20 @@
           xrdb = prev.xrdb;
           lndir = prev.lndir;
         };
+
+        # python-lsp-black's tests still import pkg_resources, which was removed
+        # from setuptools 82. The runtime import check still runs.
+        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+          (_python-final: python-prev: {
+            pylsp-mypy = python-prev.pylsp-mypy.overridePythonAttrs {
+              # Its tests still configure mypy for unsupported Python 3.9.
+              doCheck = false;
+            };
+            python-lsp-black = python-prev.python-lsp-black.overridePythonAttrs {
+              doCheck = false;
+            };
+          })
+        ];
       })
       (
         final: prev:

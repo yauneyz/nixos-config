@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    awww  # Wallpaper daemon for per-monitor wallpaper support
+    awww # Wallpaper daemon for per-monitor wallpaper support
     grimblast
     hyprpicker
     grim
@@ -18,6 +18,18 @@
   ];
   wayland.windowManager.hyprland = {
     enable = true;
+
+    # The NixOS programs.hyprland module in modules/core/wayland.nix owns the
+    # Hyprland and portal packages. If Home Manager installs them too, its
+    # xdg.portal module exports NIX_XDG_DESKTOP_PORTAL_DIR pointing at the user
+    # profile, which only contains the Hyprland portal and hides the system GTK
+    # portal. Electron then finds org.freedesktop.portal.Desktop but reports
+    # "No such interface org.freedesktop.portal.FileChooser" because XDPH does
+    # not implement file picking. Keep portal discovery system-owned so the GTK
+    # FileChooser and Hyprland screen-sharing backends are both available.
+    package = null;
+    portalPackage = null;
+
     configType = "hyprlang";
     xwayland = {
       enable = true;
