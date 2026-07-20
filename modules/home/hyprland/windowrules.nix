@@ -12,8 +12,8 @@
       # "float,udiskie"
       "float on, match:title ^(Transmission)$"
       "float on, match:title ^(Volume Control)$"
-      "float on, match:title ^(Firefox — Sharing Indicator)$"
-      "move 0 0, match:title ^(Firefox — Sharing Indicator)$"
+      "float on, match:title ^(Firefox( Developer Edition)? — Sharing Indicator)$"
+      "move 0 0, match:title ^(Firefox( Developer Edition)? — Sharing Indicator)$"
       "size 700 450, match:title ^(Volume Control)$"
       "move 40 55%, match:title ^(Volume Control)$"
 

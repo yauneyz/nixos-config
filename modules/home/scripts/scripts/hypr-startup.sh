@@ -24,9 +24,9 @@ sleep 2
 
 # === Workspace 13: Firefox ===
 hyprctl dispatch workspace 13
-firefox --new-window https://keep.google.com https://keep.google.com https://keep.google.com https://keep.google.com &
+firefox-devedition --new-window https://keep.google.com https://keep.google.com https://keep.google.com https://keep.google.com &
 sleep 5
-firefox --new-window https://youtube.com &
+firefox-devedition --new-window https://youtube.com &
 sleep 3
 
 # === Workspace 14: Spotify ===

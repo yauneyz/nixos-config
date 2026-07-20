@@ -11,7 +11,7 @@
       "$mainMod, T, exec, ghostty --gtk-single-instance=true"
 
       # Application launchers (from i3)
-      "$mainMod, I, exec, firefox"  # i3: Mod1+i
+      "$mainMod, I, exec, firefox-devedition"  # i3: Mod1+i
       "$mainMod, N, exec, nautilus"  # i3: Mod1+n (file manager)
       "$mainMod, M, exec, spotify"  # i3: Mod1+m
       "$mainMod, E, exec, emacs"  # i3: Mod1+e

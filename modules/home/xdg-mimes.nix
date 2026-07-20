@@ -13,7 +13,7 @@ let
     terminal = [ "ghostty.desktop" ];
     archive = [ "org.gnome.FileRoller.desktop" ];
     discord = [ "webcord.desktop" ];
-    browser = [ "firefox.desktop" ];
+    browser = [ "firefox-devedition.desktop" ];
   };
 
   mimeMap = {

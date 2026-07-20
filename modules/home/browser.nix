@@ -97,12 +97,13 @@ let
     {
       name,
       id,
+      path ? name,
       homepage ? "about:home",
       extensionPackages ? [ ],
       extraSettings ? { }
     }:
     {
-      inherit id;
+      inherit id path;
       isDefault = name == "default";
       search = searchConfig;
       settings =
@@ -119,7 +120,7 @@ let
       extensions.packages = extensionPackages;
     };
 
-  firefoxDesktopFile = "firefox.desktop";
+  firefoxDesktopFile = "firefox-devedition.desktop";
   firefoxProfiles = [
     "default"
     "keep-profile"
@@ -148,13 +149,14 @@ in
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox;
+    package = pkgs.firefox-devedition;
     configPath = ".mozilla/firefox"; # keep legacy path; avoids migrating ~/.mozilla/firefox to XDG
 
     profiles = {
-      default = mkProfile {
+      "dev-edition-default" = mkProfile {
         name = "default";
         id = 0;
+        path = "default";
       };
 
       "keep-profile" = mkProfile {
