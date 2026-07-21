@@ -148,5 +148,6 @@ in
 
     winetricks
     wineWow64Packages.waylandFull
+    dpkg                              # dpkg-scanpackages: signed APT repo publishing (snorlax release:both)
   ];
 }

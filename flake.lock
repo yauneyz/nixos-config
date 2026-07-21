@@ -110,6 +110,27 @@
         "type": "github"
       }
     },
+    "fenix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "rust-analyzer-src": "rust-analyzer-src"
+      },
+      "locked": {
+        "lastModified": 1784539434,
+        "narHash": "sha256-TitoB4AUyAEACEfMnIFPxFrkvEMqseulDvNHvfOyu7I=",
+        "owner": "nix-community",
+        "repo": "fenix",
+        "rev": "ef671b6baee7d1c55a93ee555d5f5ca2f0e6aaa0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "fenix",
+        "type": "github"
+      }
+    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -588,6 +609,7 @@
       "inputs": {
         "claude-code": "claude-code",
         "codex-cli-nix": "codex-cli-nix",
+        "fenix": "fenix",
         "home-manager": "home-manager",
         "maple-mono": "maple-mono",
         "nix-flatpak": "nix-flatpak",
@@ -599,6 +621,23 @@
         "superfile": "superfile",
         "vicinae": "vicinae",
         "zen-browser": "zen-browser"
+      }
+    },
+    "rust-analyzer-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784363916,
+        "narHash": "sha256-ugQVFz4RGj12q8jhISxd07VcKS1hhd2Gz2Gn0z4V7tA=",
+        "owner": "rust-lang",
+        "repo": "rust-analyzer",
+        "rev": "cac0779549328e4bd4b808000c03307f1721f869",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rust-lang",
+        "ref": "nightly",
+        "repo": "rust-analyzer",
+        "type": "github"
       }
     },
     "snorlax": {

@@ -10,6 +10,7 @@
     };
 
     overlays = [
+      inputs.fenix.overlays.default
       inputs.claude-code.overlays.default
 
       # Home Manager still references deprecated xorg aliases in some modules.

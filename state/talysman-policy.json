@@ -1,20 +1,15 @@
 {
   "mode": "blacklist",
   "domains": [
-    "twitter.com",
     "x.com",
     "substack.com",
     "news.ycombinator.com",
     "reddit.com",
+    "lichess.org",
+    "chess.com",
+    "play.pokemonshowdown.com",
     "theverge.com",
-    "theringer.com",
-    "cnn.com"
+    "theringer.com"
   ],
-  "apps": [
-    {
-      "windowsImageName": "steam",
-      "linuxProcessName": "steam",
-      "label": "steam"
-    }
-  ]
+  "apps": []
 }

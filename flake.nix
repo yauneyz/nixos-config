@@ -20,6 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     maple-mono = {
       url = "github:subframe7536/maple-font/variable";
       flake = false;
@@ -55,6 +60,7 @@
         inherit system;
         config.allowUnfree = true;
         overlays = [
+          inputs.fenix.overlays.default
           inputs.claude-code.overlays.default
           (final: prev:
             (import ./pkgs {
