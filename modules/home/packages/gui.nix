@@ -45,7 +45,6 @@ in
       spotify
       soundwireserver
       video-trimmer
-      vlc
 
       ## Office
       (lib.getAttr "anki-bin" pkgs)

@@ -41,6 +41,12 @@
       options = [ "defaults" ];
     };
 
+  fileSystems."/home/zac/Windows" =
+    { device = "/dev/disk/by-uuid/6600453600450F0D";
+      fsType = "ntfs-3g";
+      options = [ "rw" "uid=1001" "gid=100" "dmask=022" "fmask=133" "windows_names" "nofail" ];
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

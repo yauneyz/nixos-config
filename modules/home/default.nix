@@ -23,6 +23,7 @@
     ./lazygit.nix
     ./llm-roleplay.nix                # local roleplay model serving
     ./micro.nix                       # nano replacement
+    ./mpv.nix                         # video player (scrubbing + reverse)
     ./nautilus.nix                    # file manager
     ./nix-search/nix-search.nix       # TUI to search nixpkgs
     ./neovim                        # neovim editor
@@ -41,6 +42,7 @@
     ./swaync/swaync.nix               # notification deamon
     ./symlinks.nix                    # host-aware data-home symlinks
     ./vicinae.nix                     # launcher
+    ./vlc.nix                         # media player
     ./vscodium                        # vscode fork
     ./waybar                          # status bar
     # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)

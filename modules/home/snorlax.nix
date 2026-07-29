@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 # Talysman browser integration: register the native-messaging host so the
 # browser extension can stream live policy from the daemon and enforce
@@ -6,12 +6,19 @@
 # daemon package; it connects to the daemon's unix socket at /run/talysman.
 let
   hostName = "com.talysman.host";
+  # Single source of truth: the extension ids live in the snorlax repo and are also
+  # baked into the built extensions + native code (native/common/build.rs). Read them
+  # from the flake input so this manifest can never drift from the shipped extension.
+  # (A mismatch silently blocks the browser from launching the native host.)
+  identities = builtins.fromJSON (
+    builtins.readFile "${inputs.snorlax}/native/common/extension-identities.json"
+  );
   chromiumManifest = builtins.toJSON {
     name = hostName;
     description = "Talysman browser native-messaging host";
     path = "${pkgs.talysman-daemon}/bin/talysman-natmsg";
     type = "stdio";
-    allowed_origins = [ "chrome-extension://fjohodlenndbieegdcbpblcjkncdngpb/" ];
+    allowed_origins = [ "chrome-extension://${identities.chromeStoreId}/" ];
   };
   firefoxManifest = builtins.toJSON {
     name = hostName;
@@ -19,8 +26,8 @@ let
     path = "${pkgs.talysman-daemon}/bin/talysman-natmsg";
     type = "stdio";
     # Firefox uses allowed_extensions; the extension id is set in its manifest.json
-    # (browser_specific_settings.gecko.id).
-    allowed_extensions = [ "talysman@talysman.app" ];
+    # (browser_specific_settings.gecko.id) → identities.firefoxId.
+    allowed_extensions = [ identities.firefoxId ];
   };
 in
 {

@@ -643,16 +643,17 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "dirtyRev": "44fe8a1b59d2a488c80302d3b23301b2e55ecce0-dirty",
-        "dirtyShortRev": "44fe8a1-dirty",
-        "lastModified": 1784529855,
-        "narHash": "sha256-zpR6Z6iDUhvqMqeWzc2kAiST8Ir+3EmChpHtmUXB+9A=",
+        "lastModified": 1785310900,
+        "narHash": "sha256-1mlh+Jv7bS1nfoJrTyhWqR8bc72xD6PAvkNtiNVH9wo=",
+        "ref": "refs/heads/main",
+        "rev": "7a088dc7adc81abe16a41b1cacec6c653144dbc5",
+        "revCount": 49,
         "type": "git",
-        "url": "file:///data/zac/zac/development/snorlax"
+        "url": "file:///home/zac/.snorlax-src"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/zac/development/snorlax"
+        "url": "file:///home/zac/.snorlax-src"
       }
     },
     "stylix": {

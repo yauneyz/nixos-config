@@ -31,7 +31,10 @@
     };
 
     snorlax = {
-      url = "git+file:///home/zac/development/snorlax";
+      # Host-agnostic leaf symlink created by modules/home/symlinks.nix. A leaf
+      # symlink is accepted by nix's git fetcher; a symlinked *parent* (like the
+      # desktop's ~/development) is not — hence the dedicated ~/.snorlax-src.
+      url = "git+file:///home/zac/.snorlax-src";
       flake = false;
     };
 

@@ -11,5 +11,10 @@
     "theverge.com",
     "theringer.com"
   ],
-  "apps": []
+  "apps": [
+    {
+      "linuxProcessName": "steam",
+      "label": "A Short Hike"
+    }
+  ]
 }

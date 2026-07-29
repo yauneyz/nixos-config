@@ -109,7 +109,7 @@ in
     ## Multimedia
     imv
     lowfi
-    mpv
+    # mpv managed declaratively in ../mpv.nix
 
     ## Utilities
     entr                              # perform action when file change

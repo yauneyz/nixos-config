@@ -137,7 +137,9 @@
       "Bash(curl -s \"https://api.github.com/repos/sadjow/codex-cli-nix/commits?per_page=10\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/sadjow/codex-cli-nix/be567a404cddca0c018b391b11e179ae968e7a27/flake.nix\")",
       "Bash(curl *)",
-      "Bash(/nix/store/4qp9l8kcr156n6dbgvi9r699dlfiyzr1-codex-patched/bin/codex-code-mode-host --help)"
+      "Bash(/nix/store/4qp9l8kcr156n6dbgvi9r699dlfiyzr1-codex-patched/bin/codex-code-mode-host --help)",
+      "Read(//home/**)",
+      "Bash(getent passwd *)"
     ],
     "deny": [],
     "ask": []
