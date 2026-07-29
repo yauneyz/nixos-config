@@ -1,7 +1,7 @@
 {
   version = "0.1.0";
   storePath = builtins.fetchurl {
-    url = "file:///nix/store/lc8xb4yqr7pk07qlqvly02gx8avs4s4z-snorlax.AppImage";
-    sha256 = "1xwq51gg2p1i6y4ddylw5qxaz79br8npxfypd726qk7gsqm6sip3";
+    url = "file:///nix/store/faxflximwv78plw2565a73l2d84bhkxq-snorlax.AppImage";
+    sha256 = "1bkapzz3n08l1y9c4fjg660nzx4bb1pd88qg3vszbsx97fgp5dg2";
   };
 }

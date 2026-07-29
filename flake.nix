@@ -2,6 +2,10 @@
   description = "Zac Yauney's nixos configuration";
 
   inputs = {
+    # Use the Hydra-tested channel explicitly. Leaving this input indirect lets
+    # the machine registry select uncached pre-release snapshots on updates.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,8 +59,17 @@
   };
 
   outputs =
-    { nixpkgs, self, stylix, ... }@inputs:
+    { nixpkgs, self, stylix, ... }@rawInputs:
     let
+      # Nix 2.33's flake git fetcher can preserve the ~/.snorlax-src symlink as
+      # the input's store object. Re-fetch the locked revision with fetchGit so
+      # evaluators see a normal source directory rather than a store symlink.
+      inputs = rawInputs // {
+        snorlax = builtins.fetchGit {
+          url = "/home/zac/.snorlax-src";
+          inherit (rawInputs.snorlax) rev;
+        };
+      };
       username = "zac";
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -80,7 +93,14 @@
     {
       # Export custom packages for direct building
       packages.${system} = {
-        inherit (pkgs) talysman talysman-daemon snorlax snorlax-daemon thinky;
+        inherit (pkgs)
+          readfence
+          snorlax
+          snorlax-daemon
+          talysman
+          talysman-daemon
+          thinky
+          ;
       };
 
       nixosConfigurations = {

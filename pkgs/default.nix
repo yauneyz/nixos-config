@@ -8,6 +8,7 @@
 rec {
   _2048 = pkgs.callPackage ./2048 { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
+  readfence = pkgs.callPackage ./readfence { };
   talysman = pkgs.callPackage ./snorlax { };
   talysman-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
   snorlax = talysman;

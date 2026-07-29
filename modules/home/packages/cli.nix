@@ -7,7 +7,7 @@ let
   # be refreshed: nix-prefetch-url <url-with-new-version>
   codexCodeModeHost = pkgs.fetchurl {
     url = "https://github.com/openai/codex/releases/download/rust-v${codexOriginal.version}/codex-code-mode-host-x86_64-unknown-linux-musl.tar.gz";
-    hash = "sha256-NxBMQ/YnGXCTCdBuafAD6Oi+0Tl/TTZHaztl4l/ARJM=";
+    hash = "sha256-oUBzH1TnA5NV0YlHnfx9BZtsCocXbHoBHS8nGpkUE5o=";
   };
   codexLatest = pkgs.stdenv.mkDerivation {
     name = "codex-patched";
@@ -82,6 +82,7 @@ in
 
     ## TUI
     epy                               # ebook reader
+    glow                              # Markdown reader
     gtt                               # google translate TUI
     programmer-calculator
     toipe                             # typing test in the terminal

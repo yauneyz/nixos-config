@@ -17,7 +17,6 @@
       python312Packages.mypy
       python312Packages.debugpy
       python312Packages.flake8
-      python312Packages.pylint
       python312Packages.autopep8
       ruff
 

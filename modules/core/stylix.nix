@@ -22,6 +22,10 @@ in
     # We don't use kmscon, so just turn the target off.
     targets.kmscon.enable = false;
 
+    # SDDM is our display manager. The ReGreet target still writes the renamed
+    # programs.regreet options on nixpkgs 26.11 even when ReGreet is disabled.
+    targets.regreet.enable = false;
+
     # Wallpaper (required)
     image = wallpaperPath;
 

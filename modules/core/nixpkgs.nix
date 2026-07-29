@@ -20,10 +20,25 @@
           lndir = prev.lndir;
         };
 
+        # These packages are not currently available from cache for the pinned
+        # nixos-unstable revision. Keep rebuilds practical by skipping their
+        # large/flaky upstream suites while retaining build and import checks.
+        poetry = prev.poetry.python.pkgs.toPythonApplication (
+          prev.poetry.python.pkgs.poetry.overridePythonAttrs {
+            doCheck = false;
+            doInstallCheck = false;
+          }
+        );
+
         # python-lsp-black's tests still import pkg_resources, which was removed
         # from setuptools 82. The runtime import check still runs.
         pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
           (_python-final: python-prev: {
+            python-lsp-server = python-prev.python-lsp-server.overridePythonAttrs {
+              # Its full suite pulls every optional linter, including Pylint's
+              # SciPy dependency. The runtime import check still runs.
+              doCheck = false;
+            };
             pylsp-mypy = python-prev.pylsp-mypy.overridePythonAttrs {
               # Its tests still configure mypy for unsupported Python 3.9.
               doCheck = false;

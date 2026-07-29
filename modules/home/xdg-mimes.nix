@@ -8,7 +8,8 @@ let
     video = [ "mpv.desktop" ];
     directory = [ "org.gnome.Nautilus.desktop" ];
     office = [ "libreoffice.desktop" ];
-    epub = [ "org.pwmt.zathura-pdf-mupdf.desktop" ];
+    epub = [ "org.pwmt.zathura.desktop" ];
+    markdown = [ "typora.desktop" ];
     pdf = [ "org.gnome.Evince.desktop" ];
     terminal = [ "ghostty.desktop" ];
     archive = [ "org.gnome.FileRoller.desktop" ];
@@ -62,6 +63,10 @@ let
       "application/rtf"
     ];
     epub = [ "application/epub+zip" ];
+    markdown = [
+      "text/markdown"
+      "text/x-markdown"
+    ];
     pdf = [ "application/pdf" ];
     terminal = [ "terminal" ];
     archive = [

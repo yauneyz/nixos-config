@@ -49,9 +49,10 @@ in
       ## Office
       (lib.getAttr "anki-bin" pkgs)
       # calibre  # Temporarily disabled due to CUDA/PyTorch download issues
-      foliate
       libreoffice
       gnome-calculator
+      readfence
+      typora
       zotero
     ]
     ++ lib.optional hasThinky thinky
