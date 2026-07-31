@@ -4,6 +4,7 @@
     ./nixpkgs.nix
     ./paths.nix
     ./bootloader.nix
+    ./grub-theme.nix
     ./hardware.nix
     ./xserver.nix
     ./network.nix

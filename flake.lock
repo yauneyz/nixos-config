@@ -521,11 +521,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1785318670,
-        "narHash": "sha256-dN6Ou5x/+23FZLEpYP3IffO+NyJFzUlGumt1uu3MMaY=",
+        "lastModified": 1785454630,
+        "narHash": "sha256-LQy14TZp77TwbQf40gg1V3jo8FwJG0jGDkAH+zRHqg8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0954f7ee2f6bb3dc7d4e3d0d8bcb8fd4bde4cfc5",
+        "rev": "1559d3daa3ecc813a650b79375ea61b6741b8746",
         "type": "github"
       },
       "original": {
@@ -646,11 +646,11 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "lastModified": 1785356566,
-        "narHash": "sha256-Jzdhz+9piuJ7PKdv1yUVCh1/jbDDmbf5E8uL+Js+f/0=",
+        "lastModified": 1785484002,
+        "narHash": "sha256-1+itQ78IVktCXlT7snU7baSIxL9nj6Mi++vF91alAA0=",
         "ref": "refs/heads/main",
-        "rev": "bc7706935eea4d89ba480eb34dd6c8ae4101063d",
-        "revCount": 53,
+        "rev": "6536df55d63294ed3d64e943a349b14f05232e9a",
+        "revCount": 54,
         "type": "git",
         "url": "file:///home/zac/.snorlax-src"
       },

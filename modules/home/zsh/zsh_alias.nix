@@ -236,6 +236,8 @@ in
       ac = "npm run antei:compile";
       at = "npm run antei";
 
+			bump-patch = "npm run release:bump -- patch";
+
       ############################
       # pnpm shortcuts
       ############################

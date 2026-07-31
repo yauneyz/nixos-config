@@ -51,7 +51,7 @@ in
     dust                              # disk usage tree
     ncdu                              # disk space
     ripgrep                           # grep replacement
-    grip                              # GitHub Markdown preview
+    python3Packages.grip              # GitHub Markdown preview
     tldr
 
     ## Coding agents
