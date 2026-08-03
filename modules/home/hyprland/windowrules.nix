@@ -28,8 +28,10 @@
       "opacity 1.0 override 1.0 override, match:class (evince)"
       # === Window assignments from i3 ===
       "workspace 1, match:class (?i)thinky"
-      # Talysman UI — confirm class with `hyprctl clients` and adjust if needed.
-      "workspace 1, match:class (?i)(talysman|snorlax)"
+      # Talysman UI — tiled by default, with compact geometry if it is floated.
+      "workspace 1, match:class ^(talysman-desktop)$"
+      "size 1160 720, match:class ^(talysman-desktop)$"
+      "center on, match:class ^(talysman-desktop)$"
       "workspace 14, match:class ^(spotify)$"
 
       # === Development terminals ===

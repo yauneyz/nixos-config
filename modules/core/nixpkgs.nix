@@ -1,4 +1,9 @@
-{ pkgs, inputs, host, ... }:
+{
+  pkgs,
+  inputs,
+  host,
+  ...
+}:
 {
   nixpkgs = {
     config = {
@@ -46,6 +51,16 @@
             python-lsp-black = python-prev.python-lsp-black.overridePythonAttrs {
               doCheck = false;
             };
+            python-lsp-ruff = python-prev.python-lsp-ruff.overridePythonAttrs (old: {
+              # Ruff 0.16 intentionally removed E402 from its default rule set,
+              # but python-lsp-ruff 2.3.1 still has two tests that assume it is
+              # enabled by default. Keep the other 12 tests and runtime/import
+              # checks while upstream catches up with Ruff's new defaults.
+              disabledTests = (old.disabledTests or [ ]) ++ [
+                "test_ruff_settings"
+                "test_notebook_input"
+              ];
+            });
           })
         ];
       })

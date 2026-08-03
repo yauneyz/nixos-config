@@ -1,0 +1,65 @@
+[
+  {
+    "name": "comfyui",
+    "profile": "core",
+    "url": "https://github.com/Comfy-Org/ComfyUI.git",
+    "revision": "f06a187f50f896e4a0ba5be1ce1f2d2dcd13b77b",
+    "license": "GPL-3.0"
+  },
+  {
+    "name": "wan-video-wrapper",
+    "profile": "core",
+    "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper.git",
+    "revision": "088128b224242e110d3906c6750e9a3a348a659b",
+    "license": "Apache-2.0"
+  },
+  {
+    "name": "chatterbox",
+    "profile": "audio",
+    "url": "https://github.com/resemble-ai/chatterbox.git",
+    "revision": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+    "license": "MIT"
+  },
+  {
+    "name": "ace-step",
+    "profile": "audio",
+    "url": "https://github.com/ACE-Step/ACE-Step-1.5.git",
+    "revision": "6d467e4b5081ccb0abf1ec1bf4fdf9051a2d34b0",
+    "license": "MIT"
+  },
+  {
+    "name": "whisperx",
+    "profile": "audio",
+    "url": "https://github.com/m-bain/whisperX.git",
+    "revision": "2cfd7b7c5c7bba144954364db747319b50e8232b",
+    "license": "BSD-2-Clause"
+  },
+  {
+    "name": "wangp",
+    "profile": "experiments",
+    "url": "https://github.com/deepbeepmeep/Wan2GP.git",
+    "revision": "ed94632a9ec03ee8ede1e7949de5bd62b3adfd04",
+    "license": "Apache-2.0"
+  },
+  {
+    "name": "ovi",
+    "profile": "ovi",
+    "url": "https://github.com/character-ai/Ovi.git",
+    "revision": "5b69b25a4b3115216e9ea53a37a04410be6ad39a",
+    "license": "Apache-2.0"
+  },
+  {
+    "name": "real-esrgan",
+    "profile": "enhancement",
+    "url": "https://github.com/xinntao/Real-ESRGAN.git",
+    "revision": "a4abfb2979a7bbff3f69f58f58ae324608821e27",
+    "license": "BSD-3-Clause"
+  },
+  {
+    "name": "practical-rife",
+    "profile": "enhancement",
+    "url": "https://github.com/hzwer/Practical-RIFE.git",
+    "revision": "17d8c7a1005b37f4c97bfee04e316aaec7fdc536",
+    "license": "MIT"
+  }
+]

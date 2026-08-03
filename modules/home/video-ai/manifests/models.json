@@ -1,0 +1,83 @@
+[
+  {
+    "profile": "core",
+    "name": "Wan 2.2 TI2V-5B diffusion model",
+    "url": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/fb1388adc906ab39ffc26ee40e96b22886b56bc4/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors",
+    "destination": "comfy/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors",
+    "size": 9999658848,
+    "sha256": "456f901338bd9eadbded3828b819109a9b68e8a525ca5cf8d0049a69fcfeca1e",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "core",
+    "name": "Wan UMT5 XXL FP8 text encoder",
+    "url": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/fb1388adc906ab39ffc26ee40e96b22886b56bc4/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "destination": "comfy/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "size": 6735906897,
+    "sha256": "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "core",
+    "name": "Wan 2.2 VAE",
+    "url": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/fb1388adc906ab39ffc26ee40e96b22886b56bc4/split_files/vae/wan2.2_vae.safetensors",
+    "destination": "comfy/vae/wan2.2_vae.safetensors",
+    "size": 1409400960,
+    "sha256": "e40321bd36b9709991dae2530eb4ac303dd168276980d3e9bc4b6e2b75fed156",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "enhancement",
+    "name": "Practical-RIFE 4.25 interpolation model",
+    "url": "https://drive.usercontent.google.com/download?id=1ZKjcbmt1hypiFprJPIKW0Tt0lr_2i7bg&export=download&confirm=t",
+    "destination": "rife/rife-v4.25.zip",
+    "size": 22919050,
+    "sha256": "e63d481b7ae5d4a4e6ad7ac5b410ff78f3bf7be3b51b2e38ca8152747abde5b4",
+    "license": "MIT"
+  },
+  {
+    "profile": "ovi",
+    "name": "Ovi 1.1 FP8 transformer",
+    "url": "https://huggingface.co/rkfg/Ovi-fp8_quantized/resolve/b097ea0cfec96ad56e21dae3f7ad97e6ae8992ab/model_fp8_e4m3fn.safetensors",
+    "destination": "ovi/Ovi/model_fp8_e4m3fn.safetensors",
+    "size": 11662655924,
+    "sha256": "7798ec60c8b6922692460283f14317def4e49876df729ceef9d5e9e99421050f",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "ovi",
+    "name": "Ovi Wan 2.2 T5 encoder",
+    "url": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/resolve/921dbaf3f1674a56f47e83fb80a34bac8a8f203e/models_t5_umt5-xxl-enc-bf16.pth",
+    "destination": "ovi/Wan2.2-TI2V-5B/models_t5_umt5-xxl-enc-bf16.pth",
+    "size": 11361920418,
+    "sha256": "7cace0da2b446bbbbc57d031ab6cf163a3d59b366da94e5afe36745b746fd81d",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "ovi",
+    "name": "Ovi Wan 2.2 VAE",
+    "url": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/resolve/921dbaf3f1674a56f47e83fb80a34bac8a8f203e/Wan2.2_VAE.pth",
+    "destination": "ovi/Wan2.2-TI2V-5B/Wan2.2_VAE.pth",
+    "size": 2818839170,
+    "sha256": "20eb789667fa5e60e7516bf509512f6cb61f01b0aa0695eadaea930c13892b36",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "ovi",
+    "name": "Ovi MMAudio VAE",
+    "url": "https://huggingface.co/hkchengrex/MMAudio/resolve/eb13a1a98fdbec91753775c57b074ccdfc60587c/ext_weights/v1-16.pth",
+    "destination": "ovi/MMAudio/ext_weights/v1-16.pth",
+    "size": 686652758,
+    "sha256": "15ad082c714ccf3771898a771fc6eebdc1d9c8d5c6154726906a97f43603d62c",
+    "license": "CC-BY-NC-4.0 checkpoint; Ovi dependency only—commercial clearance required"
+  },
+  {
+    "profile": "ovi",
+    "name": "Ovi MMAudio BigVGAN vocoder",
+    "url": "https://huggingface.co/hkchengrex/MMAudio/resolve/eb13a1a98fdbec91753775c57b074ccdfc60587c/ext_weights/best_netG.pt",
+    "destination": "ovi/MMAudio/ext_weights/best_netG.pt",
+    "size": 449217313,
+    "sha256": "970ca75ee4d5ce583e9396a4534acb14971ea2b4f1c22e038f476680c868a789",
+    "license": "Verify upstream audio checkpoint terms before commercial use"
+  }
+]

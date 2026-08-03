@@ -1,0 +1,12 @@
+[
+  {
+    "profile": "core",
+    "name": "wan22-ti2v-5b-i2v.json",
+    "url": "https://raw.githubusercontent.com/comfyanonymous/ComfyUI_examples/f9431bb000ce792094ff345446e22cac1ea6cef3/wan22/image_to_video_wan22_5B.json"
+  },
+  {
+    "profile": "core",
+    "name": "wan22-ti2v-5b-t2v.json",
+    "url": "https://raw.githubusercontent.com/comfyanonymous/ComfyUI_examples/f9431bb000ce792094ff345446e22cac1ea6cef3/wan22/text_to_video_wan22_5B.json"
+  }
+]
