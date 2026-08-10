@@ -166,7 +166,7 @@ let
   workspaceBinds =
     lib.concatMap (entry: [
       (mkBind "ALT + ${entry.key}" "hl.dsp.focus({ workspace = ${toString entry.workspace} })")
-      (mkBind "ALT + SHIFT + ${entry.key}" "hl.dsp.window.move({ workspace = ${toString entry.workspace} })")
+      (mkBind "ALT + SHIFT + ${entry.key}" "hl.dsp.window.move({ workspace = ${toString entry.workspace}, follow = false })")
     ]) workspaceKeys
     ++ [
       (mkBind "ALT + CTRL + c" ''hl.dsp.window.move({ workspace = "empty", follow = true })'')
