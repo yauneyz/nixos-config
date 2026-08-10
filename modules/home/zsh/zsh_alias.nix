@@ -40,6 +40,7 @@ in
       ib = "cd ~/development/indigo/server";
       jir = "cd ~/development/jirachi";
       nb = "cd ~/development/newbark";
+      lt = "cd ~/development/littleroot";
       sl = "cd ~/development/snorlax";
       sbase = "cd ~/development/snorlax/apps/web && supabase start";
       focusd = "cd ~/development/tools/focus";
