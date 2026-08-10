@@ -1,90 +1,241 @@
 { ... }:
 {
   wayland.windowManager.hyprland.settings = {
-    windowrule = [
-      "float on, match:class ^(Viewnior)$"
-      "float on, match:class ^(imv)$"
-      "float on, match:class ^(mpv)$"
-      "tile on, match:class ^(Aseprite)$"
-      "pin on, match:class ^(rofi)$"
-      "pin on, match:class ^(waypaper)$"
-      # "idleinhibit focus,mpv"
-      # "float,udiskie"
-      "float on, match:title ^(Transmission)$"
-      "float on, match:title ^(Volume Control)$"
-      "float on, match:title ^(Firefox( Developer Edition)? — Sharing Indicator)$"
-      "move 0 0, match:title ^(Firefox( Developer Edition)? — Sharing Indicator)$"
-      "size 700 450, match:title ^(Volume Control)$"
-      "move 40 55%, match:title ^(Volume Control)$"
+    window_rule = [
+      {
+        match.class = "^(Viewnior)$";
+        float = true;
+      }
+      {
+        match.class = "^(imv)$";
+        float = true;
+      }
+      {
+        match.class = "^(mpv)$";
+        float = true;
+      }
+      {
+        match.class = "^(Aseprite)$";
+        tile = true;
+      }
+      {
+        match.class = "^(rofi)$";
+        pin = true;
+      }
+      {
+        match.class = "^(waypaper)$";
+        pin = true;
+      }
 
-      "float on, match:title ^(Picture-in-Picture)$"
-      "opacity 1.0 override 1.0 override, match:title ^(Picture-in-Picture)$"
-      "pin on, match:title ^(Picture-in-Picture)$"
-      "opacity 1.0 override 1.0 override, match:title ^(.*imv.*)$"
-      "opacity 1.0 override 1.0 override, match:title ^(.*mpv.*)$"
-      "opacity 1.0 override 1.0 override, match:class (Aseprite)"
-      "opacity 1.0 override 1.0 override, match:class (Unity)"
-      "opacity 1.0 override 1.0 override, match:class (zen)"
-      "opacity 1.0 override 1.0 override, match:class (evince)"
-      # === Window assignments from i3 ===
-      "workspace 1, match:class (?i)thinky"
-      # Talysman UI — tiled by default, with compact geometry if it is floated.
-      "workspace 1, match:class ^(talysman-desktop)$"
-      "size 1160 720, match:class ^(talysman-desktop)$"
-      "center on, match:class ^(talysman-desktop)$"
-      "workspace 14, match:class ^(spotify)$"
+      {
+        match.title = "^(Transmission)$";
+        float = true;
+      }
+      {
+        match.title = "^(Volume Control)$";
+        float = true;
+        size = [
+          700
+          450
+        ];
+        move = [
+          40
+          "55%"
+        ];
+      }
+      {
+        match.title = "^(Firefox( Developer Edition)? — Sharing Indicator)$";
+        float = true;
+        move = [
+          0
+          0
+        ];
+      }
 
-      # === Development terminals ===
-      "workspace 9, match:class ^(owl-dev)$"
+      {
+        match.title = "^(Picture-in-Picture)$";
+        float = true;
+        opacity = "1.0 override 1.0 override";
+        pin = true;
+      }
+      {
+        match.title = "^(.*imv.*)$";
+        opacity = "1.0 override 1.0 override";
+      }
+      {
+        match.title = "^(.*mpv.*)$";
+        opacity = "1.0 override 1.0 override";
+      }
+      {
+        match.class = "(Aseprite)";
+        opacity = "1.0 override 1.0 override";
+      }
+      {
+        match.class = "(Unity)";
+        opacity = "1.0 override 1.0 override";
+      }
+      {
+        match.class = "(zen)";
+        opacity = "1.0 override 1.0 override";
+      }
+      {
+        match.class = "(evince)";
+        opacity = "1.0 override 1.0 override";
+      }
 
-      # === Other workspace assignments ===
-      "float on, match:class ^(file_progress)$"
-      "float on, match:class ^(confirm)$"
-      "float on, match:class ^(dialog)$"
-      "float on, match:class ^(download)$"
-      "float on, match:class ^(notification)$"
-      "float on, match:class ^(error)$"
-      "float on, match:class ^(confirmreset)$"
-      "float on, match:title ^(Open File)$"
-      "float on, match:title ^(File Upload)$"
-      "float on, match:title ^(branchdialog)$"
-      "float on, match:title ^(Confirm to replace files)$"
-      "float on, match:title ^(File Operation Progress)$"
+      # Window assignments carried over from i3.
+      {
+        match.class = "(?i)thinky";
+        workspace = "1";
+      }
+      {
+        match.class = "^(talysman-desktop)$";
+        workspace = "1";
+        size = [
+          1160
+          720
+        ];
+        center = true;
+      }
+      {
+        match.class = "^(spotify)$";
+        workspace = "14";
+      }
+      {
+        match.class = "^(owl-dev)$";
+        workspace = "9";
+      }
 
-      "opacity 0.0 override, match:class ^(xwaylandvideobridge)$"
-      "no_anim on, match:class ^(xwaylandvideobridge)$"
-      "no_initial_focus on, match:class ^(xwaylandvideobridge)$"
-      "size 1 1, match:class ^(xwaylandvideobridge)$"
-      "no_blur on, match:class ^(xwaylandvideobridge)$"
+      {
+        match.class = "^(file_progress)$";
+        float = true;
+      }
+      {
+        match.class = "^(confirm)$";
+        float = true;
+      }
+      {
+        match.class = "^(dialog)$";
+        float = true;
+      }
+      {
+        match.class = "^(download)$";
+        float = true;
+      }
+      {
+        match.class = "^(notification)$";
+        float = true;
+      }
+      {
+        match.class = "^(error)$";
+        float = true;
+      }
+      {
+        match.class = "^(confirmreset)$";
+        float = true;
+      }
+      {
+        match.title = "^(Open File)$";
+        float = true;
+      }
+      {
+        match.title = "^(File Upload)$";
+        float = true;
+      }
+      {
+        match.title = "^(branchdialog)$";
+        float = true;
+      }
+      {
+        match.title = "^(Confirm to replace files)$";
+        float = true;
+      }
+      {
+        match.title = "^(File Operation Progress)$";
+        float = true;
+      }
 
-      # No gaps when only
-      "border_size 0, match:float 0, match:workspace w[t1]"
-      "rounding 0, match:float 0, match:workspace w[t1]"
-      "border_size 0, match:float 0, match:workspace w[tg1]"
-      "rounding 0, match:float 0, match:workspace w[tg1]"
-      "border_size 0, match:float 0, match:workspace f[1]"
-      "rounding 0, match:float 0, match:workspace f[1]"
+      {
+        match.class = "^(xwaylandvideobridge)$";
+        opacity = "0.0 override";
+        no_anim = true;
+        no_initial_focus = true;
+        size = [
+          1
+          1
+        ];
+        no_blur = true;
+      }
 
-      # "maxsize 1111 700, floating: 1"
-      # "center, floating: 1"
+      # No gaps when only one tiled window is present.
+      {
+        match = {
+          float = false;
+          workspace = "w[t1]";
+        };
+        border_size = 0;
+        rounding = 0;
+      }
+      {
+        match = {
+          float = false;
+          workspace = "w[tg1]";
+        };
+        border_size = 0;
+        rounding = 0;
+      }
+      {
+        match = {
+          float = false;
+          workspace = "f[1]";
+        };
+        border_size = 0;
+        rounding = 0;
+      }
 
-      # Remove context menu transparency in chromium based apps
-      "opaque on, match:class ^()$, match:title ^()$"
-      "no_shadow on, match:class ^()$, match:title ^()$"
-      "no_blur on, match:class ^()$, match:title ^()$"
+      # Remove context-menu transparency in Chromium-based apps.
+      {
+        match = {
+          class = "^()$";
+          title = "^()$";
+        };
+        opaque = true;
+        no_shadow = true;
+        no_blur = true;
+      }
     ];
 
-    layerrule = [
-      "dim_around on, match:namespace vicinae"
-      "dim_around on, match:namespace rofi"
-      "dim_around on, match:namespace swaync-control-center"
+    layer_rule = [
+      {
+        match.namespace = "vicinae";
+        dim_around = true;
+      }
+      {
+        match.namespace = "rofi";
+        dim_around = true;
+      }
+      {
+        match.namespace = "swaync-control-center";
+        dim_around = true;
+      }
     ];
 
-    # No gaps when only
-    workspace = [
-      "w[t1], gapsout:0, gapsin:0"
-      "w[tg1], gapsout:0, gapsin:0"
-      "f[1], gapsout:0, gapsin:0"
+    workspace_rule = [
+      {
+        workspace = "w[t1]";
+        gaps_out = 0;
+        gaps_in = 0;
+      }
+      {
+        workspace = "w[tg1]";
+        gaps_out = 0;
+        gaps_in = 0;
+      }
+      {
+        workspace = "f[1]";
+        gaps_out = 0;
+        gaps_in = 0;
+      }
     ];
   };
 }

@@ -20,7 +20,8 @@ let
 
   scriptsSet = builtins.listToAttrs (map mkScript shellScripts);
   scripts = builtins.attrValues scriptsSet;
+  rebuildScript = pkgs.writeScriptBin "rebuild" (builtins.readFile ../../../scripts/rebuild.sh);
 in
 {
-  home.packages = scripts;
+  home.packages = scripts ++ [ rebuildScript ];
 }

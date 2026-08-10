@@ -30,7 +30,9 @@
     package = null;
     portalPackage = null;
 
-    configType = "hyprlang";
+    # Hyprland 0.55 deprecated Hyprlang; Home Manager renders the structured
+    # settings below to ~/.config/hypr/hyprland.lua.
+    configType = "lua";
     xwayland = {
       enable = true;
       # hidpi = true;

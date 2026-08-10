@@ -1,30 +1,61 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
+let
+  lua = lib.generators.mkLuaInline;
+  bind = keys: command: options: {
+    _args = [
+      keys
+      (lua "hl.dsp.exec_cmd(${builtins.toJSON command})")
+      options
+    ];
+  };
+in
 {
   home.packages = with pkgs; [ swayosd ];
 
   wayland.windowManager.hyprland = {
     settings = {
-      exec-once = [ "swayosd-server" ];
-
-      bind = [ ",XF86AudioMute, exec, swayosd-client --output-volume mute-toggle" ];
-      # binds active in lockscreen
-      bindl = [
-        ",XF86MonBrightnessUp, exec, swayosd-client --brightness raise 5%+"
-        ",XF86MonBrightnessDown, exec, swayosd-client --brightness lower 5%-"
-        "$mainMod, XF86MonBrightnessUp, exec, brightnessctl set 100%"
-        "$mainMod, XF86MonBrightnessDown, exec, brightnessctl set 0%"
+      on = [
+        {
+          _args = [
+            "hyprland.start"
+            (lua ''
+              function()
+                hl.exec_cmd("swayosd-server")
+              end
+            '')
+          ];
+        }
       ];
-      bindle = [
-        ",XF86AudioRaiseVolume, exec, swayosd-client --output-volume +2 --max-volume=100"
-        ",XF86AudioLowerVolume, exec, swayosd-client --output-volume -2"
 
-        "$mainMod, f11, exec, swayosd-client --output-volume +2 --max-volume=100"
-        "$mainMod, f12, exec, swayosd-client --output-volume -2"
-      ];
-      bindr = [
-        "CAPS,Caps_Lock,exec,swayosd-client --caps-lock"
-        ",Scroll_Lock,exec,swayosd-client --scroll-lock"
-        ",Num_Lock,exec,swayosd-client --num-lock"
+      bind = [
+        (bind "XF86AudioMute" "swayosd-client --output-volume mute-toggle" { })
+
+        # Binds active on the lock screen.
+        (bind "XF86MonBrightnessUp" "swayosd-client --brightness raise 5%+" { locked = true; })
+        (bind "XF86MonBrightnessDown" "swayosd-client --brightness lower 5%-" { locked = true; })
+        (bind "ALT + XF86MonBrightnessUp" "brightnessctl set 100%" { locked = true; })
+        (bind "ALT + XF86MonBrightnessDown" "brightnessctl set 0%" { locked = true; })
+
+        (bind "XF86AudioRaiseVolume" "swayosd-client --output-volume +2 --max-volume=100" {
+          locked = true;
+          repeating = true;
+        })
+        (bind "XF86AudioLowerVolume" "swayosd-client --output-volume -2" {
+          locked = true;
+          repeating = true;
+        })
+        (bind "ALT + f11" "swayosd-client --output-volume +2 --max-volume=100" {
+          locked = true;
+          repeating = true;
+        })
+        (bind "ALT + f12" "swayosd-client --output-volume -2" {
+          locked = true;
+          repeating = true;
+        })
+
+        (bind "CAPS + Caps_Lock" "swayosd-client --caps-lock" { release = true; })
+        (bind "Scroll_Lock" "swayosd-client --scroll-lock" { release = true; })
+        (bind "Num_Lock" "swayosd-client --num-lock" { release = true; })
       ];
     };
   };

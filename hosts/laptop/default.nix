@@ -53,9 +53,19 @@
         enable = true;
         efiSupport = true;
         device = "nodev";
-        useOSProber = true;
+        useOSProber = false;
         efiInstallAsRemovable = false;
-        configurationLimit = 3;
+        extraEntries = ''
+          menuentry "Windows Boot Manager" --class windows {
+            insmod part_gpt
+            insmod fat
+            insmod chain
+            search --no-floppy --file --set=esp /EFI/Microsoft/Boot/bootmgfw.efi
+            chainloader ($esp)/EFI/Microsoft/Boot/bootmgfw.efi
+          }
+        '';
+        # The laptop ESP is 256M; three Zen initrds plus kernels can fill /boot.
+        configurationLimit = 2;
       };
 
     };

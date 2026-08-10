@@ -1,176 +1,219 @@
-{ ... }:
+{ lib, ... }:
+let
+  lua = lib.generators.mkLuaInline;
+  mkBindWith = keys: dispatcher: options: {
+    _args = [
+      keys
+      (lua dispatcher)
+      options
+    ];
+  };
+  mkBind = keys: dispatcher: {
+    _args = [
+      keys
+      (lua dispatcher)
+    ];
+  };
+  exec = command: "hl.dsp.exec_cmd(${builtins.toJSON command})";
+
+  workspaceKeys = [
+    {
+      key = "1";
+      workspace = 1;
+    }
+    {
+      key = "2";
+      workspace = 2;
+    }
+    {
+      key = "3";
+      workspace = 3;
+    }
+    {
+      key = "4";
+      workspace = 4;
+    }
+    {
+      key = "5";
+      workspace = 5;
+    }
+    {
+      key = "6";
+      workspace = 6;
+    }
+    {
+      key = "7";
+      workspace = 7;
+    }
+    {
+      key = "8";
+      workspace = 8;
+    }
+    {
+      key = "9";
+      workspace = 9;
+    }
+    {
+      key = "0";
+      workspace = 10;
+    }
+    {
+      key = "w";
+      workspace = 11;
+    }
+    {
+      key = "y";
+      workspace = 12;
+    }
+    {
+      key = "u";
+      workspace = 13;
+    }
+    {
+      key = "o";
+      workspace = 14;
+    }
+    {
+      key = "p";
+      workspace = 15;
+    }
+  ];
+
+  directions = [
+    {
+      key = "left";
+      direction = "l";
+      x = -80;
+      y = 0;
+    }
+    {
+      key = "right";
+      direction = "r";
+      x = 80;
+      y = 0;
+    }
+    {
+      key = "up";
+      direction = "u";
+      x = 0;
+      y = -80;
+    }
+    {
+      key = "down";
+      direction = "d";
+      x = 0;
+      y = 80;
+    }
+    {
+      key = "h";
+      direction = "l";
+      x = -80;
+      y = 0;
+    }
+    {
+      key = "j";
+      direction = "d";
+      x = 0;
+      y = 80;
+    }
+    {
+      key = "k";
+      direction = "u";
+      x = 0;
+      y = -80;
+    }
+    {
+      key = "l";
+      direction = "r";
+      x = 80;
+      y = 0;
+    }
+  ];
+
+  applicationBinds = [
+    (mkBind "ALT + T" (exec "ghostty --gtk-single-instance=true"))
+    (mkBind "ALT + I" (exec "firefox-devedition"))
+    (mkBind "ALT + N" (exec "nautilus"))
+    (mkBind "ALT + M" (exec "spotify"))
+    (mkBind "ALT + E" (exec "emacs"))
+    (mkBind "ALT + SHIFT + E" (exec "restart-emacs-daemon.sh"))
+    (mkBind "ALT + D" (exec "rofi -show drun"))
+    (mkBind "ALT + Z" (exec "toggle-monitor"))
+    (mkBind "ALT + B" (exec "bluetoothctl connect 94:DB:56:F7:A5:C7"))
+    (mkBind "ALT + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
+    (mkBind "ALT + CTRL + B" (exec "overskride"))
+  ];
+
+  windowBinds = [
+    (mkBind "ALT + SHIFT + Q" "hl.dsp.window.close()")
+    (mkBind "ALT + SHIFT + X" (exec "hyprctl kill"))
+    (mkBind "ALT + F" ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
+    (mkBind "ALT + Space" "hl.dsp.window.float()")
+    (mkBind "ALT + V" ''hl.dsp.layout("preselect d")'')
+    (mkBind "ALT + SHIFT + V" ''hl.dsp.layout("preselect r")'')
+    (mkBind "ALT + minus" ''hl.dsp.workspace.toggle_special("scratchpad")'')
+    (mkBind "ALT + SHIFT + minus" ''hl.dsp.window.move({ workspace = "special:scratchpad", follow = true })'')
+    (mkBind "ALT + Tab" ''hl.dsp.focus({ workspace = "previous" })'')
+    (mkBind "CTRL + ALT + up" ''hl.dsp.focus({ window = "floating" })'')
+    (mkBind "CTRL + ALT + down" ''hl.dsp.focus({ window = "tiled" })'')
+  ];
+
+  focusBinds = lib.concatMap (entry: [
+    (mkBind "ALT + ${entry.key}" "hl.dsp.focus({ direction = \"${entry.direction}\" })")
+    (mkBind "ALT + ${entry.key}" ''hl.dsp.window.alter_zorder({ mode = "top" })'')
+  ]) directions;
+
+  workspaceBinds =
+    lib.concatMap (entry: [
+      (mkBind "ALT + ${entry.key}" "hl.dsp.focus({ workspace = ${toString entry.workspace} })")
+      (mkBind "ALT + SHIFT + ${entry.key}" "hl.dsp.window.move({ workspace = ${toString entry.workspace} })")
+    ]) workspaceKeys
+    ++ [
+      (mkBind "ALT + CTRL + c" ''hl.dsp.window.move({ workspace = "empty", follow = true })'')
+    ];
+
+  movementBinds = lib.concatMap (entry: [
+    (mkBind "ALT + SHIFT + ${entry.key}" "hl.dsp.window.move({ direction = \"${entry.direction}\" })")
+    (mkBind "ALT + CTRL + ${entry.key}" "hl.dsp.window.resize({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
+    (mkBind "ALT + ALT + ${entry.key}" "hl.dsp.window.move({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
+  ]) directions;
+
+  utilityBinds = [
+    (mkBind "ALT + S" (exec "brightnessctl set 5%-"))
+    (mkBind "ALT + A" (exec "brightnessctl set 5%+"))
+    (mkBind "ALT + SHIFT + S" "hl.dsp.dpms({})")
+    (mkBind "ALT + SHIFT + Escape" (exec "power-menu"))
+    (mkBind "Print" (exec "screenshot --copy"))
+
+    (mkBind "ALT + CTRL + R" (exec "record-lando-video"))
+    (mkBind "ALT + CTRL + T" (exec "get-lando-thumbnail"))
+    (mkBind "ALT + CTRL + S" (exec "get-lando-screenshot"))
+    (mkBind "ALT + CTRL + bracketleft" (exec "record-lando-prev"))
+    (mkBind "ALT + CTRL + bracketright" (exec "record-lando-next"))
+
+    (mkBind "XF86AudioMute" (exec "playerctl volume 0.0"))
+    (mkBind "XF86AudioRaiseVolume" (exec "playerctl volume 0.05+"))
+    (mkBind "XF86AudioLowerVolume" (exec "playerctl volume 0.05-"))
+    (mkBind "XF86AudioPlay" (exec "playerctl play-pause"))
+    (mkBind "XF86AudioNext" (exec "playerctl next"))
+    (mkBind "XF86AudioPrev" (exec "playerctl previous"))
+    (mkBind "XF86AudioStop" (exec "playerctl stop"))
+    (mkBind "ALT + semicolon" (exec "playerctl play-pause"))
+    (mkBind "XF86MonBrightnessUp" (exec "swayosd-client --brightness raise"))
+    (mkBind "XF86MonBrightnessDown" (exec "swayosd-client --brightness lower"))
+
+    (mkBind "ALT + mouse_down" ''hl.dsp.focus({ workspace = "e-1" })'')
+    (mkBind "ALT + mouse_up" ''hl.dsp.focus({ workspace = "e+1" })'')
+    (mkBind "ALT + V" (exec "vicinae vicinae://extensions/vicinae/clipboard/history"))
+
+    (mkBindWith "ALT + mouse:272" "hl.dsp.window.drag()" { mouse = true; })
+    (mkBindWith "ALT + mouse:273" "hl.dsp.window.resize()" { mouse = true; })
+  ];
+in
 {
   wayland.windowManager.hyprland.settings = {
-		"$mainMod" = "ALT";
-    binds = {
-      movefocus_cycles_fullscreen = true;
-    };
-
-    bind = [
-      # Terminal (i3: Mod1+t)
-      "$mainMod, T, exec, ghostty --gtk-single-instance=true"
-
-      # Application launchers (from i3)
-      "$mainMod, I, exec, firefox-devedition"  # i3: Mod1+i
-      "$mainMod, N, exec, nautilus"  # i3: Mod1+n (file manager)
-      "$mainMod, M, exec, spotify"  # i3: Mod1+m
-      "$mainMod, E, exec, emacs"  # i3: Mod1+e
-      "$mainMod SHIFT, E, exec, restart-emacs-daemon.sh" # restart emacs daemon
-      "$mainMod, D, exec, rofi -show drun"  # i3: Mod1+d (launcher)
-      "$mainMod, Z, exec, toggle-monitor"
-
-      # Bluetooth controls (from i3) - Connect/disconnect headphones
-      "$mainMod, B, exec, bluetoothctl connect 94:DB:56:F7:A5:C7"  # i3: Mod1+b
-      "$mainMod SHIFT, B, exec, bluetoothctl disconnect 94:DB:56:F7:A5:C7"  # i3: Mod1+Shift+b
-      "$mainMod CTRL, B, exec, overskride"  # Open Overskride for BT management
-
-      # Window management (from i3)
-      "$mainMod SHIFT, Q, killactive,"  # i3: Mod1+Shift+q
-      "$mainMod SHIFT, X, exec, hyprctl kill"  # Click a window to kill it
-      "$mainMod, F, fullscreen, 0"  # i3: Mod1+f
-      "$mainMod, Space, togglefloating,"  # i3: Mod1+Space (floating toggle)
-
-      # Split controls (from i3)
-      "$mainMod, V, layoutmsg, preselect d"  # i3: Mod1+v (split vertical)
-      "$mainMod SHIFT, V, layoutmsg, preselect r"  # i3: Mod1+Shift+v (split horizontal)
-
-      # Scratchpad (from i3)
-      "$mainMod, minus, togglespecialworkspace, scratchpad"  # i3: Mod1+minus (show)
-      "$mainMod SHIFT, minus, movetoworkspace, special:scratchpad"  # i3: Mod1+Shift+minus
-
-      # Workspace back and forth (from i3)
-      "$mainMod, Tab, workspace, previous"  # i3: Mod1+Tab
-
-      # Brightness controls (from i3)
-      "$mainMod, S, exec, brightnessctl set 5%-"  # i3: Mod1+s
-      "$mainMod, A, exec, brightnessctl set 5%+"  # i3: Mod1+a
-
-      # Utility bindings (from i3)
-      "$mainMod SHIFT, S, exec, hyprctl dispatch dpms toggle"  # i3: Mod1+Shift+s (screen sleep toggle)
-
-      # Power menu
-      "$mainMod SHIFT, Escape, exec, power-menu"
-
-      # Screenshot (i3: Print key)
-      ",Print, exec, screenshot --copy"
-
-      # Lando capture tools
-      "$mainMod CTRL, R, exec, record-lando-video"
-      "$mainMod CTRL, T, exec, get-lando-thumbnail"
-      "$mainMod CTRL, S, exec, get-lando-screenshot"
-      "$mainMod CTRL, bracketleft, exec, record-lando-prev"
-      "$mainMod CTRL, bracketright, exec, record-lando-next"
-
-      # switch focus
-      "$mainMod, left,  movefocus, l"
-      "$mainMod, right, movefocus, r"
-      "$mainMod, up,    movefocus, u"
-      "$mainMod, down,  movefocus, d"
-      "$mainMod, h, movefocus, l"
-      "$mainMod, j, movefocus, d"
-      "$mainMod, k, movefocus, u"
-      "$mainMod, l, movefocus, r"
-
-      "$mainMod, left,  alterzorder, top"
-      "$mainMod, right, alterzorder, top"
-      "$mainMod, up,    alterzorder, top"
-      "$mainMod, down,  alterzorder, top"
-      "$mainMod, h, alterzorder, top"
-      "$mainMod, j, alterzorder, top"
-      "$mainMod, k, alterzorder, top"
-      "$mainMod, l, alterzorder, top"
-
-      "CTRL ALT, up, exec, hyprctl dispatch focuswindow floating"
-      "CTRL ALT, down, exec, hyprctl dispatch focuswindow tiled"
-
-      # switch workspace
-      "$mainMod, 1, workspace, 1"
-      "$mainMod, 2, workspace, 2"
-      "$mainMod, 3, workspace, 3"
-      "$mainMod, 4, workspace, 4"
-      "$mainMod, 5, workspace, 5"
-      "$mainMod, 6, workspace, 6"
-      "$mainMod, 7, workspace, 7"
-      "$mainMod, 8, workspace, 8"
-      "$mainMod, 9, workspace, 9"
-      "$mainMod, 0, workspace, 10"
-      "$mainMod, w, workspace, 11"
-      "$mainMod, y, workspace, 12"
-      "$mainMod, u, workspace, 13"
-      "$mainMod, o, workspace, 14"
-      "$mainMod, p, workspace, 15"
-
-      # same as above, but switch to the workspace
-      "$mainMod SHIFT, 1, movetoworkspacesilent, 1" # movetoworkspacesilent
-      "$mainMod SHIFT, 2, movetoworkspacesilent, 2"
-      "$mainMod SHIFT, 3, movetoworkspacesilent, 3"
-      "$mainMod SHIFT, 4, movetoworkspacesilent, 4"
-      "$mainMod SHIFT, 5, movetoworkspacesilent, 5"
-      "$mainMod SHIFT, 6, movetoworkspacesilent, 6"
-      "$mainMod SHIFT, 7, movetoworkspacesilent, 7"
-      "$mainMod SHIFT, 8, movetoworkspacesilent, 8"
-      "$mainMod SHIFT, 9, movetoworkspacesilent, 9"
-      "$mainMod SHIFT, 0, movetoworkspacesilent, 10"
-      "$mainMod SHIFT, w, movetoworkspacesilent, 11"
-      "$mainMod SHIFT, y, movetoworkspacesilent, 12"
-      "$mainMod SHIFT, u, movetoworkspacesilent, 13"
-      "$mainMod SHIFT, o, movetoworkspacesilent, 14"
-      "$mainMod SHIFT, p, movetoworkspacesilent, 15"
-      "$mainMod CTRL, c, movetoworkspace, empty"
-
-      # window control
-      "$mainMod SHIFT, left, movewindow, l"
-      "$mainMod SHIFT, right, movewindow, r"
-      "$mainMod SHIFT, up, movewindow, u"
-      "$mainMod SHIFT, down, movewindow, d"
-      "$mainMod SHIFT, h, movewindow, l"
-      "$mainMod SHIFT, j, movewindow, d"
-      "$mainMod SHIFT, k, movewindow, u"
-      "$mainMod SHIFT, l, movewindow, r"
-
-      "$mainMod CTRL, left, resizeactive, -80 0"
-      "$mainMod CTRL, right, resizeactive, 80 0"
-      "$mainMod CTRL, up, resizeactive, 0 -80"
-      "$mainMod CTRL, down, resizeactive, 0 80"
-      "$mainMod CTRL, h, resizeactive, -80 0"
-      "$mainMod CTRL, j, resizeactive, 0 80"
-      "$mainMod CTRL, k, resizeactive, 0 -80"
-      "$mainMod CTRL, l, resizeactive, 80 0"
-
-      "$mainMod ALT, left, moveactive,  -80 0"
-      "$mainMod ALT, right, moveactive, 80 0"
-      "$mainMod ALT, up, moveactive, 0 -80"
-      "$mainMod ALT, down, moveactive, 0 80"
-      "$mainMod ALT, h, moveactive,  -80 0"
-      "$mainMod ALT, j, moveactive, 0 80"
-      "$mainMod ALT, k, moveactive, 0 -80"
-      "$mainMod ALT, l, moveactive, 80 0"
-
-      # media and volume controls (from i3)
-      ",XF86AudioMute, exec, playerctl volume 0.0"
-      ",XF86AudioRaiseVolume, exec, playerctl volume 0.05+"
-      ",XF86AudioLowerVolume, exec, playerctl volume 0.05-"
-      ",XF86AudioPlay, exec, playerctl play-pause"
-      ",XF86AudioNext, exec, playerctl next"
-      ",XF86AudioPrev, exec, playerctl previous"
-      ",XF86AudioStop, exec, playerctl stop"
-      "$mainMod, semicolon, exec, playerctl play-pause"  # i3: Mod1+semicolon
-
-      # brightness controls with media keys
-      ",XF86MonBrightnessUp, exec, swayosd-client --brightness raise"
-      ",XF86MonBrightnessDown, exec, swayosd-client --brightness lower"
-
-      "$mainMod, mouse_down, workspace, e-1"
-      "$mainMod, mouse_up, workspace, e+1"
-
-      # clipboard manager
-      "$mainMod, V, exec, vicinae vicinae://extensions/vicinae/clipboard/history"
-    ];
-
-    # mouse binding
-    bindm = [
-      "$mainMod, mouse:272, movewindow"
-      "$mainMod, mouse:273, resizewindow"
-    ];
+    config.binds.movefocus_cycles_fullscreen = true;
+    bind =
+      applicationBinds ++ windowBinds ++ focusBinds ++ workspaceBinds ++ movementBinds ++ utilityBinds;
   };
 }

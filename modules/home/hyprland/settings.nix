@@ -1,140 +1,214 @@
-{ config, ... }:
+{ lib, ... }:
 let
-  colors = config.lib.stylix.colors.withHashtag;
+  curve = name: points: {
+    _args = [
+      name
+      {
+        type = "bezier";
+        inherit points;
+      }
+    ];
+  };
 in
 {
   wayland.windowManager.hyprland = {
     settings = {
-    cursor = {
-      enable_hyprcursor = true;
-      warp_on_change_workspace = false;
-      no_warps = false;
-      persistent_warps = false;
-      # Cursor size workaround for scaling
-      default_monitor = "eDP-1";
-    };
+      config = {
+        cursor = {
+          enable_hyprcursor = true;
+          warp_on_change_workspace = false;
+          no_warps = false;
+          persistent_warps = false;
+          # Cursor size workaround for scaling
+          default_monitor = "eDP-1";
+        };
 
-    input = {
-      kb_layout = "us";
-      kb_options = "ctrl:nocaps";
-      numlock_by_default = true;
-      repeat_delay = 300;
-      follow_mouse = 1;
-      float_switch_override_focus = 0;
-      mouse_refocus = 1;
-      sensitivity = 0;
-      touchpad = {
-        natural_scroll = true;
+        input = {
+          kb_layout = "us";
+          kb_options = "ctrl:nocaps";
+          numlock_by_default = true;
+          repeat_delay = 300;
+          follow_mouse = 1;
+          float_switch_override_focus = 0;
+          mouse_refocus = 1;
+          sensitivity = 0;
+          touchpad.natural_scroll = true;
+        };
+
+        general = {
+          layout = "dwindle";
+          gaps_in = 6;
+          gaps_out = 12;
+          border_size = 2;
+          # Border colors are set by Stylix.
+        };
+
+        misc = {
+          disable_hyprland_logo = true;
+          always_follow_on_dnd = true;
+          layers_hog_keyboard_focus = true;
+          animate_manual_resizes = false;
+          enable_swallow = true;
+          focus_on_activate = true;
+          on_focus_under_fullscreen = 2;
+          middle_click_paste = false;
+        };
+
+        dwindle = {
+          force_split = 2;
+          special_scale_factor = 1.0;
+          split_width_multiplier = 1.0;
+          use_active_for_splits = true;
+          preserve_split = true;
+        };
+
+        master = {
+          new_status = "master";
+          special_scale_factor = 1;
+        };
+
+        decoration = {
+          rounding = 0;
+
+          blur = {
+            enabled = true;
+            size = 3;
+            passes = 2;
+            brightness = 1;
+            contrast = 1.4;
+            ignore_opacity = true;
+            noise = 0;
+            new_optimizations = true;
+            xray = true;
+          };
+
+          shadow = {
+            enabled = true;
+            offset = "0 2";
+            range = 20;
+            render_power = 3;
+            # Shadow color is set by Stylix.
+          };
+        };
+
+        animations.enabled = true;
+
+        xwayland = {
+          force_zero_scaling = true;
+          # Helps avoid blur if scaling ever changes.
+          use_nearest_neighbor = true;
+        };
       };
-    };
 
-    general = {
-      "$mainMod" = "ALT";
-      layout = "dwindle";
-      gaps_in = 6;
-      gaps_out = 12;
-      border_size = 2;
-      # Border colors are set by Stylix
-      # border_part_of_window = false;
-    };
-
-    misc = {
-      disable_hyprland_logo = true;
-      always_follow_on_dnd = true;
-      layers_hog_keyboard_focus = true;
-      animate_manual_resizes = false;
-      enable_swallow = true;
-      focus_on_activate = true;
-      on_focus_under_fullscreen = 2;
-      middle_click_paste = false;
-    };
-
-    dwindle = {
-      force_split = 2;
-      special_scale_factor = 1.0;
-      split_width_multiplier = 1.0;
-      use_active_for_splits = true;
-      preserve_split = "yes";
-    };
-
-    master = {
-      new_status = "master";
-      special_scale_factor = 1;
-    };
-
-    decoration = {
-      rounding = 0;
-      # active_opacity = 0.90;
-      # inactive_opacity = 0.90;
-      # fullscreen_opacity = 1.0;
-
-      blur = {
-        enabled = true;
-        size = 3;
-        passes = 2;
-        brightness = 1;
-        contrast = 1.4;
-        ignore_opacity = true;
-        noise = 0;
-        new_optimizations = true;
-        xray = true;
-      };
-
-      shadow = {
-        enabled = true;
-
-        offset = "0 2";
-        range = 20;
-        render_power = 3;
-        # color is set by Stylix
-      };
-    };
-
-    animations = {
-      enabled = true;
-
-      bezier = [
-        "fluent_decel, 0, 0.2, 0.4, 1"
-        "easeOutCirc, 0, 0.55, 0.45, 1"
-        "easeOutCubic, 0.33, 1, 0.68, 1"
-        "fade_curve, 0, 0.55, 0.45, 1"
+      curve = [
+        (curve "fluent_decel" [
+          [
+            0
+            0.2
+          ]
+          [
+            0.4
+            1
+          ]
+        ])
+        (curve "easeOutCirc" [
+          [
+            0
+            0.55
+          ]
+          [
+            0.45
+            1
+          ]
+        ])
+        (curve "easeOutCubic" [
+          [
+            0.33
+            1
+          ]
+          [
+            0.68
+            1
+          ]
+        ])
+        (curve "fade_curve" [
+          [
+            0
+            0.55
+          ]
+          [
+            0.45
+            1
+          ]
+        ])
       ];
 
       animation = [
-        # name, enable, speed, curve, style
-
-        # Windows
-        "windowsIn,   0, 4, easeOutCubic,  popin 20%" # window open
-        "windowsOut,  0, 4, fluent_decel,  popin 80%" # window close.
-        "windowsMove, 1, 2, fluent_decel, slide" # everything in between, moving, dragging, resizing.
-
-        # Fade
-        "fadeIn,      1, 3,   fade_curve" # fade in (open) -> layers and windows
-        "fadeOut,     1, 3,   fade_curve" # fade out (close) -> layers and windows
-        "fadeSwitch,  0, 1,   easeOutCirc" # fade on changing activewindow and its opacity
-        "fadeShadow,  1, 10,  easeOutCirc" # fade on changing activewindow for shadows
-        "fadeDim,     1, 4,   fluent_decel" # the easing of the dimming of inactive windows
-        # "border,      1, 2.7, easeOutCirc"  # for animating the border's color switch speed
-        # "borderangle, 1, 30,  fluent_decel, once" # for animating the border's gradient angle - styles: once (default), loop
-        "workspaces,  1, 4,   easeOutCubic, fade" # styles: slide, slidevert, fade, slidefade, slidefadevert
+        {
+          leaf = "windowsIn";
+          enabled = false;
+          speed = 4;
+          bezier = "easeOutCubic";
+          style = "popin 20%";
+        }
+        {
+          leaf = "windowsOut";
+          enabled = false;
+          speed = 4;
+          bezier = "fluent_decel";
+          style = "popin 80%";
+        }
+        {
+          leaf = "windowsMove";
+          enabled = true;
+          speed = 2;
+          bezier = "fluent_decel";
+          style = "slide";
+        }
+        {
+          leaf = "fadeIn";
+          enabled = true;
+          speed = 3;
+          bezier = "fade_curve";
+        }
+        {
+          leaf = "fadeOut";
+          enabled = true;
+          speed = 3;
+          bezier = "fade_curve";
+        }
+        {
+          leaf = "fadeSwitch";
+          enabled = false;
+          speed = 1;
+          bezier = "easeOutCirc";
+        }
+        {
+          leaf = "fadeShadow";
+          enabled = true;
+          speed = 10;
+          bezier = "easeOutCirc";
+        }
+        {
+          leaf = "fadeDim";
+          enabled = true;
+          speed = 4;
+          bezier = "fluent_decel";
+        }
+        {
+          leaf = "workspaces";
+          enabled = true;
+          speed = 4;
+          bezier = "easeOutCubic";
+          style = "fade";
+        }
       ];
-    };
 
-    xwayland = {
-      force_zero_scaling = true;
-      use_nearest_neighbor = true;  # optional, but helps avoid blur if scaling ever happens
+      device = {
+        name = "logitech-mx-ergo-multi-device-trackball-";
+        sensitivity = 1.0;
+        accel_profile = "adaptive";
+      };
     };
-    };
-
-    # Device-specific configuration using extraConfig
-    # This is required because home-manager's Nix attribute ordering
-    # conflicts with Hyprland's requirement for device blocks
-    extraConfig = ''
-      device {
-        name = logitech-mx-ergo-multi-device-trackball-
-        sensitivity = 1.0
-        accel_profile = adaptive
-      }
-    '';
   };
 }
