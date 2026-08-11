@@ -1,4 +1,5 @@
 {
+  host ? "desktop",
   inputs,
   pkgs,
   system,
@@ -9,11 +10,14 @@ rec {
   _2048 = pkgs.callPackage ./2048 { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
   readfence = pkgs.callPackage ./readfence { };
-  talysman = pkgs.callPackage ./snorlax { };
+  screenplain = pkgs.callPackage ./screenplain {
+    python3Packages = pkgs.python312Packages;
+  };
+  talysman = pkgs.callPackage ./snorlax { releaseHost = host; };
   talysman-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
   snorlax = talysman;
   snorlax-daemon = talysman-daemon;
-  thinky = pkgs.callPackage ./thinky { };
+  thinky = pkgs.callPackage ./thinky { releaseHost = host; };
   python312Packages = prev.python312Packages.overrideScope (
     finalPy: prevPy: {
       jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {

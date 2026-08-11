@@ -67,7 +67,7 @@
       (
         final: prev:
         (import ../../pkgs {
-          inherit inputs;
+          inherit host inputs;
           pkgs = final;
           inherit prev;
           inherit (prev) system;

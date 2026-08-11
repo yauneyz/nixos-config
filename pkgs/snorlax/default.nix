@@ -1,13 +1,13 @@
 { lib
 , appimageTools
 , stdenvNoCC
+, releaseHost ? "desktop"
 }:
 
 let
-  # Local release info is written by the Talysman source repo's `pnpm run release:local`.
-  # That script builds the AppImage, adds it to /nix/store, and stages this file so
-  # flake evaluation sees the new version/store path on the next rebuild.
-  releaseInfo = import ./release.nix;
+  # Local release info is written per host by the Talysman source repo's
+  # `pnpm run release:local`. The host file is staged so flake evaluation sees it.
+  releaseInfo = import ./release.nix { host = releaseHost; };
 
   pname = "talysman";
   version = releaseInfo.version;
@@ -29,6 +29,7 @@ let
     '';
     passthru = {
       appimageAvailable = false;
+      inherit releaseHost;
     };
     meta = with lib; {
       description = "Talysman distraction-blocker desktop UI";
@@ -62,6 +63,7 @@ appimageTools.wrapType2 {
   passthru = {
     appimageAvailable = true;
     appimageStorePath = toString src;
+    inherit releaseHost;
   };
 
   # Sourced inside the FHS env before the AppImage runs.

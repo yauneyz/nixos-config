@@ -35,6 +35,7 @@
     multimarkdown         # For markdown-mode preview
     pandoc                # For markdown export
     ripgrep               # Already in cli.nix, used by deadgrep/consult
+    screenplain           # Fountain screenplay PDF export
 
   ];
 

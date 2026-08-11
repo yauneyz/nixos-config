@@ -95,6 +95,7 @@
       packages.${system} = {
         inherit (pkgs)
           readfence
+          screenplain
           snorlax
           snorlax-daemon
           talysman

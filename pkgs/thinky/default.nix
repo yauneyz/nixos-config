@@ -1,12 +1,13 @@
 { lib
 , appimageTools
 , stdenvNoCC
+, releaseHost ? "desktop"
 }:
 
 let
-  # Local release info is written by the electron repo's release:local script.
-  # The file is staged so flake evaluation sees the new AppImage store path.
-  releaseInfo = import ./release.nix;
+  # Local release info is written per host by the electron repo's release:local
+  # script. The host file is staged so flake evaluation sees the new AppImage.
+  releaseInfo = import ./release.nix { host = releaseHost; };
 
   pname = "thinky";
   version = releaseInfo.version;
@@ -28,6 +29,7 @@ let
     '';
     passthru = {
       appimageAvailable = false;
+      inherit releaseHost;
     };
     meta = with lib; {
       description = "Document annotation and ideation tool";
@@ -62,6 +64,7 @@ appimageTools.wrapType2 {
   passthru = {
     appimageAvailable = true;
     appimageStorePath = toString src;
+    inherit releaseHost;
   };
 
   # This script is sourced inside the FHS env before running the AppImage.

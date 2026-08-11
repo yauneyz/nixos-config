@@ -17,11 +17,11 @@ in
   warnings = lib.optional (!hasThinky) ''
     Skipping Thinky package: AppImage source is unavailable.
     Rebuild it from the electron repo with `npm run release:local`
-    (writes and stages pkgs/thinky/release.nix), then rebuild NixOS.
+    (writes and stages pkgs/thinky/releases/<host>.nix), then rebuild NixOS.
   '' ++ lib.optional (!hasTalysman) ''
     Skipping Talysman package: AppImage source is unavailable.
     Build it from the Talysman source repo with `talysman-dist` (pnpm run release:local)
-    (writes and stages pkgs/snorlax/release.nix), then rebuild NixOS.
+    (writes and stages pkgs/snorlax/releases/<host>.nix), then rebuild NixOS.
   '';
 
   home.packages = with pkgs;
