@@ -20,6 +20,7 @@
 
     ## Android
     android-studio
+    android-tools # adb, fastboot
 
     # Electron/GUI App Dependencies
     gtk3

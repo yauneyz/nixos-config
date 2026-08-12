@@ -1,4 +1,9 @@
-{ pkgs, config, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   colors = config.lib.stylix.colors.withHashtag;
 
@@ -28,13 +33,15 @@ let
         # Skip first 13 lines (the :root section)
         remainingLines = pkgs.lib.drop 13 lines;
       in
-        pkgs.lib.concatStringsSep "\n" remainingLines
+      pkgs.lib.concatStringsSep "\n" remainingLines
     }
   '';
 in
 {
-  home.packages = with pkgs; [ swaynotificationcenter ];
+  config = lib.mkIf (config.zac.desktop.shell.backend == "legacy") {
+    home.packages = with pkgs; [ swaynotificationcenter ];
 
-  xdg.configFile."swaync/style.css".text = styledCss;
-  xdg.configFile."swaync/config.json".source = ./config.json;
+    xdg.configFile."swaync/style.css".text = styledCss;
+    xdg.configFile."swaync/config.json".source = ./config.json;
+  };
 }

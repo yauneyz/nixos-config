@@ -208,7 +208,28 @@ in
           enabled = true;
           speed = 4;
           bezier = "easeOutCubic";
+          style = "slidefade 18%";
+        }
+        {
+          leaf = "layersIn";
+          enabled = true;
+          speed = 3;
+          bezier = "easeOutCubic";
           style = "fade";
+        }
+        {
+          leaf = "layersOut";
+          enabled = true;
+          speed = 3;
+          bezier = "fade_curve";
+          style = "fade";
+        }
+        {
+          leaf = "specialWorkspace";
+          enabled = true;
+          speed = 3;
+          bezier = "easeOutCubic";
+          style = "slidefadevert 12%";
         }
       ];
 

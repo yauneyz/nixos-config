@@ -13,21 +13,8 @@ in
 {
   home.packages = with pkgs; [ swayosd ];
 
-  wayland.windowManager.hyprland = {
+  wayland.windowManager.hyprland = lib.mkIf (config.zac.desktop.shell.backend == "legacy") {
     settings = {
-      on = [
-        {
-          _args = [
-            "hyprland.start"
-            (lua ''
-              function()
-                hl.exec_cmd("swayosd-server")
-              end
-            '')
-          ];
-        }
-      ];
-
       bind = [
         (bind "XF86AudioMute" "swayosd-client --output-volume mute-toggle" { })
 

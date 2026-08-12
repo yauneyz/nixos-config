@@ -30,6 +30,7 @@
     ./obsidian.nix
     ./p10k/p10k.nix
     ./packages                        # other packages
+    ./quickshell                     # native desktop shell + legacy backend switch
     ./retroarch.nix
     ./rofi/rofi.nix                   # launcher
     ./scripts/scripts.nix             # personal scripts

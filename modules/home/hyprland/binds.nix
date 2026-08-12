@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 let
   lua = lib.generators.mkLuaInline;
   mkBindWith = keys: dispatcher: options: {
@@ -141,8 +141,8 @@ let
     (mkBind "ALT + SHIFT + V" (exec "vicinae cmd launch clipboard:history"))
     (mkBind "ALT + Z" (exec "toggle-monitor"))
     (mkBind "ALT + B" (exec "bluetoothctl connect 94:DB:56:F7:A5:C7"))
-    (mkBind "ALT + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
-    (mkBind "ALT + CTRL + B" (exec "overskride"))
+    (mkBind "ALT + SHIFT + B" (exec "overskride"))
+    (mkBind "ALT + CTRL + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
   ];
 
   windowBinds = [
@@ -178,9 +178,12 @@ let
     (mkBind "ALT + ALT + ${entry.key}" "hl.dsp.window.move({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
   ]) directions;
 
-  utilityBinds = [
+  backendHardwareBinds = lib.optionals (config.zac.desktop.shell.backend == "legacy") [
     (mkBind "ALT + S" (exec "brightnessctl set 5%-"))
     (mkBind "ALT + A" (exec "brightnessctl set 5%+"))
+  ];
+
+  utilityBinds = [
     (mkBind "ALT + SHIFT + S" "hl.dsp.dpms({})")
     (mkBind "ALT + SHIFT + Escape" (exec "power-menu"))
     (mkBind "Print" (exec "screenshot --copy"))
@@ -191,22 +194,17 @@ let
     (mkBind "ALT + CTRL + bracketleft" (exec "record-lando-prev"))
     (mkBind "ALT + CTRL + bracketright" (exec "record-lando-next"))
 
-    (mkBind "XF86AudioMute" (exec "playerctl volume 0.0"))
-    (mkBind "XF86AudioRaiseVolume" (exec "playerctl volume 0.05+"))
-    (mkBind "XF86AudioLowerVolume" (exec "playerctl volume 0.05-"))
     (mkBind "XF86AudioPlay" (exec "playerctl play-pause"))
     (mkBind "XF86AudioNext" (exec "playerctl next"))
     (mkBind "XF86AudioPrev" (exec "playerctl previous"))
     (mkBind "XF86AudioStop" (exec "playerctl stop"))
     (mkBind "ALT + semicolon" (exec "playerctl play-pause"))
-    (mkBind "XF86MonBrightnessUp" (exec "swayosd-client --brightness raise"))
-    (mkBind "XF86MonBrightnessDown" (exec "swayosd-client --brightness lower"))
-
     (mkBind "ALT + mouse_down" ''hl.dsp.focus({ workspace = "e-1" })'')
     (mkBind "ALT + mouse_up" ''hl.dsp.focus({ workspace = "e+1" })'')
     (mkBindWith "ALT + mouse:272" "hl.dsp.window.drag()" { mouse = true; })
     (mkBindWith "ALT + mouse:273" "hl.dsp.window.resize()" { mouse = true; })
-  ];
+  ]
+  ++ backendHardwareBinds;
 in
 {
   wayland.windowManager.hyprland.settings = {

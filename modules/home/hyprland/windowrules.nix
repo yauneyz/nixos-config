@@ -222,6 +222,27 @@
         ignore_alpha = 0.2;
       }
       {
+        match.namespace = "zac-shell-bar";
+        blur = true;
+        ignore_alpha = 0.12;
+      }
+      {
+        match.namespace = "zac-shell-popup";
+        blur = true;
+        ignore_alpha = 0.12;
+        dim_around = true;
+      }
+      {
+        match.namespace = "zac-shell-notifications";
+        blur = true;
+        ignore_alpha = 0.12;
+      }
+      {
+        match.namespace = "zac-shell-osd";
+        blur = true;
+        ignore_alpha = 0.12;
+      }
+      {
         match.namespace = "vicinae";
         dim_around = true;
       }

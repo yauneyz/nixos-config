@@ -1,0 +1,7 @@
+module ZacShell
+singleton Theme 1.0 Theme.qml
+singleton Motion 1.0 Motion.qml
+singleton Metrics 1.0 Metrics.qml
+singleton RuntimeConfig 1.0 RuntimeConfig.qml
+singleton ShellState 1.0 ShellState.qml
+
