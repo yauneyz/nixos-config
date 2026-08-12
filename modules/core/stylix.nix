@@ -1,29 +1,34 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
-  wallpaperPath = ../../wallpapers/cosmic-nebula-blue.jpg;
+  wallpaperPath = ../../wallpapers/sakura-shrine-night.png;
 
-  # A low-luminance, cool palette tuned for the cosmic wallpaper pair.  The
-  # foreground/background contrast remains high even when terminals are
-  # translucent, while cyan, blue, violet, and amber provide distinct accents.
-  cosmicNight = {
-    scheme = "Cosmic Night";
+  # Ink-black surfaces and warm sakura accents tuned for the shrine wallpaper
+  # pair.  Neutral foregrounds keep code calm and readable over translucent
+  # terminals; the muted sage and amber are reserved for semantic status.
+  sakuraNoir = {
+    scheme = "Sakura Noir";
     author = "Zac Yauney";
-    base00 = "09111a";
-    base01 = "101b27";
-    base02 = "1b2a38";
-    base03 = "526579";
-    base04 = "91a4b7";
-    base05 = "d7e2ec";
-    base06 = "e7eef5";
-    base07 = "f5f8fb";
-    base08 = "ef6f7a";
-    base09 = "e9a66b";
-    base0A = "e5cc72";
-    base0B = "82c99a";
-    base0C = "5ccfe6";
-    base0D = "6aa9ff";
-    base0E = "ad8cff";
-    base0F = "d08fb3";
+    base00 = "070607";
+    base01 = "110a0d";
+    base02 = "241218";
+    base03 = "6f4c54";
+    base04 = "b79097";
+    base05 = "e7d9d8";
+    base06 = "f1e6e3";
+    base07 = "fbf5f0";
+    base08 = "f06466";
+    base09 = "e4775b";
+    base0A = "e7b269";
+    base0B = "a9c78e";
+    base0C = "f0a7b2";
+    base0D = "dc3b59";
+    base0E = "e879a0";
+    base0F = "ad727d";
   };
 
 in
@@ -31,7 +36,7 @@ in
   stylix = {
     enable = true;
     enableReleaseChecks = false;
-    autoEnable = true;  # Auto-theme installed applications
+    autoEnable = true; # Auto-theme installed applications
 
     # Disable GRUB theming (using custom theme instead)
     targets.grub.enable = false;
@@ -47,7 +52,7 @@ in
 
     # Wallpaper (required)
     image = wallpaperPath;
-    base16Scheme = cosmicNight;
+    base16Scheme = sakuraNoir;
 
     # Polarity (matters for wallpaper-derived colors)
     polarity = "dark";
@@ -82,13 +87,13 @@ in
     # Cursor theme
     cursor = {
       package = pkgs.bibata-cursors;
-      name = "Bibata-Modern-Ice";
+      name = "Bibata-Modern-Classic";
       size = 24;
     };
 
     # Opacity settings
     opacity = {
-      terminal = 0.84;
+      terminal = 0.86;
       applications = 0.98;
       popups = 0.96;
       desktop = 0.94;

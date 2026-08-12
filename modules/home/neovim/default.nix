@@ -103,16 +103,64 @@ let
       set splitbelow
       set splitright
 
-      "Better background highlight color than pink
-      :highlight Pmenu ctermbg=gray guibg=gray
+      " Keep completion menus opaque enough to separate them from the wallpaper.
+      highlight Pmenu ctermbg=black guibg=#241218 guifg=#e7d9d8
 
       augroup Smartf
-        autocmd User SmartfEnter :hi Conceal ctermfg=220 guifg=#6638F0
-        autocmd User SmartfLeave :hi Conceal ctermfg=239 guifg=#504945
+        autocmd User SmartfEnter :hi Conceal ctermfg=204 guifg=#e879a0
+        autocmd User SmartfLeave :hi Conceal ctermfg=239 guifg=#6f4c54
       augroup end
 
-      " Set colorscheme
-      " Other options: tokyonight, catppuccin, gruvbox
+      " Preserve Kanagawa's Japanese character while replacing its cool tones
+      " and allowing Ghostty's dark, blurred wallpaper layer to show through.
+      lua << EOF
+      require('kanagawa').setup({
+        transparent = true,
+        dimInactive = false,
+        colors = {
+          palette = {
+            sumiInk0 = '#070607',
+            sumiInk1 = '#0c080a',
+            sumiInk2 = '#110a0d',
+            sumiInk3 = '#171013',
+            sumiInk4 = '#241218',
+            sumiInk5 = '#42252d',
+            sumiInk6 = '#6f4c54',
+            waveBlue1 = '#241218',
+            waveBlue2 = '#4b2731',
+            winterBlue = '#2b171e',
+            autumnRed = '#dc3b59',
+            autumnGreen = '#a9c78e',
+            autumnYellow = '#e7b269',
+            samuraiRed = '#f06466',
+            roninYellow = '#e7b269',
+            waveAqua1 = '#a9c78e',
+            dragonBlue = '#f0a7b2',
+            oldWhite = '#d8c8c7',
+            fujiWhite = '#e7d9d8',
+            fujiGray = '#8d6971',
+            oniViolet = '#dc3b59',
+            oniViolet2 = '#e879a0',
+            crystalBlue = '#e879a0',
+            springViolet1 = '#e879a0',
+            springViolet2 = '#f0a7b2',
+            springBlue = '#dc3b59',
+            lightBlue = '#f1e6e3',
+            waveAqua2 = '#c9929a',
+            springGreen = '#a9c78e',
+            boatYellow1 = '#ad727d',
+            boatYellow2 = '#e7b269',
+            carpYellow = '#f0c98c',
+            sakuraPink = '#e879a0',
+            waveRed = '#dc3b59',
+            peachRed = '#f06466',
+            surimiOrange = '#e4775b',
+            katanaGray = '#b79097',
+          },
+        },
+      })
+      EOF
+
       set background=dark
       colorscheme kanagawa
     '';

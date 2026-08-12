@@ -11,7 +11,8 @@ in
         bg-col-light: #${colors.base01}f5;
         border-col: #${colors.base0D};
         selected-col: #${colors.base02}f5;
-        green: #${colors.base0B};
+        /* This legacy variable is the launcher highlight, not success state. */
+        green: #${colors.base0D};
         accent: #${colors.base0C};
         urgent: #${colors.base08};
         fg-col: #${colors.base05};
