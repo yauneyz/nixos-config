@@ -1,69 +1,52 @@
-{ inputs, pkgs, ... }:
-let
-  system = pkgs.stdenv.hostPlatform.system;
-in
+{ lib, ... }:
 {
-  imports = [ inputs.vicinae.homeManagerModules.default ];
-
-  services.vicinae = {
+  programs.vicinae = {
     enable = true;
-    package = inputs.vicinae.packages.${system}.default;
 
     systemd = {
       enable = true;
       autoStart = true;
-      environment = {
-        USE_LAYER_SHELL = true;
-      };
     };
 
     settings = {
       font = {
-        normal = "Maple Mono";
-        size = 12;
+        normal = {
+          family = "Maple Mono";
+          size = 13;
+        };
       };
 
-      theme = {
-        iconTheme = "Papirus-Dark";
-        name = "gruvbox-dark-hard.json";
+      launcher_window = {
+        layer_shell.enabled = true;
+
+        client_side_decorations = {
+          enabled = true;
+          rounding = 14;
+          border_width = 1;
+          shadow_size = 12;
+        };
       };
 
-      window = {
-        csd = true;
-        opacity = 1;
-        rounding = 0;
-      };
+      favicon_service = "twenty";
+      pop_to_root_on_close = true;
+      search_files_in_root = false;
 
-      faviconService = "twenty";
-      popToRootOnClose = true;
-
-      rootSearch = {
-        searchFiles = true;
-      };
-    };
-
-    themes = {
-      gruvbox-dark-hard = {
-        name = "Gruvbox Dark Hard";
-        description = "Custom Gruvbox-Dark-Hard theme";
-
-        icon = "";
-        version = "1.0.0";
-        appearance = "dark";
-
-        palette = {
-          background = "#1d2021";
-          foreground = "#ebdbb2";
-          blue = "#458588";
-          green = "#98971a";
-          magenta = "#b16286";
-          orange = "#d65d0e";
-          purple = "#b16286";
-          red = "#cc241d";
-          yellow = "#d79921";
-          cyan = "#689d6a";
+      favorites = [ "clipboard:history" ];
+      fallbacks = [ ];
+      providers.files = {
+        preferences = {
+          autoIndexing = false;
+          indexingPaths = [ ];
+          excludedIndexingPaths = [ ];
         };
       };
     };
+  };
+
+  systemd.user.services.vicinae.Service = {
+    Environment = [
+      "VICINAE_INPUT_SERVER_BIN=/run/wrappers/bin/vicinae-input-server"
+    ];
+    KillMode = lib.mkForce "control-group";
   };
 }

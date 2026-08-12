@@ -1,4 +1,7 @@
 { host, config, ... }:
+let
+  colors = config.lib.stylix.colors.withHashtag;
+in
 {
   programs.ghostty = {
     enable = true;
@@ -27,6 +30,8 @@
       ##### Window #####;
       window-padding-balance = true;
       window-padding-color = "extend";
+      window-padding-x = 10;
+      window-padding-y = 8;
       window-decoration = "none";
       window-theme = "ghostty";
       window-inherit-working-directory = false;
@@ -76,5 +81,37 @@
     # Theme colors managed by Stylix
   };
 
-  xdg.configFile."ghostty/styles/tabs.css".source = ./styles/tabs.css;
+  xdg.configFile."ghostty/styles/tabs.css".text = ''
+    headerbar {
+      min-height: 30px;
+      padding: 0;
+      margin: 0;
+      background: ${colors.base00};
+      color: ${colors.base05};
+    }
+
+    tabbar tabbox {
+      margin: 0;
+      padding: 3px;
+      min-height: 30px;
+      background: ${colors.base00};
+    }
+
+    tabbar tabbox tab {
+      margin: 2px;
+      padding: 0 8px;
+      border-radius: 7px;
+      color: ${colors.base04};
+      background: transparent;
+    }
+
+    tabbar tabbox tab:selected {
+      background: ${colors.base02};
+      color: ${colors.base06};
+    }
+
+    tabbar tabbox tab label {
+      font-size: 16px;
+    }
+  '';
 }

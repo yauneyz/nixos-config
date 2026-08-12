@@ -1,4 +1,4 @@
-{ host, config, ... }:
+{ host, config, lib, ... }:
 let
   colors = config.lib.stylix.colors.withHashtag;
   custom = {
@@ -24,30 +24,39 @@ in
   programs.waybar.settings.mainBar = with custom; {
     position = "bottom";
     layer = "top";
-    height = 20;
+    height = 36;
     margin-top = 0;
-    margin-bottom = 0;
-    margin-left = 0;
-    margin-right = 0;
+    margin-bottom = 8;
+    margin-left = 10;
+    margin-right = 10;
+    spacing = 8;
     modules-left = [
-      "custom/launcher"
-      "tray"
+      "group/navigation"
     ];
     modules-center = [
       "hyprland/workspaces"
     ];
     modules-right = [
-      "cpu"
-      "memory"
-      (if (host == "desktop") then "disk" else "")
-      "pulseaudio"
-      "network"
-      "battery"
-      "hyprland/language"
-      "custom/notification"
-      "custom/power-menu"
-      "clock"
+      "group/system"
+      "group/connectivity"
+      "group/session"
     ];
+    "group/navigation" = {
+      orientation = "inherit";
+      modules = [ "custom/launcher" "tray" ];
+    };
+    "group/system" = {
+      orientation = "inherit";
+      modules = [ "cpu" "memory" ] ++ lib.optionals (host == "desktop") [ "disk" ];
+    };
+    "group/connectivity" = {
+      orientation = "inherit";
+      modules = [ "pulseaudio" "network" "battery" "hyprland/language" ];
+    };
+    "group/session" = {
+      orientation = "inherit";
+      modules = [ "custom/notification" "clock" "custom/power-menu" ];
+    };
     clock = {
       calendar = {
         format = {
@@ -55,7 +64,7 @@ in
         };
       };
       format = "  {:%H:%M}";
-      tooltip = "true";
+      tooltip = true;
       tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
       format-alt = "  {:%d/%m}";
     };
@@ -94,19 +103,19 @@ in
       format = "<span foreground='${green}'> </span> {usage}%";
       format-alt = "<span foreground='${green}'> </span> {avg_frequency} GHz";
       interval = 2;
-      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] kitty --override font_size=14 --title float_kitty btop'";
+      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] ghostty --title=float_ghostty -e btop'";
     };
     memory = {
       format = "<span foreground='${cyan}'>󰟜 </span>{}%";
       format-alt = "<span foreground='${cyan}'>󰟜 </span>{used} GiB"; # 
       interval = 2;
-      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] kitty --override font_size=14 --title float_kitty btop'";
+      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] ghostty --title=float_ghostty -e btop'";
     };
     disk = {
       # path = "/";
       format = "<span foreground='${orange}'>󰋊 </span>{percentage_used}%";
       interval = 60;
-      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] kitty --override font_size=14 --title float_kitty btop'";
+      on-click-right = "hyprctl dispatch exec '[float; center; size 950 650] ghostty --title=float_ghostty -e btop'";
     };
     network = {
       format-wifi = "<span foreground='${magenta}'> </span> {signalStrength}%";
@@ -159,10 +168,10 @@ in
     };
     "custom/launcher" = {
       format = "";
-      on-click = "random-wallpaper";
-      on-click-right = "rofi -show drun";
-      tooltip = "true";
-      tooltip-format = "Random Wallpaper";
+      on-click = "rofi -show drun";
+      on-click-right = "init-wallpaper";
+      tooltip = true;
+      tooltip-format = "Applications  •  right-click: restore wallpaper pair";
     };
     "custom/notification" = {
       tooltip = true;

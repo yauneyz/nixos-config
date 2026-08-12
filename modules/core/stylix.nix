@@ -1,11 +1,30 @@
 { pkgs, lib, config, ... }:
 let
-  # Easy toggle between color modes
-  # Set to true to derive colors from wallpaper, false to use Gruvbox
-  useWallpaperColors = false;
+  wallpaperPath = ../../wallpapers/cosmic-nebula-blue.jpg;
 
-  # Wallpaper path (always required)
-  wallpaperPath = ../../wallpapers/nixos_wave.png;
+  # A low-luminance, cool palette tuned for the cosmic wallpaper pair.  The
+  # foreground/background contrast remains high even when terminals are
+  # translucent, while cyan, blue, violet, and amber provide distinct accents.
+  cosmicNight = {
+    scheme = "Cosmic Night";
+    author = "Zac Yauney";
+    base00 = "09111a";
+    base01 = "101b27";
+    base02 = "1b2a38";
+    base03 = "526579";
+    base04 = "91a4b7";
+    base05 = "d7e2ec";
+    base06 = "e7eef5";
+    base07 = "f5f8fb";
+    base08 = "ef6f7a";
+    base09 = "e9a66b";
+    base0A = "e5cc72";
+    base0B = "82c99a";
+    base0C = "5ccfe6";
+    base0D = "6aa9ff";
+    base0E = "ad8cff";
+    base0F = "d08fb3";
+  };
 
 in
 {
@@ -28,12 +47,7 @@ in
 
     # Wallpaper (required)
     image = wallpaperPath;
-
-# Pick themes at https://tinted-theming.github.io/tinted-gallery/
-    base16Scheme = lib.mkIf (!useWallpaperColors)
-			"${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-      #"${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
-      #"${pkgs.base16-schemes}/share/themes/icy.yaml";
+    base16Scheme = cosmicNight;
 
     # Polarity (matters for wallpaper-derived colors)
     polarity = "dark";
@@ -74,10 +88,10 @@ in
 
     # Opacity settings
     opacity = {
-      terminal = 0.66;
-      applications = 1.0;
-      popups = 1.0;
-      desktop = 1.0;
+      terminal = 0.84;
+      applications = 0.98;
+      popups = 0.96;
+      desktop = 0.94;
     };
   };
 }

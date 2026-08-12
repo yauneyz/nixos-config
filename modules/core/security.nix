@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   security = {
     rtkit.enable = true;
@@ -22,6 +22,13 @@
     pam.services = {
       swaylock = { };
       hyprlock = { };
+    };
+
+    wrappers.vicinae-input-server = {
+      source = "${pkgs.vicinae}/libexec/vicinae/vicinae-input-server";
+      capabilities = "cap_dac_override+ep";
+      owner = "root";
+      group = "root";
     };
   };
 }

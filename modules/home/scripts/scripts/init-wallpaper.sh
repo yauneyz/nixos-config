@@ -2,11 +2,12 @@
 
 # Wallpaper configuration
 WP_DIR="${HOME}/nixos-config/wallpapers"
-WP_LEFT="Portrait/red4.jpg"
-WP_RIGHT="red3.jpg"
+WP_LEFT="portrait/cosmic-milky-way-blue.jpg"
+WP_RIGHT="cosmic-nebula-blue.jpg"
 
-# Start awww daemon if not running
-if ! pgrep -x awww-daemon > /dev/null; then
+# Query the socket directly: the daemon's process name is not stable across
+# awww versions, while a successful query proves the live instance is usable.
+if ! awww query > /dev/null 2>&1; then
     awww-daemon --no-cache &
 
     # Wait until the daemon is ready

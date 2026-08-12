@@ -7,11 +7,13 @@ in
 
   xdg.configFile."rofi/theme.rasi".text = ''
     * {
-        bg-col: #${colors.base00};
-        bg-col-light: #${colors.base01};
-        border-col: #${colors.base04};
-        selected-col: #${colors.base02};
+        bg-col: #${colors.base00}ed;
+        bg-col-light: #${colors.base01}f5;
+        border-col: #${colors.base0D};
+        selected-col: #${colors.base02}f5;
         green: #${colors.base0B};
+        accent: #${colors.base0C};
+        urgent: #${colors.base08};
         fg-col: #${colors.base05};
         fg-col2: #${colors.base06};
         grey: #${colors.base03};

@@ -1,14 +1,14 @@
 :root {
-    --bg-primary: #1d2021;
-    --bg-secondary: #282828;
-    --bg-button: #4E4E4E;
-    --bg-button-hover: #5E5E5E;
-    --text-primary: #EBDBB2;
-    --text-disabled: #5C554A;
-    --border-color: #928374;
-    --priority-low: #EBDBB2;
-    --priority-normal: #83A598;
-    --priority-critical: #FB4934;
+    --bg-primary: #09111a;
+    --bg-secondary: #101b27;
+    --bg-button: #1b2a38;
+    --bg-button-hover: #526579;
+    --text-primary: #d7e2ec;
+    --text-disabled: #526579;
+    --border-color: #526579;
+    --priority-low: #d7e2ec;
+    --priority-normal: #6aa9ff;
+    --priority-critical: #ef6f7a;
     --transition-standard: 0.15s ease-in-out;
 }
 
@@ -38,7 +38,7 @@ scrollbar slider {
 .widget-menubar>.menu-button-bar>.widget-menubar-container button,
 .widget-menubar>revealer button,
 .widget-inhibitors>button {
-    border-radius: 0px;
+    border-radius: 9px;
     border: none;
     box-shadow: none;
     transition: background var(--transition-standard);
@@ -72,16 +72,17 @@ scrollbar slider {
 }
 
 .notification-row .notification-background {
-    margin: 0px 0px 0px 0px;
+    margin: 4px 8px;
 }
 
 /* Base notification styles */
 .notification-row .notification-background .notification {
-    border-radius: 0px;
+    border-radius: 12px;
     border: 1px solid var(--border-color);
     transition: background var(--transition-standard);
     background: var(--bg-primary);
-    padding: 2px 4px;
+    padding: 6px 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.32);
 }
 
 /* Priority-based notification styles */
@@ -106,7 +107,7 @@ scrollbar slider {
     border: none;
     color: var(--text-primary);
     transition: background var(--transition-standard);
-    border-radius: 0px;
+    border-radius: 9px;
 }
 
 .notification-default-action:hover {
@@ -115,14 +116,14 @@ scrollbar slider {
 }
 
 .notification-default-action:not(:only-child) {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
 }
 
 /* Notification content */
 .notification-content {
     background: transparent;
-    border-radius: 0px;
+    border-radius: 10px;
     padding: 0;
 }
 
@@ -188,14 +189,14 @@ scrollbar slider {
     color: var(--text-primary);
     caret-color: var(--text-primary);
     border: 1px solid var(--border-color);
-    border-radius: 0px;
+    border-radius: 8px;
 }
 
 .notification-content .inline-reply .inline-reply-button {
     margin-left: 4px;
-    background: rgb(48, 48, 48);
+    background: var(--bg-button);
     border: 1px solid var(--border-color);
-    border-radius: 0px;
+    border-radius: 8px;
     color: var(--text-primary);
 }
 
@@ -225,7 +226,7 @@ scrollbar slider {
 }
 
 .notification-action>button {
-    border-radius: 0px;
+    border-radius: 8px;
     font-size: 16px;
     padding: 1px;
 }
@@ -288,9 +289,9 @@ scrollbar slider {
 .control-center {
     background: var(--bg-primary);
     color: var(--text-primary);
-    border-radius: 0px;
-    border: 2px solid var(--border-color);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.48);
 }
 
 .control-center .control-center-list-placeholder {
@@ -318,7 +319,7 @@ scrollbar slider {
 }
 
 .floating-notifications .notification {
-    box-shadow: none;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.42);
 }
 
 /* Widgets */
@@ -332,7 +333,8 @@ scrollbar slider {
     margin: 8px;
     font-size: 16px;
     background: var(--bg-primary);
-    border: 2px solid var(--text-disabled);
+    border: 1px solid var(--text-disabled);
+    border-radius: 9px;
     padding: 3px 10px;
     color: var(--text-primary);
     font-weight: 700;
@@ -367,7 +369,7 @@ scrollbar slider {
 }
 
 .widget-dnd switch slider {
-    border-radius: 0px;
+    border-radius: 999px;
 }
 
 .widget-label {
@@ -381,7 +383,7 @@ scrollbar slider {
 
 .widget-mpris .widget-mpris-player {
     margin: 10px 10px;
-    border-radius: 0px;
+    border-radius: 12px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
     border: 1px solid var(--border-color);
 }
@@ -400,7 +402,7 @@ scrollbar slider {
 }
 
 .widget-mpris .widget-mpris-player .mpris-overlay .widget-mpris-album-art {
-    border-radius: 0px;
+    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
     -gtk-icon-size: 50px;
 }
@@ -435,11 +437,11 @@ scrollbar slider {
 .widget-buttons-grid {
     padding: 8px;
     margin: 8px;
-    border-radius: 0px;
+    border-radius: 10px;
 }
 
 .widget-buttons-grid flowboxchild>button {
-    border-radius: 0px;
+    border-radius: 9px;
 }
 
 /* Menubar widget */
@@ -468,7 +470,7 @@ scrollbar slider {
 .widget-volume {
     padding: 8px;
     margin-bottom: 8px;
-    border-radius: 0px;
+    border-radius: 10px;
 }
 
 .widget-volume row image {
@@ -479,13 +481,13 @@ scrollbar slider {
     background-color: var(--bg-secondary);
     padding: 8px 8px 8px 8px;
     margin: 8px 8px 8px 8px;
-    border-radius: 0px;
+    border-radius: 9px;
 }
 
 /* Slider widget */
 .widget-slider {
     padding: 8px;
-    border-radius: 0px;
+    border-radius: 10px;
 }
 
 .widget-slider label {
@@ -495,7 +497,7 @@ scrollbar slider {
 /* Backlight widget */
 .widget-backlight {
     padding: 8px;
-    border-radius: 0px;
+    border-radius: 10px;
     margin-top: -8px;
     margin-bottom: 8px;
 }

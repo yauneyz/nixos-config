@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 # Sequential startup: switch workspace, launch app, wait, repeat.
 
+# Wait until the compositor's clipboard plumbing answers before launching any
+# apps. wl-paste exits with "No selection" once the data-control protocol is
+# live, so treat that as ready too; GTK apps started before this point can end
+# up with a permanently dead clipboard until restarted.
+for _ in $(seq 1 30); do
+  out=$(wl-paste --list-types 2>&1) && break
+  case "$out" in *"No selection"*) break ;; esac
+  sleep 0.2
+done
+
 # === Workspace 3: Emacs (Snorlax web prompt) ===
 hyprctl dispatch workspace 3
 #emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &

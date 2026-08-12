@@ -26,6 +26,16 @@
         match.class = "^(waypaper)$";
         pin = true;
       }
+      {
+        # Keep the non-layer-shell fallback centered and floating too.
+        match.class = "^(vicinae)$";
+        float = true;
+        center = true;
+        size = [
+          900
+          620
+        ];
+      }
 
       {
         match.title = "^(Transmission)$";
@@ -206,6 +216,11 @@
     ];
 
     layer_rule = [
+      {
+        match.namespace = "waybar";
+        blur = true;
+        ignore_alpha = 0.2;
+      }
       {
         match.namespace = "vicinae";
         dim_around = true;

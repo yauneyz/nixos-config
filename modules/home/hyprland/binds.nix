@@ -138,6 +138,7 @@ let
     (mkBind "ALT + E" (exec "emacs"))
     (mkBind "ALT + SHIFT + E" (exec "restart-emacs-daemon.sh"))
     (mkBind "ALT + D" (exec "rofi -show drun"))
+    (mkBind "ALT + SHIFT + V" (exec "vicinae cmd launch clipboard:history"))
     (mkBind "ALT + Z" (exec "toggle-monitor"))
     (mkBind "ALT + B" (exec "bluetoothctl connect 94:DB:56:F7:A5:C7"))
     (mkBind "ALT + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
@@ -150,7 +151,6 @@ let
     (mkBind "ALT + F" ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
     (mkBind "ALT + Space" "hl.dsp.window.float()")
     (mkBind "ALT + V" ''hl.dsp.layout("preselect d")'')
-    (mkBind "ALT + SHIFT + V" ''hl.dsp.layout("preselect r")'')
     (mkBind "ALT + minus" ''hl.dsp.workspace.toggle_special("scratchpad")'')
     (mkBind "ALT + SHIFT + minus" ''hl.dsp.window.move({ workspace = "special:scratchpad", follow = true })'')
     (mkBind "ALT + Tab" ''hl.dsp.focus({ workspace = "previous" })'')
@@ -204,8 +204,6 @@ let
 
     (mkBind "ALT + mouse_down" ''hl.dsp.focus({ workspace = "e-1" })'')
     (mkBind "ALT + mouse_up" ''hl.dsp.focus({ workspace = "e+1" })'')
-    (mkBind "ALT + V" (exec "vicinae vicinae://extensions/vicinae/clipboard/history"))
-
     (mkBindWith "ALT + mouse:272" "hl.dsp.window.drag()" { mouse = true; })
     (mkBindWith "ALT + mouse:273" "hl.dsp.window.resize()" { mouse = true; })
   ];

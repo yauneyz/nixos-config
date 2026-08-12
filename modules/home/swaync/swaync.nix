@@ -8,13 +8,13 @@ let
   # Generate CSS with Stylix colors in :root variables
   styledCss = ''
     :root {
-        --bg-primary: ${colors.base00};
-        --bg-secondary: ${colors.base01};
+        --bg-primary: alpha(${colors.base00}, 0.94);
+        --bg-secondary: alpha(${colors.base01}, 0.96);
         --bg-button: ${colors.base02};
         --bg-button-hover: ${colors.base03};
         --text-primary: ${colors.base05};
         --text-disabled: ${colors.base03};
-        --border-color: ${colors.base04};
+        --border-color: ${colors.base03};
         --priority-low: ${colors.base05};
         --priority-normal: ${colors.base0D};
         --priority-critical: ${colors.base08};

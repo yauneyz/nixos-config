@@ -1,5 +1,9 @@
 { lib, ... }:
 let
+  innerGaps = 0;
+  outerGaps = 0;
+  showWindowChrome = innerGaps > 0 || outerGaps > 0;
+
   curve = name: points: {
     _args = [
       name
@@ -37,10 +41,11 @@ in
 
         general = {
           layout = "dwindle";
-          gaps_in = 6;
-          gaps_out = 12;
-          border_size = 2;
-          # Border colors are set by Stylix.
+          gaps_in = innerGaps;
+          gaps_out = outerGaps;
+          border_size = if showWindowChrome then 2 else 0;
+          # Stylix still provides the active/inactive border colors, ready for
+          # whenever either gap value above is raised again.
         };
 
         misc = {
@@ -68,22 +73,25 @@ in
         };
 
         decoration = {
-          rounding = 0;
+          rounding = if showWindowChrome then 10 else 0;
+          rounding_power = 3;
+          dim_inactive = true;
+          dim_strength = 0.06;
 
           blur = {
             enabled = true;
-            size = 3;
-            passes = 2;
-            brightness = 1;
-            contrast = 1.4;
+            size = 8;
+            passes = 3;
+            brightness = 0.82;
+            contrast = 1.12;
             ignore_opacity = true;
-            noise = 0;
+            noise = 0.015;
             new_optimizations = true;
             xray = true;
           };
 
           shadow = {
-            enabled = true;
+            enabled = showWindowChrome;
             offset = "0 2";
             range = 20;
             render_power = 3;
@@ -146,17 +154,17 @@ in
       animation = [
         {
           leaf = "windowsIn";
-          enabled = false;
-          speed = 4;
+          enabled = true;
+          speed = 3;
           bezier = "easeOutCubic";
-          style = "popin 20%";
+          style = "popin 92%";
         }
         {
           leaf = "windowsOut";
-          enabled = false;
-          speed = 4;
+          enabled = true;
+          speed = 3;
           bezier = "fluent_decel";
-          style = "popin 80%";
+          style = "popin 92%";
         }
         {
           leaf = "windowsMove";

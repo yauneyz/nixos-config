@@ -63,6 +63,7 @@ in
     ## Tools / useful cli
     aoc-cli                           # Advent of Code command-line tool
     awscli2
+    azure-cli
     asciinema
     asciinema-agg
     binsider
@@ -139,6 +140,9 @@ in
     playerctl                         # controller for media players
     postgresql                        # PostgreSQL client tools (psql, etc.)
     poweralertd
+    powershell                        # pwsh: electron-builder's native Azure Trusted Signing
+                                       # (Invoke-TrustedSigning) needs it + wine to cross-sign
+                                       # Windows installers from Linux (snorlax release:upload:win)
     slurp                             # select region on screen (Wayland)
     grim                              # screenshot utility (Wayland)
     udiskie                           # Automounter for removable media

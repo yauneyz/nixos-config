@@ -1,5 +1,6 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
+  colors = config.lib.stylix.colors.withHashtag;
   lua = lib.generators.mkLuaInline;
   bind = keys: command: options: {
     _args = [
@@ -62,10 +63,11 @@ in
 
   xdg.configFile."swayosd/style.css".text = ''
     window {
-        padding: 0px 10px;
-        border-radius: 25px;
-        border: 10px;
-        background: alpha(#282828, 0.99);
+        padding: 0 10px;
+        border-radius: 16px;
+        border: 1px solid alpha(${colors.base03}, 0.7);
+        background: alpha(${colors.base00}, 0.94);
+        box-shadow: 0 6px 20px alpha(#000000, 0.4);
     }
 
     #container {
@@ -73,7 +75,7 @@ in
     }
 
     image, label {
-        color: #FBF1C7;
+        color: ${colors.base05};
     }
 
     progressbar:disabled,
@@ -91,13 +93,13 @@ in
         min-height: inherit;
         border-radius: inherit;
         border: none;
-        background: alpha(#DDDDDD, 0.2);
+        background: alpha(${colors.base02}, 0.9);
     }
     progress {
         min-height: inherit;
         border-radius: inherit;
         border: none;
-        background: #FBF1C7;
+        background: ${colors.base0D};
     }
   '';
 }
