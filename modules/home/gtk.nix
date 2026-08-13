@@ -3,6 +3,10 @@
   gtk = {
     enable = true;
     gtk4.theme = config.gtk.theme;
+    iconTheme = {
+      package = pkgs.papirus-icon-theme;
+      name = "Papirus-Dark";
+    };
     gtk3.extraConfig = {
       # Hint GTK3 apps to prefer a dark theme when available.
       gtk-application-prefer-dark-theme = 1;

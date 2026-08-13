@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage {
   pname = "talysman-daemon";
   version = "0.1.0";
 
-  # Keep native/common beside native/linux so Cargo can resolve the
-  # talysman_common path dependency declared as ../common.
-  src = snorlaxSrc + "/native";
-  cargoRoot = "linux";
-  buildAndTestSubdir = "linux";
+  # Keep the repository layout intact: native/linux has a ../common path
+  # dependency and the tray binary embeds icons from apps/desktop/resources.
+  src = snorlaxSrc;
+  cargoRoot = "native/linux";
+  buildAndTestSubdir = "native/linux";
 
   cargoLock.lockFile = snorlaxSrc + "/native/linux/Cargo.lock";
 
