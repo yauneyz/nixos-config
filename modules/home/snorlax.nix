@@ -54,4 +54,24 @@ in
     text = chromiumManifest;
     force = true;
   };
+
+  # Standalone tray icon (native/linux/src/bin/tray.rs): talks directly to the daemon's socket
+  # over D-Bus (ksni, no GTK/libappindicator), so it stays cheap and keeps showing blocking
+  # status in the quickshell bar even when the Talysman desktop app itself isn't running.
+  systemd.user.services.talysman-tray = {
+    Unit = {
+      Description = "Talysman tray icon";
+      After = [
+        "graphical-session-pre.target"
+        "hyprland-session.target"
+      ];
+      PartOf = [ "hyprland-session.target" ];
+    };
+    Install.WantedBy = [ "hyprland-session.target" ];
+    Service = {
+      ExecStart = "${pkgs.talysman-daemon}/bin/talysman-tray";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+  };
 }
