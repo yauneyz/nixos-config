@@ -149,6 +149,16 @@ in
             1
           ]
         ])
+        (curve "linear" [
+          [
+            0
+            0
+          ]
+          [
+            1
+            1
+          ]
+        ])
       ];
 
       animation = [
@@ -187,7 +197,7 @@ in
         }
         {
           leaf = "fadeSwitch";
-          enabled = false;
+          enabled = true;
           speed = 1;
           bezier = "easeOutCirc";
         }
@@ -208,7 +218,7 @@ in
           enabled = true;
           speed = 4;
           bezier = "easeOutCubic";
-          style = "slidefade 18%";
+          style = "fade";
         }
         {
           leaf = "layersIn";
@@ -229,7 +239,14 @@ in
           enabled = true;
           speed = 3;
           bezier = "easeOutCubic";
-          style = "slidefadevert 12%";
+          style = "fade";
+        }
+        {
+          leaf = "borderangle";
+          enabled = true;
+          speed = 8;
+          bezier = "linear";
+          style = "loop";
         }
       ];
 

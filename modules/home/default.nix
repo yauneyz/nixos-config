@@ -27,6 +27,7 @@
     ./nautilus.nix                    # file manager
     ./nix-search/nix-search.nix       # TUI to search nixpkgs
     ./neovim                        # neovim editor
+    ./obs.nix                         # OBS tray icon config
     ./obsidian.nix
     ./p10k/p10k.nix
     ./packages                        # other packages

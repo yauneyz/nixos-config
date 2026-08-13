@@ -8,6 +8,7 @@ IconButton {
     required property var trayItem
     required property var barWindow
     icon: trayItem.icon
+    resolveIcon: false
     fallbackText: "•"
     tooltip: trayItem.tooltipTitle || trayItem.title
     opacity: 0

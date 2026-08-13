@@ -130,6 +130,7 @@ in
         exec pnpm dlx vercel@54.21.1 "$@"
       '';
     })
+    caffeine-ng                       # Tray toggle to inhibit screensaver/sleep
     fpm                               # Effing Package Management
     jq                                # JSON processor
     killall

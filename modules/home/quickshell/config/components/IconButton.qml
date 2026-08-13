@@ -5,6 +5,7 @@ import ".."
 Item {
     id: root
     property string icon: ""
+    property bool resolveIcon: true
     property string fallbackText: "?"
     property string tooltip: ""
     property color accent: Theme.text
@@ -40,7 +41,7 @@ Item {
         anchors.centerIn: parent
         width: 19
         height: 19
-        source: root.icon ? Quickshell.iconPath(root.icon, true) : ""
+        source: root.icon ? (root.resolveIcon ? Quickshell.iconPath(root.icon, true) : root.icon) : ""
         sourceSize.width: width * 2
         sourceSize.height: height * 2
         visible: status === Image.Ready

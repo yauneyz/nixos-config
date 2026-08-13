@@ -11,6 +11,17 @@ for _ in $(seq 1 30); do
   sleep 0.2
 done
 
+# Wait for the status bar's layer-shell surface to map before switching
+# workspaces. The bar reserves an exclusive zone on each monitor, and if that
+# reservation lands after windows have already been placed, monitor layout
+# can still be settling while we're dispatching workspace switches, causing
+# apps to end up on the wrong workspace.
+for _ in $(seq 1 30); do
+  namespaces=$(hyprctl layers -j 2>/dev/null | jq -r '.[].levels // {} | .[][] | .namespace' 2>/dev/null)
+  case "$namespaces" in *zac-shell-bar*|*waybar*) break ;; esac
+  sleep 0.2
+done
+
 # === Workspace 3: Emacs (Snorlax web prompt) ===
 hyprctl dispatch workspace 3
 #emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
@@ -38,11 +49,6 @@ firefox-devedition --new-window https://keep.google.com https://keep.google.com 
 sleep 5
 firefox-devedition --new-window https://youtube.com &
 sleep 3
-
-# === Workspace 14: Spotify ===
-hyprctl dispatch workspace 14
-spotify &
-sleep 2
 
 # === Workspace 15: Emacs (misc todo) ===
 hyprctl dispatch workspace 15
