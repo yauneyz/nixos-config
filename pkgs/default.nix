@@ -42,15 +42,28 @@ rec {
         --replace 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
     '';
   });
-  wf-recorder = prev.wf-recorder.overrideAttrs (old: rec {
-    version = "0.6.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "ammen99";
-      repo = "wf-recorder";
-      rev = "v${version}";
-      hash = "sha256-CY0pci2LNeQiojyeES5323tN3cYfS3m4pECK85fpn5I=";
-    };
-    # Remove old patches - they're already applied in 0.6.0
-    patches = [ ];
-  });
+  # ffmpeg 8+ removed the same deprecated AVCodec fields (pix_fmts,
+  # sample_fmts) that simplescreenrecorder's AVWrapper.cpp reads directly.
+  # Same fix as wf-recorder below: pin to ffmpeg_7 until upstream migrates.
+  simplescreenrecorder = prev.simplescreenrecorder.override { ffmpeg = prev.ffmpeg_7; };
+
+  wf-recorder =
+    (prev.wf-recorder.override {
+      # ffmpeg 8+ removed the deprecated AVCodec.sample_fmts field that
+      # wf-recorder 0.6.0's frame-writer.cpp still reads directly, breaking
+      # the build ("has no member named 'sample_fmts'"). Pin to ffmpeg_7
+      # until upstream wf-recorder migrates to avcodec_get_supported_config.
+      ffmpeg = prev.ffmpeg_7;
+    }).overrideAttrs
+      (old: rec {
+        version = "0.6.0";
+        src = pkgs.fetchFromGitHub {
+          owner = "ammen99";
+          repo = "wf-recorder";
+          rev = "v${version}";
+          hash = "sha256-CY0pci2LNeQiojyeES5323tN3cYfS3m4pECK85fpn5I=";
+        };
+        # Remove old patches - they're already applied in 0.6.0
+        patches = [ ];
+      });
 }
