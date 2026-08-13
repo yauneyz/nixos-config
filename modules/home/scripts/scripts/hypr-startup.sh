@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
-# Sequential startup: switch workspace, launch app, wait, repeat.
+# Startup launcher: fire each app, wait for its window to actually appear,
+# then move it to the target workspace with a single one-shot dispatcher
+# call. This is deliberately NOT done via a permanent class-based
+# window_rule: Emacs and Firefox windows should stay completely free to drag
+# to any workspace during the day. A one-shot move at boot is indistinguishable
+# from the user pressing the ALT+SHIFT+<workspace key> bind themselves right
+# after the window opens -- nothing "remembers" the assignment or fights a
+# later manual move. (Spotify/owl-dev/thinky keep their existing permanent
+# class rules in windowrules.nix -- those are single-purpose apps that only
+# ever belong on one workspace.)
+#
+# Previous versions of this script instead dispatched `hyprctl dispatch
+# workspace N` before each launch and hoped the window would appear before
+# the next switch. That's a race: DP-1's default workspace (8) is what a
+# window lands on whenever the switch hasn't "taken" yet by the time the app
+# maps, which is why most windows used to end up there regardless of intent.
 
 # Wait until the compositor's clipboard plumbing answers before launching any
 # apps. wl-paste exits with "No selection" once the data-control protocol is
@@ -11,49 +26,114 @@ for _ in $(seq 1 30); do
   sleep 0.2
 done
 
-# Wait for the status bar's layer-shell surface to map before switching
-# workspaces. The bar reserves an exclusive zone on each monitor, and if that
+# Wait for the status bar's layer-shell surface to map before launching
+# anything. The bar reserves an exclusive zone on each monitor, and if that
 # reservation lands after windows have already been placed, monitor layout
-# can still be settling while we're dispatching workspace switches, causing
-# apps to end up on the wrong workspace.
+# can still be settling while apps are mapping.
 for _ in $(seq 1 30); do
   namespaces=$(hyprctl layers -j 2>/dev/null | jq -r '.[].levels // {} | .[][] | .namespace' 2>/dev/null)
   case "$namespaces" in *zac-shell-bar*|*waybar*) break ;; esac
   sleep 0.2
 done
 
-# === Workspace 3: Emacs (Snorlax web prompt) ===
-hyprctl dispatch workspace 3
-#emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
-emacs ~/development/snorlax/apps/web/prompts/current.org &
-sleep 2
+snapshot_addresses_for_class() {
+  hyprctl clients -j 2>/dev/null | jq -r --arg c "$1" '.[] | select(.class == $c) | .address'
+}
 
-# === Workspace 9: Emacs (Snorlax current work) ===
+# wait_for_new_window <class> <addresses-before> [timeout-seconds]
+# Polls for a window of <class> whose address wasn't in the "before"
+# snapshot, and prints its address once found.
+wait_for_new_window() {
+  local class="$1" before="$2" timeout="${3:-20}" iterations i now new
+  iterations=$((timeout * 5))
+  for ((i = 0; i < iterations; i++)); do
+    now=$(snapshot_addresses_for_class "$class")
+    new=$(comm -13 <(sort <<<"$before") <(sort <<<"$now"))
+    if [ -n "$new" ]; then
+      head -n1 <<<"$new"
+      return 0
+    fi
+    sleep 0.2
+  done
+  return 1
+}
+
+# One-shot, non-sticky move: identical in effect to the user pressing
+# ALT+SHIFT+<key> on the window themselves. No rule is created, so the
+# window can be dragged to any other workspace afterward with no fight-back.
+move_window_to_workspace_once() {
+  local address="$1" workspace="$2"
+  hyprctl dispatch "hl.dsp.window.move({workspace = $workspace, window = 'address:$address', follow = false})" >/dev/null
+}
+
+# launch_and_place <class-to-match> <workspace> <command...>
+# <class-to-match> only needs to be unique long enough to identify the new
+# window among whatever else is opening concurrently at boot -- it's not
+# written anywhere persistent.
+launch_and_place() {
+  local class="$1" workspace="$2"
+  shift 2
+  local before addr
+  before=$(snapshot_addresses_for_class "$class")
+  "$@" &
+  addr=$(wait_for_new_window "$class" "$before") || return 0
+  move_window_to_workspace_once "$addr" "$workspace"
+}
+
+# Workspace 3: Emacs (Snorlax web prompt)
+launch_and_place emacs-snorlax-prompt 3 \
+  emacs --name=emacs-snorlax-prompt \
+  --eval '(setq frame-title-format (list "%b - GNU Emacs"))' \
+  ~/development/snorlax/apps/web/prompts/current.org &
+
+# Workspace 9: Emacs (Snorlax current work)
+launch_and_place emacs-snorlax-current 9 \
+  emacs --name=emacs-snorlax-current \
+  --eval '(setq frame-title-format (list "%b - GNU Emacs"))' \
+  ~/development/snorlax/current.org &
+
+# Workspace 15: Emacs (misc todo)
+launch_and_place emacs-misc-todo 15 \
+  emacs --name=emacs-misc-todo \
+  --eval '(setq frame-title-format (list "%b - GNU Emacs"))' \
+  ~/development/org/misc/todo.org &
+
+# Workspace 14 ("o"): Spotify -- placed via the permanent class rule in
+# windowrules.nix, since it's single-purpose and always belongs there.
+spotify &
+
+# Workspace 13 ("u"): Firefox -- 2 windows, Keep tabs on the left, YouTube on
+# the right. Firefox can't use launch_and_place's simple form because the
+# second window depends on the first: Firefox's single-instance remoting
+# means a fixed sleep between the two launches is unreliable (this is also
+# why URLs used to occasionally split across the wrong number of windows) --
+# so this waits for each window by address before firing the next command.
+# Runs in its own background block so it doesn't block the Emacs launches.
+(
+  before=$(snapshot_addresses_for_class firefox-devedition)
+  firefox-devedition --new-window https://keep.google.com https://keep.google.com https://keep.google.com &
+  keep_addr=$(wait_for_new_window firefox-devedition "$before")
+  [ -n "$keep_addr" ] && move_window_to_workspace_once "$keep_addr" 13
+
+  before=$(snapshot_addresses_for_class firefox-devedition)
+  firefox-devedition --new-window https://youtube.com &
+  youtube_addr=$(wait_for_new_window firefox-devedition "$before")
+  [ -n "$youtube_addr" ] && move_window_to_workspace_once "$youtube_addr" 13
+) &
+
+# === Disabled experiments (kept for reference) ===
+#emacs ~/development/clojure/owl/electron/src/app/components/PdfWindow.cljs &
 #ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run develop; exec bash' &
 #ghostty --class=owl-dev -e bash -c 'cd /home/zac/development/jirachi && bun run dev; exec bash' &
-sleep 2
-
-hyprctl dispatch workspace 9
 #emacs ~/development/clojure/owl/todo.org &
-emacs ~/development/snorlax/current.org &
-sleep 2
-
-# === Workspace 10: owl start terminal ===
 #hyprctl dispatch workspace 10
 #ghostty -e bash -c 'cd /home/zac/development/clojure/owl/electron && npm run start; exec bash' &
-#sleep 2
 
-# === Workspace 13: Firefox ===
-hyprctl dispatch workspace 13
-firefox-devedition --new-window https://keep.google.com https://keep.google.com https://keep.google.com https://keep.google.com &
-sleep 5
-firefox-devedition --new-window https://youtube.com &
-sleep 3
+# Wait for all placement jobs above to finish (they only block on their own
+# window appearing, not on the app itself exiting -- the app processes are
+# backgrounded inside each job and keep running as orphans once this script
+# exits, same as before).
+wait
 
-# === Workspace 15: Emacs (misc todo) ===
-hyprctl dispatch workspace 15
-emacs ~/development/org/misc/todo.org &
-sleep 2
-
-# === Return to workspace 13 ===
+# Land on workspace 13 ("u") once everything has been placed.
 hyprctl dispatch workspace 13

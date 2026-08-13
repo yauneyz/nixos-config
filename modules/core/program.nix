@@ -8,6 +8,13 @@
     ];
   };
 
+  # Transparently run Windows .exe binaries through Wine (kernel binfmt_misc).
+  # electron-builder's Azure Trusted Signing cross-sign path (pwsh's Invoke-TrustedSigning
+  # module, snorlax release:upload:win) shells out to signtool.exe directly rather than via
+  # `wine signtool.exe`, so this registration is required for cross-signing Windows
+  # installers from Linux to work at all.
+  boot.binfmt.emulatedSystems = [ "x86_64-windows" ];
+
   programs = {
     dconf.enable = true;
     gpu-screen-recorder.enable = true;

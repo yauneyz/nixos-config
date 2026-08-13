@@ -93,7 +93,7 @@ in
 
     # Opacity settings
     opacity = {
-      terminal = 0.86;
+      terminal = 0.80;
       applications = 0.98;
       popups = 0.96;
       desktop = 0.94;
