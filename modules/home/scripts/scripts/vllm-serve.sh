@@ -39,6 +39,10 @@ if [[ -d "$default_model_dir" ]]; then
 	default_model="$default_model_dir"
 fi
 model="${1:-${VLLM_MODEL:-$default_model}}"
+if (($# > 0)); then
+	shift
+fi
+cli_args=("$@")
 model_hint="${model##*/}"
 
 if [[ -e "$model" ]]; then
@@ -226,5 +230,6 @@ fi
 
 cmd+=("${default_args[@]}")
 cmd+=("${extra_args[@]}")
+cmd+=("${cli_args[@]}")
 
 exec "${ml_env_runner[@]}" run "${cmd[@]}"

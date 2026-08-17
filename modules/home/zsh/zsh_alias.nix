@@ -2,9 +2,9 @@
 let
   rebuildAlias = "bash ${userPaths.nixosConfig}/scripts/rebuild.sh ${host}";
   rebuildBootAlias = "bash ${userPaths.nixosConfig}/scripts/rebuild.sh ${host} boot";
-  llamaServeAlias = "llama-serve";
-  vllmServeAlias = "vllm-serve";
-  vllmEmbeddingsServeAlias = "vllm-serve-embeddings";
+  llamaServeAlias = "llm-serve";
+  vllmServeAlias = "llm-serve qwen-vllm";
+  vllmEmbeddingsServeAlias = "llm-serve embeddings";
   snorlaxSrcPath = "${userPaths.development}/snorlax";
   updateTalysmanAlias = "cd ${userPaths.nixosConfig} && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
   talysmanDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
@@ -112,16 +112,17 @@ in
 
       # LLM server
       llmserve = llamaServeAlias;
-      tabbyserve = "tabby-serve";
-      tavernserve = "tavern-serve";
+      tabbyserve = "llm-serve cydonia-exl3";
+      tavernserve = "llm-serve tavern";
+      # Keep the web UI directly launchable as well as `llm-serve textgen`.
       textgenserve = "textgen-serve";
-      cydonia-serve = "tabby-serve";
-      euryale-serve = "llama-serve-euryale-70b";
+      cydonia-serve = "llm-serve cydonia-exl3";
+      euryale-serve = "llm-serve euryale";
       vllmserve = vllmServeAlias;
       vllmembedserve = vllmEmbeddingsServeAlias;
-      oss-serve = "llama-serve-gpt-oss-20b";
-      w-serve = "llama-serve-weirdcompound-24b";
-      c-serve = "llama-serve-cydonia-24b";
+      oss-serve = "llm-serve oss";
+      w-serve = "llm-serve weird";
+      c-serve = "llm-serve cydonia";
 
       # Motion helpers
       cd = "z";

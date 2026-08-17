@@ -53,7 +53,7 @@ rec {
       # wf-recorder 0.6.0's frame-writer.cpp still reads directly, breaking
       # the build ("has no member named 'sample_fmts'"). Pin to ffmpeg_7
       # until upstream wf-recorder migrates to avcodec_get_supported_config.
-      ffmpeg = prev.ffmpeg_7;
+      ffmpeg_8 = prev.ffmpeg_7;
     }).overrideAttrs
       (old: rec {
         version = "0.6.0";
