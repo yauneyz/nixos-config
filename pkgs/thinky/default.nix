@@ -54,7 +54,7 @@ let
       releaseInfo.storePath;
 
   # Extract AppImage contents for desktop file and icons
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in

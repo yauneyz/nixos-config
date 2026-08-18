@@ -1,42 +1,14 @@
 { pkgs, inputs, ... }:
 let
-  codexOriginal = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
-  # Codex 0.144+ runs commands through a separate "code mode" host binary that it
-  # expects to find next to its own executable. codex-cli-nix doesn't package it,
-  # so fetch it from the matching upstream release. On version bumps the hash must
-  # be refreshed: nix-prefetch-url <url-with-new-version>
-  codexCodeModeHost = pkgs.fetchurl {
-    url = "https://github.com/openai/codex/releases/download/rust-v${codexOriginal.version}/codex-code-mode-host-x86_64-unknown-linux-musl.tar.gz";
-    hash = "sha256-AUat+qyDY+yfzbWJX3Yk21suhheig4h5OLf7l6HdQ1Y=";
+  # codex-cli-nix now packages the "code mode" host binary and wrapper itself.
+  # Supply a non-deprecated platform alias until its remaining stdenv.isLinux
+  # checks switch to stdenv.hostPlatform.isLinux.
+  codexStdenv = pkgs.stdenv // {
+    isLinux = pkgs.stdenv.hostPlatform.isLinux;
   };
-  codexLatest = pkgs.stdenv.mkDerivation {
-    name = "codex-patched";
-    src = codexOriginal;
-    dontUnpack = true;
-
-    nativeBuildInputs = [ pkgs.autoPatchelfHook ];
-    buildInputs = [
-      pkgs.libcap.lib
-      pkgs.openssl
-      pkgs.stdenv.cc.cc.lib
-      pkgs.zlib
-    ];
-
-    installPhase = ''
-      mkdir -p $out/bin
-      cp $src/bin/codex-raw $out/bin/codex-raw
-      tar -xzf ${codexCodeModeHost} -C $out/bin
-      mv $out/bin/codex-code-mode-host-x86_64-unknown-linux-musl $out/bin/codex-code-mode-host
-      chmod +x $out/bin/codex-code-mode-host
-      cat > $out/bin/codex <<EOF
-      #!${pkgs.bash}/bin/bash -e
-      export CODEX_EXECUTABLE_PATH="\$HOME/.local/bin/codex"
-      export DISABLE_AUTOUPDATER=1
-      exec "$out/bin/codex-raw" "\$@"
-      EOF
-      chmod +x $out/bin/codex
-    '';
-  };
+  codexLatest =
+    (inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default).override
+      { stdenv = codexStdenv; };
 in
 {
   home.packages = with pkgs; [
@@ -55,7 +27,7 @@ in
     tldr
 
     ## Coding agents
-    gemini-cli
+    antigravity-cli
     claude-code
     codexLatest                       # codex CLI (fast-updating flake)
     bubblewrap                        # bwrap: sandbox backend codex looks for on PATH

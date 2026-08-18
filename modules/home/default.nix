@@ -1,5 +1,7 @@
 { ... }:
 {
+  home.pointerCursor.enable = true;
+
   imports = [
     ./aseprite/aseprite.nix           # pixel art editor
     ./audacious/audacious.nix         # music player
