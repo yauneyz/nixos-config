@@ -21,6 +21,7 @@
     ./gnome.nix                       # gnome apps
     ./gtk.nix                         # gtk theme
     ./hyprland                        # window manager
+    ./kindle-sync.nix                 # opportunistic USB mirror of ~/Main to Kindle
     ./languages                       # programming language tooling
     ./lazygit.nix
     ./llm-roleplay.nix                # local roleplay model serving

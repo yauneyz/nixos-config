@@ -48,7 +48,8 @@ in
 
       ## Office
       (lib.getAttr "anki-bin" pkgs)
-      # calibre  # Temporarily disabled due to CUDA/PyTorch download issues
+      chatgpt-linux
+      claude-desktop
       libreoffice
       gnome-calculator
       readfence

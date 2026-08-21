@@ -91,6 +91,14 @@ let
     "devtools.chrome.enabled" = true;
     "svg.context-properties.content.enabled" = true;
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    # hypr-startup.sh backgrounds Firefox as an orphan and never lets it quit
+    # cleanly, so every boot looks like a crash to sessionstore. Without this,
+    # Firefox auto-restores an extra window with yesterday's tabs (always Keep,
+    # since that's the last thing this profile ever has open) on top of the
+    # window the startup script explicitly launches -- same window class, so
+    # hypr-startup.sh's "first new window wins" placement logic can't tell them
+    # apart and mis-assigns both that and the following Firefox launch.
+    "browser.sessionstore.resume_from_crash" = false;
   };
 
   mkProfile =

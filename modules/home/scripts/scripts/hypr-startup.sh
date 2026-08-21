@@ -40,18 +40,29 @@ snapshot_addresses_for_class() {
   hyprctl clients -j 2>/dev/null | jq -r --arg c "$1" '.[] | select(.class == $c) | .address'
 }
 
-# wait_for_new_window <class> <addresses-before> [timeout-seconds]
+# wait_for_new_window <class> <addresses-before> [timeout-seconds] [title-regex]
 # Polls for a window of <class> whose address wasn't in the "before"
-# snapshot, and prints its address once found.
+# snapshot, and prints its address once found. If <title-regex> is given,
+# only a new window whose title matches it counts -- this matters whenever
+# more than one window of the same class can appear around the same time
+# (e.g. a second Firefox window unexpectedly mapping, a session-restore
+# window), since otherwise the first new address wins even if it's the
+# wrong window.
 wait_for_new_window() {
-  local class="$1" before="$2" timeout="${3:-20}" iterations i now new
+  local class="$1" before="$2" timeout="${3:-20}" title_re="${4:-}" iterations i new match
   iterations=$((timeout * 5))
   for ((i = 0; i < iterations; i++)); do
-    now=$(snapshot_addresses_for_class "$class")
-    new=$(comm -13 <(sort <<<"$before") <(sort <<<"$now"))
+    new=$(comm -13 <(sort <<<"$before") <(sort <<<"$(snapshot_addresses_for_class "$class")"))
     if [ -n "$new" ]; then
-      head -n1 <<<"$new"
-      return 0
+      if [ -z "$title_re" ]; then
+        head -n1 <<<"$new"
+        return 0
+      fi
+      match=$(hyprctl clients -j 2>/dev/null |
+        jq -r --arg c "$class" --arg t "$title_re" \
+          '.[] | select(.class == $c and (.title | test($t))) | .address' |
+        grep -Fxf <(printf '%s\n' "$new") | head -n1)
+      [ -n "$match" ] && { echo "$match"; return 0; }
     fi
     sleep 0.2
   done
@@ -112,12 +123,12 @@ spotify &
 (
   before=$(snapshot_addresses_for_class firefox-devedition)
   firefox-devedition --new-window https://keep.google.com https://keep.google.com https://keep.google.com &
-  keep_addr=$(wait_for_new_window firefox-devedition "$before")
+  keep_addr=$(wait_for_new_window firefox-devedition "$before" 20 "Google Keep")
   [ -n "$keep_addr" ] && move_window_to_workspace_once "$keep_addr" 13
 
   before=$(snapshot_addresses_for_class firefox-devedition)
   firefox-devedition --new-window https://youtube.com &
-  youtube_addr=$(wait_for_new_window firefox-devedition "$before")
+  youtube_addr=$(wait_for_new_window firefox-devedition "$before" 20 "YouTube")
   [ -n "$youtube_addr" ] && move_window_to_workspace_once "$youtube_addr" 13
 ) &
 

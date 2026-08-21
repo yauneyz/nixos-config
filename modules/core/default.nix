@@ -7,6 +7,7 @@
     ./grub-theme.nix
     ./hardware.nix
     ./xserver.nix
+    ./kosync.nix
     ./network.nix
     ./nh.nix
     ./stylix.nix

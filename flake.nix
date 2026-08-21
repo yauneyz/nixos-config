@@ -94,6 +94,8 @@
       # Export custom packages for direct building
       packages.${system} = {
         inherit (pkgs)
+          chatgpt-linux
+          claude-desktop
           readfence
           screenplain
           snorlax

@@ -8,6 +8,8 @@
 }:
 rec {
   _2048 = pkgs.callPackage ./2048 { };
+  chatgpt-linux = pkgs.callPackage ./chatgpt-linux { };
+  claude-desktop = pkgs.callPackage ./claude-desktop { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
   readfence = pkgs.callPackage ./readfence { };
   screenplain = pkgs.callPackage ./screenplain {

@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    # Java runtime and compiler used by Clojure and other JVM tooling
+    jdk
+
     # Clojure runtime
     clojure
 
@@ -34,6 +37,8 @@
 
   # Set up Clojure environment
   home.sessionVariables = {
+    JAVA_HOME = pkgs.jdk.home;
+    JDK_HOME = pkgs.jdk.home;
     # Leiningen will use ~/.lein by default
     LEIN_HOME = "$HOME/.lein";
     # Clojure CLI will use ~/.clojure by default

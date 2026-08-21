@@ -81,6 +81,11 @@ if [[ ! -f "${repo_dir}/flake.nix" ]]; then
   exit 1
 fi
 
+echo "Checking ChatGPT and Claude Desktop updates"
+if ! bash "${repo_dir}/scripts/update-ai-desktop-apps.sh" "${repo_dir}"; then
+  echo "Warning: one or more desktop app update checks failed; rebuilding with the current pins." >&2
+fi
+
 echo "Rebuilding NixOS host '${host}' with '${mode}' from ${repo_dir}"
 
 cmd=(nixos-rebuild "${mode}" --flake "${repo_dir}#${host}")
