@@ -149,6 +149,7 @@ let
     (mkBind "ALT + SHIFT + Q" "hl.dsp.window.close()")
     (mkBind "ALT + SHIFT + X" (exec "hyprctl kill"))
     (mkBind "ALT + F" ''hl.dsp.window.fullscreen({ mode = "fullscreen" })'')
+    (mkBind "ALT + SHIFT + F" (exec "focus-toggle"))
     (mkBind "ALT + Space" "hl.dsp.window.float()")
     (mkBind "ALT + V" ''hl.dsp.layout("preselect d")'')
     (mkBind "ALT + minus" ''hl.dsp.workspace.toggle_special("scratchpad")'')

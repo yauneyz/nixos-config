@@ -99,7 +99,7 @@ in
         pnpm
       ];
       text = ''
-        exec pnpm dlx vercel@54.21.1 "$@"
+        exec pnpm dlx vercel@59.5.0 "$@"
       '';
     })
     caffeine-ng                       # Tray toggle to inhibit screensaver/sleep

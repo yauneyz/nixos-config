@@ -11,6 +11,7 @@
 #   talysman-natmsg   - browser native-messaging host (com.talysman.host)
 #   focus-enable       - toggle focus blocking on  (RPC enableFocus)
 #   focus-disable      - toggle focus blocking off (RPC disableFocus; needs USB key)
+#   focus-toggle       - toggle focus blocking (RPC toggleFocus; off needs USB key)
 # All land in $out/bin as siblings, so svcctl's current_exe()-relative lookup of
 # talysman-svc still resolves. The daemon shells out to `nft`/`ip` at runtime; those
 # are provided on PATH by the systemd unit (modules/core/snorlax.nix), not linked here.

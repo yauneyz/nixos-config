@@ -95,13 +95,13 @@ launch_and_place() {
 launch_and_place emacs-snorlax-prompt 3 \
   emacs --name=emacs-snorlax-prompt \
   --eval '(setq frame-title-format (list "%b - GNU Emacs"))' \
-  ~/development/snorlax/apps/web/prompts/current.org &
+  ~/development/snorlax/current.org &
 
 # Workspace 9: Emacs (Snorlax current work)
 launch_and_place emacs-snorlax-current 9 \
   emacs --name=emacs-snorlax-current \
   --eval '(setq frame-title-format (list "%b - GNU Emacs"))' \
-  ~/development/snorlax/current.org &
+  ~/development/snorlax/todo.org &
 
 # Workspace 15: Emacs (misc todo)
 launch_and_place emacs-misc-todo 15 \

@@ -70,7 +70,7 @@ in
     Install.WantedBy = [ "hyprland-session.target" ];
     Service = {
       ExecStart = "${pkgs.talysman-daemon}/bin/talysman-tray";
-      Restart = "on-failure";
+      Restart = "always";
       RestartSec = 2;
     };
   };
