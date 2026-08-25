@@ -37,6 +37,7 @@
         22
         80
         443
+        3000 # Talysman development web app (physical-device testing)
         7777 # LAN gaming
         22000 # Syncthing transfers
         17200 # kosync (KOReader progress sync)

@@ -21,6 +21,7 @@ let
   modelsManifest = ./manifests/models.json;
   workflowsManifest = ./manifests/workflows.json;
   voiceScript = ./python/voice.py;
+  guideDoc = ./GUIDE.md;
 
   runtimeLibraryPath =
     lib.makeLibraryPath [
@@ -172,6 +173,14 @@ let
     ];
   };
 
+  videoGuide = pkgs.writeShellApplication {
+    name = "video-guide";
+    runtimeInputs = [ pkgs.glow ];
+    text = ''
+      exec glow --pager ${lib.escapeShellArg guideDoc} "$@"
+    '';
+  };
+
   rifeLauncher = mkLauncher {
     name = "video-ai-rife";
     script = ./scripts/video-ai-rife.sh;
@@ -235,6 +244,7 @@ in
 
   home.packages = [
     videoAi
+    videoGuide
     comfyLauncher
     wangpLauncher
     aceStepLauncher
