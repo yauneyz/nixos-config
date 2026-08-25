@@ -21,7 +21,9 @@ let
   modelsManifest = ./manifests/models.json;
   workflowsManifest = ./manifests/workflows.json;
   voiceScript = ./python/voice.py;
+  transcriptScript = ./python/transcript.py;
   guideDoc = ./GUIDE.md;
+  workflowGuideDoc = ./WORKFLOW.md;
 
   runtimeLibraryPath =
     lib.makeLibraryPath [
@@ -105,11 +107,13 @@ let
       util-linux
       unzip
       uv
+      yt-dlp-light
     ];
     extraEnvironment = ''
       export VIDEO_AI_APPS_MANIFEST=${lib.escapeShellArg appsManifest}
       export VIDEO_AI_MODELS_MANIFEST=${lib.escapeShellArg modelsManifest}
       export VIDEO_AI_WORKFLOWS_MANIFEST=${lib.escapeShellArg workflowsManifest}
+      export VIDEO_AI_TRANSCRIPT_SCRIPT=${lib.escapeShellArg transcriptScript}
     '';
   };
 
@@ -181,6 +185,14 @@ let
     '';
   };
 
+  workflowGuide = pkgs.writeShellApplication {
+    name = "workflow-guide";
+    runtimeInputs = [ pkgs.glow ];
+    text = ''
+      exec glow --pager ${lib.escapeShellArg workflowGuideDoc} "$@"
+    '';
+  };
+
   rifeLauncher = mkLauncher {
     name = "video-ai-rife";
     script = ./scripts/video-ai-rife.sh;
@@ -245,6 +257,7 @@ in
   home.packages = [
     videoAi
     videoGuide
+    workflowGuide
     comfyLauncher
     wangpLauncher
     aceStepLauncher

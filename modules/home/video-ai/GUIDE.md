@@ -6,6 +6,10 @@ frame interpolation, and editing. Everything is declared in this NixOS config
 (`modules/home/video-ai/`) and driven by one CLI, `video-ai`, plus a handful
 of per-tool launchers it unlocks.
 
+Run `workflow-guide` for the reference-to-upload production workflow. This
+guide remains the technical manual for installing and operating the local
+tools.
+
 You don't need to know Nix to use this. You need to know: what each tool
 does, what order they go in, and the commands below.
 
@@ -141,6 +145,29 @@ debugging) with `video-ai-comfy`, `video-ai-wangp`, or `video-ai-ovi`.
 ComfyUI workflow graphs installed via `video-ai workflows sync` show up
 inside the ComfyUI UI's workflow browser under `video-ai/`.
 
+### Reference transcripts
+
+Download a YouTube video's creator-provided or automatic captions without
+downloading the video itself:
+
+```sh
+video-ai transcript 'https://www.youtube.com/shorts/VIDEO_ID' research/reference.txt
+```
+
+The command prefers manual captions, falls back to automatic captions, and
+selects English by default. Pass a language prefix as the third argument for a
+different language, e.g. `video-ai transcript URL research/reference-es.txt es`.
+
+It creates three provenance-friendly files and refuses to overwrite them:
+
+- `reference.txt` — cleaned, de-duplicated plain text
+- `reference.vtt` — the original timed captions
+- `reference.source.json` — source URL, channel, video metadata, caption type,
+  and selected language
+
+Use transcripts to study an abstract format and pacing. Do not copy another
+creator's distinctive wording, jokes, or story.
+
 ### ACE-Step (music)
 
 Also a systemd service:
@@ -214,8 +241,8 @@ and provenance together:
 video-ai new my-short-video
 ```
 
-This creates `~/Games/VideoAI/projects/my-short-video/` with `assets/`,
-`audio/`, `captions/`, `resolve/`, and `shots/` subfolders plus a
+This creates `~/Games/VideoAI/projects/my-short-video/` with `research/`,
+`assets/`, `audio/`, `captions/`, `resolve/`, and `shots/` subfolders plus a
 `project.json` manifest. There's no requirement to use this structure, but
 it's there if you want a consistent place to collect a project's outputs
 before importing into Resolve.
@@ -290,6 +317,7 @@ video-ai env sync <profile>     # build Python environments
 video-ai models sync <profile>  # download model weights
 video-ai workflows sync <profile>  # install ComfyUI example workflows
 video-ai new <slug>             # create a project folder
+video-ai transcript <url> [out] [lang]  # download and clean captions
 video-ai proxy <in> [out]       # make a Resolve-friendly proxy
 
 systemctl --user start|stop comfyui|wangp|ace-step|ovi

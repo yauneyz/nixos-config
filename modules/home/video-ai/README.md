@@ -135,6 +135,18 @@ Create a project tree with a provenance manifest:
 video-ai new summer-product-ad
 ```
 
+Research a reference video's structure without downloading the video:
+
+```sh
+cd /home/zac/Games/VideoAI/projects/summer-product-ad
+video-ai transcript \
+  'https://www.youtube.com/shorts/VIDEO_ID' \
+  research/reference.txt
+```
+
+This writes cleaned text, the original WebVTT captions, and a JSON source
+record. Run `workflow-guide` for the complete reference-to-upload process.
+
 Generated H.264/H.265 media can be converted to a predictable Resolve
 intermediate:
 

@@ -488,7 +488,13 @@ new_project() {
   init_layout
   local project="$projects_root/$slug"
   [[ ! -e "$project" ]] || die "project already exists: $project"
-  mkdir -p "$project/assets" "$project/audio" "$project/captions" "$project/resolve" "$project/shots"
+  mkdir -p \
+    "$project/research" \
+    "$project/assets" \
+    "$project/audio" \
+    "$project/captions" \
+    "$project/resolve" \
+    "$project/shots"
   jq -n \
     --arg slug "$slug" \
     --arg created "$(date --iso-8601=seconds)" \
@@ -509,6 +515,109 @@ make_proxy() {
     -c:v dnxhd -profile:v dnxhr_hq -pix_fmt yuv422p \
     -c:a pcm_s24le -ar 48000 "$output"
   printf '%s\n' "$output"
+}
+
+transcribe_url() {
+  local url="${1:-}"
+  local output="${2:-transcript.txt}"
+  local requested_language="${3:-en}"
+  [[ -n "$url" ]] || die "usage: video-ai transcript URL [OUTPUT.txt] [LANGUAGE]"
+  [[ "$#" -le 3 ]] || die "usage: video-ai transcript URL [OUTPUT.txt] [LANGUAGE]"
+  init_layout
+
+  output="$(realpath -m "$output")"
+  local prefix="$output"
+  [[ "$prefix" == *.txt ]] && prefix="${prefix%.txt}"
+  local raw="$prefix.vtt"
+  local source="$prefix.source.json"
+  local output_partial="$output.partial.$$"
+  local raw_partial="$raw.partial.$$"
+  local source_partial="$source.partial.$$"
+  local run_dir
+  run_dir="$(mktemp -d "$tmp_root/transcript.XXXXXX")"
+  cleanup_transcript() {
+    rm -rf -- "$run_dir"
+    rm -f -- "$output_partial" "$raw_partial" "$source_partial"
+  }
+  trap cleanup_transcript EXIT
+
+  for target in "$output" "$raw" "$source"; do
+    [[ ! -e "$target" ]] || die "refusing to overwrite existing transcript artifact: $target"
+  done
+  mkdir -p "$(dirname "$output")"
+
+  local metadata="$run_dir/video.json"
+  note "reading video metadata"
+  yt-dlp --dump-single-json --skip-download --no-playlist --no-warnings \
+    "$url" >"$metadata"
+
+  local subtitle_choice subtitle_kind subtitle_language
+  subtitle_choice="$(jq -r --arg language "$requested_language" '
+    def matching_language($captions; $wanted):
+      if $captions[$wanted] != null then $wanted
+      else ([
+        $captions
+        | keys[]
+        | select(startswith($wanted + "-") or startswith($wanted + "_"))
+      ][0] // null)
+      end;
+    (.subtitles // {}) as $manual
+    | (.automatic_captions // {}) as $automatic
+    | matching_language($manual; $language) as $manual_language
+    | matching_language($automatic; $language) as $automatic_language
+    | if $manual_language != null then ["manual", $manual_language]
+      elif $automatic_language != null then ["automatic", $automatic_language]
+      else empty
+      end
+    | @tsv
+  ' "$metadata")"
+  [[ -n "$subtitle_choice" ]] ||
+    die "no manual or automatic captions found for language: $requested_language"
+  IFS=$'\t' read -r subtitle_kind subtitle_language <<<"$subtitle_choice"
+
+  local subtitle_flag="--write-auto-subs"
+  [[ "$subtitle_kind" == manual ]] && subtitle_flag="--write-subs"
+  note "downloading $subtitle_kind captions ($subtitle_language)"
+  yt-dlp --skip-download --no-playlist --no-warnings \
+    "$subtitle_flag" \
+    --sub-langs "$subtitle_language" \
+    --sub-format vtt \
+    --output "$run_dir/captions.%(ext)s" \
+    "$url"
+
+  local downloaded_vtt
+  downloaded_vtt="$(find "$run_dir" -maxdepth 1 -type f -name '*.vtt' -print -quit)"
+  [[ -n "$downloaded_vtt" ]] || die "caption download did not produce a WebVTT file"
+
+  install -m 600 "$downloaded_vtt" "$raw_partial"
+  "$python_cmd" "${VIDEO_AI_TRANSCRIPT_SCRIPT:?VIDEO_AI_TRANSCRIPT_SCRIPT is not set}" \
+    "$downloaded_vtt" "$output_partial" >/dev/null
+  jq \
+    --arg fetched_at "$(date --iso-8601=seconds)" \
+    --arg requested_url "$url" \
+    --arg subtitle_kind "$subtitle_kind" \
+    --arg subtitle_language "$subtitle_language" \
+    '{
+      schema: 1,
+      fetchedAt: $fetched_at,
+      requestedUrl: $requested_url,
+      sourceUrl: (.webpage_url // .original_url // $requested_url),
+      id,
+      title,
+      channel: (.channel // .uploader),
+      channelUrl: (.channel_url // .uploader_url),
+      duration,
+      uploadDate: .upload_date,
+      subtitleKind: $subtitle_kind,
+      subtitleLanguage: $subtitle_language
+    }' "$metadata" >"$source_partial"
+
+  mv -T "$raw_partial" "$raw"
+  mv -T "$output_partial" "$output"
+  mv -T "$source_partial" "$source"
+  cleanup_transcript
+  trap - EXIT
+  printf '%s\n%s\n%s\n' "$output" "$raw" "$source"
 }
 
 doctor() {
@@ -628,6 +737,8 @@ Commands:
   models sync [profile]        Download checksum-pinned models (default: core)
   workflows sync [profile]     Install pinned ComfyUI workflows (default: core)
   new <slug>                   Create a provenance-ready project directory
+  transcript <url> [out] [lang]
+                               Save clean text, source VTT, and metadata
   proxy <input> [output]       Make a Resolve-friendly DNxHR/PCM intermediate
 
 Profiles: core, audio, experiments, ovi, enhancement, all
@@ -664,6 +775,7 @@ case "$command" in
     sync_workflows "${1:-core}"
     ;;
   new) new_project "${1:-}" ;;
+  transcript) transcribe_url "$@" ;;
   proxy) make_proxy "${1:-}" "${2:-}" ;;
   help|-h|--help|'') usage ;;
   *) die "unknown command: $command (run video-ai help)" ;;
