@@ -1,388 +1,375 @@
-# Short-Form Video Workflow — From Reference to Upload
+# Short-Form Video Workflow — Human Taste, Machine Throughput
 
-This guide turns the five-step method from the reference video into a repeatable
-workflow using your Claude/ChatGPT subscriptions and the local `video-ai`
-toolchain. Run `video-guide` when you need the technical reference for the local
-software; run `workflow-guide` when you want to make a video.
+This is the production guide. Run `workflow-guide` when making a Short and
+`video-guide` for installation, maintenance, and individual tool details.
 
-The method in the reference video is:
+The pipeline has one governing rule:
 
+> Audio establishes time; humans establish editorial beats; AI generates
+> candidates; Resolve establishes the final experience.
+
+The system deliberately does **not** automate taste. It makes timing, file
+handling, generation, provenance, and packaging cheap enough that you can spend
+your attention on performance, pacing, visual metaphor, selection, typography,
+humor, and rhythm.
+
+## The production graph
+
+```text
+creative brief (your taste)
+  → original locked script
+  → Chatterbox takes
+  → HUMAN VOICE APPROVAL
+  → narration_master.wav                         [master clock]
+  → WhisperX words + deterministic captions
+  → machine-proposed visual beats
+  → HUMAN TIMELINE EDIT
+  → timeline.csv                                 [master edit]
+  → LLM storyboard constrained to that timeline
+  → still / real / graphic / motion routing
+  → FLUX.2 Klein candidate stills
+  → HUMAN STILL SELECTION
+  → Wan 2.2 I2V only where motion earns its cost
+  → HUMAN TAKE SELECTION
+  → normalized, checksum-backed editor package
+  → DaVinci Resolve taste work
+  → 1080×1920 master
 ```
-1. Find a successful format and extract its structure
-2. Use an AI assistant to write an original script in your niche
-3. Generate the voice-over
-4. Generate a small set of meme-style images
-5. Combine them with background footage, captions, and audio
-```
 
-Our version keeps that structure, adds project organization and rights checks,
-and replaces OpenArt, ElevenLabs, and CapCut with tools already on this machine.
+`video-ai project next` always tells you the next gate. `video-ai project
+status` shows what is approved, ready, waiting, or stale.
 
----
+## 0. One-time machine setup
 
-## 1. Tools you will use
-
-| Job | Tool | Where it runs |
-|---|---|---|
-| Find reference Shorts | YouTube in Chrome | Web |
-| Download a reference transcript | `video-ai transcript` | Local CLI |
-| Analyze structure and write the script | Claude or ChatGPT | Subscription app/web |
-| Write image prompts and a shot list | Claude or ChatGPT | Subscription app/web |
-| Generate still images | ChatGPT image generation | Subscription app/web |
-| Generate moving shots | ComfyUI + Wan 2.2, or WanGP | Local GPU |
-| Generate narration | Chatterbox via `video-ai-voice` | Local GPU |
-| Generate optional music | ACE-Step | Local GPU/API |
-| Record original gameplay if wanted | OBS Studio | Local GUI |
-| Generate captions | WhisperX via `video-ai-caption` | Local GPU |
-| Upscale or smooth footage | Real-ESRGAN / Practical-RIFE | Local GPU |
-| Assemble and export | DaVinci Resolve | Local GUI |
-
-Use Claude or ChatGPT for the reasoning-heavy text work. Use ChatGPT's image
-generator for the meme cards and starting frames; this avoids adding another
-large local still-image model. A ChatGPT subscription is separate from API
-billing, so this workflow assumes you generate and download the images manually
-in the ChatGPT app or website. OpenAI's current image model documentation is at
-<https://developers.openai.com/api/docs/models/gpt-image-2>.
-
----
-
-## 2. Preflight and project setup
-
-Check the local stack before committing to a production session:
+After rebuilding this NixOS configuration, install the commercial-first stack:
 
 ```sh
+video-ai sync production
 video-ai doctor
-video-ai status
 ```
 
-Create one project per Short:
+That profile installs:
+
+- ComfyUI with FLUX.2 Klein 4B and Wan 2.2 TI2V-5B workflows/models;
+- Chatterbox Turbo/Multilingual V3, WhisperX, and ACE-Step environments;
+- Practical-RIFE and the Nix-provided Real-ESRGAN/ffmpeg/Resolve tools.
+
+It excludes Ovi's restricted audio dependency and skips WanGP experiments.
+Those remain available as explicit optional profiles.
+
+## 1. Create a project and write the taste contract
 
 ```sh
-video-ai new gym-hierarchy-01
-cd ~/Games/VideoAI/projects/gym-hierarchy-01
+video-ai new desert-water-01
+cd ~/Games/VideoAI/projects/desert-water-01
+video-ai project next
 ```
 
-The project contains:
+The numbered project tree encodes authority and handoff order:
 
+```text
+00_admin/       creative brief, rights, logs, environment snapshot
+01_script/      locked narration and pronunciation notes
+02_voice/       raw takes and the one narration master
+03_alignment/   word timing, captions, alignment QA
+04_timeline/    machine suggestion, human timeline, edit plan
+05_stills/      generated candidates and human-approved stills
+06_video/       generated candidates, approved clips, normalized clips
+07_audio/       music and SFX
+08_workflows/   storyboard contract and API-format ComfyUI graphs
+09_delivery/    clean package created for the editor
+10_exports/     final master
 ```
-research/   reference transcripts, URLs, structure notes, rights records
-assets/     generated still images and licensed supporting material
-audio/      narration, music, and sound effects
-shots/      generated or recorded video clips
-captions/   WhisperX subtitle files
-resolve/    proxies and Resolve project material
-project.json
+
+Fill `00_admin/creative_brief.md`. Be concrete about audience, point of view,
+delivery energy, palette, composition, visual grammar, evidence shots, motion
+rules, anti-patterns, and what would make the piece unmistakably yours. This is
+the binding taste contract for later assistants and models.
+
+```sh
+video-ai project approve brief
 ```
 
-Keep `script.txt` and `shot-list.md` in the project root so they are easy to
-find throughout the workflow.
+## 2. Study formats, then lock an original script
 
----
-
-## 3. Find a format—not a script to copy
-
-Browse Shorts in and around the subject you want to cover. Choose a reference
-with a clear structure you can describe independently of its exact wording:
-
-- What happens in the first one or two seconds?
-- How many beats or examples follow?
-- How often does the visual change?
-- How does tension, absurdity, or curiosity escalate?
-- What is the final payoff?
-- Approximately how many seconds and spoken words does it use?
-
-Views show that the complete video connected with an audience; they do not
-prove that a single structural trick caused the performance. Save more than one
-reference when possible and look for patterns shared across them.
-
-Download captions without downloading the reference video:
+Study several successful references for abstract structure—not wording, jokes,
+characters, stories, or a creator's signature look. Download captions without
+downloading the reference video:
 
 ```sh
 video-ai transcript \
   'https://www.youtube.com/shorts/REFERENCE_ID' \
-  research/reference.txt
+  00_admin/reference-01.txt
 ```
 
-For another language, pass its language prefix as the third argument:
+Ask Claude or ChatGPT to describe the hook, beat order, escalation, payoff,
+word count, and visual-change pattern. Then ask it for an original draft about
+your topic under the creative brief. Verify claims and rewrite it until it
+sounds like you.
 
-```sh
-video-ai transcript URL research/reference-es.txt es
-```
-
-The command produces:
-
-- `research/reference.txt` — clean text to paste into Claude or ChatGPT
-- `research/reference.vtt` — original timed captions
-- `research/reference.source.json` — source URL, channel, title, date, caption
-  type, and language
-
-It prefers creator-provided subtitles and falls back to automatic captions.
-It refuses to overwrite an existing transcript set.
-
----
-
-## 4. Extract the structure and write an original script
-
-Start a new Claude or ChatGPT conversation. Attach or paste
-`research/reference.txt`, then use a prompt like this:
+Put only the final narration in `01_script/script_locked.md`. Add `|` between
+phrases where **you** want a visual beat:
 
 ```text
-Analyze this short-form transcript as a format reference.
+Nobody expected | this to work.
 
-First, describe only its abstract structure: hook, beat order, pacing,
-escalation, transitions, payoff, approximate word count, tone, and visual
-change points. Do not reuse its distinctive wording, jokes, examples,
-characters, or story.
-
-Then write an original script about [MY TOPIC] for [MY AUDIENCE]. Target
-[DURATION] seconds. It should use the useful structural principles while
-having a new premise, new examples, and my own point of view. Make every beat
-factually defensible. Return:
-1. the structure analysis;
-2. the final voice-over only;
-3. a table with timestamp, narration beat, visual purpose, and on-screen text.
+In 1923, | two engineers tried a completely different material. |
+Then the impossible part happened.
 ```
 
-Review the result yourself. Shorten weak setup, verify factual claims, replace
-generic AI phrasing, and make sure the joke or insight belongs to your channel.
-Save only the finished narration as `script.txt`; save the timing table as
-`shot-list.md`.
+These markers are semantic decisions, not timestamps. The alignment stage will
+resolve them against the spoken performance later.
 
-A conversational delivery is usually around 130–170 words per minute. Generate
-the voice early: its real duration becomes the timing source for everything
-else.
+```sh
+video-ai project approve script
+```
 
----
+## 3. Make the voice the master clock
 
-## 5. Generate the voice-over
-
-Create local narration with Chatterbox:
+Render narration in semantic chunks so a bad name or line can be replaced
+without regenerating everything:
 
 ```sh
 video-ai-voice \
-  --text-file script.txt \
-  --output audio/narration.wav
+  --text 'Nobody expected this to work.' \
+  --output 02_voice/narration_raw/take_001.wav
+
+video-ai-voice \
+  --text 'In 1923, two engineers tried a completely different material.' \
+  --output 02_voice/narration_raw/take_002.wav
 ```
 
-The default `turbo` model is the fast path. For another supported language:
+Chatterbox Turbo is the default English path. Use `--model multilingual-v3
+--language es` when appropriate. A cloned reference voice requires both
+authorization and `--consent-confirmed`; every take gets a provenance sidecar.
+
+Choose performances yourself, then assemble them in accepted order:
 
 ```sh
-video-ai-voice \
-  --model multilingual-v3 \
-  --language es \
-  --text-file script.txt \
-  --output audio/narration.wav
+video-ai project voice-master \
+  02_voice/narration_raw/take_001.wav \
+  02_voice/narration_raw/take_002.wav
 ```
 
-If you use a reference voice, it must be a voice you are authorized to clone;
-the command requires both `--reference` and `--consent-confirmed`. Every WAV
-gets a JSON sidecar recording its model and provenance.
+This creates mono, 48 kHz, 24-bit PCM `02_voice/narration_master.wav`. Listen
+from beginning to end for delivery, pronunciation, glitches, and unwanted
+silence. This is the highest-leverage performance gate.
 
-Listen once before generating visuals. Fix pronunciation and pacing in the
-script, regenerate, and treat the accepted WAV as locked.
-
----
-
-## 6. Generate still images and moving shots
-
-Ask Claude or ChatGPT to turn the locked narration and shot list into one image
-prompt per beat:
-
-```text
-Using this final script and shot list, write one production-ready image prompt
-per visual beat for ChatGPT image generation.
-
-The Short is vertical 9:16. Keep the same visual language, lighting, character
-design, lens feel, and color palette across every prompt. Each image must have
-one immediately readable joke or idea, a strong silhouette, and uncluttered
-space for captions. Do not imitate a living artist or use a real person's
-likeness. Put any editor-added text in a separate field instead of rendering
-it into the image.
-
-Return a numbered table with filename, timestamp, prompt, negative constraints,
-caption-safe area, and intended edit duration.
+```sh
+video-ai project approve voice
 ```
 
-Generate the images in ChatGPT and download them into `assets/` with stable
-names such as:
+Do not change words, silence, playback speed, or this WAV after approval. If
+you do, its hash changes and every timing-dependent downstream gate becomes
+stale.
 
+## 4. Align once; derive timing deterministically
+
+```sh
+video-ai project align
 ```
-assets/01-hook.png
-assets/02-treadmill.png
-assets/03-chest-day.png
-assets/04-payoff.png
+
+The command runs pinned WhisperX on the narration master and then creates:
+
+- `03_alignment/words.json` — normalized word-level timing;
+- `03_alignment/captions.srt` — plain 2–5-word caption events;
+- `03_alignment/alignment_review.csv` — script/ASR differences;
+- `04_timeline/suggested_shots.csv` — machine proposal only;
+- `04_timeline/timeline.csv` — editable initial copy, all rows unlocked.
+
+Synthetic speech still needs QA around numbers, names, acronyms, punctuation,
+and text normalization. Inspect `alignment_review.csv`; set `reviewed` to
+`true` on every difference only after deciding it is harmless or correcting
+the timing. Inspect the SRT for awkward one-word captions and drift.
+
+```sh
+video-ai project approve alignment
 ```
 
-Generate for a vertical composition when the interface allows it. A square 4K
-image is not inherently better for a 1080×1920 Short; composition and readable
-subjects matter more. Keep generated text out of the image when possible and
-add exact copy in Resolve.
+Caption timing and shot timing are separate decisions. Captions answer “which
+words appear together?” A shot answers “when does the visual idea change?”
 
-For motion, choose one of these paths:
+## 5. Edit the authoritative timeline by feel
 
-- Import a generated still into the installed Wan 2.2 image-to-video workflow
-  in ComfyUI.
-- Use the Wan 2.2 text-to-video workflow for original background B-roll.
-- Use WanGP for quicker experiments.
-- Record your own gameplay in OBS if the split-screen gameplay format is part
-  of the concept.
+Open `04_timeline/timeline.csv`. Merge, split, and move proposed beats based on
+meaning, surprise, breath, emphasis, and visual opportunity. A 0.7-second hook
+or a quiet four-second hold can be right; a fixed cut interval cannot know.
+
+For every row:
+
+- keep millisecond precision;
+- use unique zero-padded IDs (`shot_001`);
+- prevent overlap and keep `duration = end - start`;
+- ensure narration is covered by a deliberate visual strategy;
+- set `locked` to `true` only after a human pacing pass.
+
+```sh
+video-ai project approve timeline
+```
+
+`timeline.csv` is now the only master edit. The storyboard, ComfyUI, captions,
+and Resolve must not invent competing timings.
+
+## 6. Route visuals before generating anything expensive
+
+Use `08_workflows/storyboard_prompt.md` with the creative brief, script, and
+locked timeline. Fill `04_timeline/edit_plan.csv` with exactly one record per
+shot. The validator refuses any changed shot ID, time, duration, or narration.
+
+Choose the cheapest medium that communicates the beat well:
+
+| Asset type | Use it for |
+|---|---|
+| `text_graphic` | hook typography, numbers, labels, graphic emphasis in Resolve |
+| `screenshot` / `stock` / `recorded` | reality, evidence, interfaces, original gameplay |
+| `ai_still` | composition, setting, metaphor, character/reference consistency |
+| `ai_i2v` | motion that adds meaning after a still is approved |
+| `ai_t2v` | rare motion concepts that have no useful starting frame |
+
+A strong 45-second piece might use 3–5 moving hero shots, 3–5 AI stills,
+2–4 real/stock/graphic shots, and editor-native typography. This is a routing
+heuristic, not a quota. Visual change does not imply new generated video.
+
+For prompts, keep appearance in `image_prompt` and movement in
+`motion_prompt`. Preserve the exact prompt and any rewritten version; a seed
+alone is not reproducibility.
+
+```sh
+video-ai project approve storyboard
+```
+
+## 7. Establish the look with FLUX.2 Klein stills
 
 ```sh
 systemctl --user start comfyui
-# Open http://127.0.0.1:8188 and render into the configured ComfyUI exports.
-systemctl --user stop comfyui
+# open http://127.0.0.1:8188
 ```
 
-Do not download a random video merely because its title says “copyright free.”
-Use footage you created, public-domain material you verified, or material with
-an explicit license that covers your use. Save the license or permission in
-`research/`.
+Use the installed `flux2-klein-4b-text-to-image.json` workflow for cheap
+candidate compositions and `flux2-klein-4b-image-edit.json` for character,
+object, environment, or style continuity from approved references. The 4B
+distilled model is the four-step Apache-2.0 production default.
 
----
+Generate several compositions before animating anything. A still should have a
+single readable idea, strong silhouette, deliberate caption-safe negative
+space, no generated typography, and a subject that survives 9:16 cropping.
 
-## 7. Music, captions, and enhancement
-
-Music is optional. The voice and joke must remain clear without it. For local
-music, start ACE-Step and drive its API on `127.0.0.1:8001`:
+You can work visually in ComfyUI, or export a known-good graph in API format,
+replace values with the tokens documented in `08_workflows/README.md`, and set
+that workflow path in `edit_plan.csv`:
 
 ```sh
-systemctl --user start ace-step
-# Generate and save the accepted track under audio/.
-systemctl --user stop ace-step
+video-ai project render shot_003
 ```
 
-You can instead use the YouTube Audio Library and retain any required
-attribution: <https://support.google.com/youtube/answer/3376882>. Generated
-music may require an AI-content disclosure when you upload.
-
-Generate captions from the locked narration:
+The API runner queues only a locked storyboard record and saves candidate
+files plus workflow/input/prompt hashes and seed. Either way, selection is
+human:
 
 ```sh
-video-ai-caption audio/narration.wav \
-  --model large-v3 \
-  --output_dir captions \
-  --output_format srt
+video-ai project select shot_003 05_stills/candidates/shot_003_take_04.png
 ```
 
-WhisperX supplies timing; Resolve supplies the final font, size, emphasis,
-animation, and line breaks. Review every caption rather than publishing the raw
-transcription.
+## 8. Generate motion selectively with Wan 2.2
 
-Only enhance clips that need it:
+For every `ai_i2v` shot, start from the approved FLUX still and use the
+installed Wan 2.2 TI2V-5B image-to-video workflow. The normal production target
+is portrait 704×1280 at the model's native 24 fps. Request limited, legible
+movement: a controlled push, one subject action, restrained environmental
+motion. Excess motion is where scenes melt.
+
+Use two tiers:
+
+- **Draft:** enough quality and one or two seeds to decide whether motion helps.
+- **Final:** normal Wan quality, multiple seeds only for approved hero shots.
+
+If motion adds nothing, keep the PNG and make the pan/zoom in Resolve. Use RIFE
+only when interpolation solves a visible cadence problem; do not convert 24 to
+30 fps merely because the video is vertical.
 
 ```sh
-# Double a generated clip's frame rate.
-video-ai-rife shots/raw.mp4 shots/smooth.mp4 2
-
-# Upscale an individual still or extracted frame.
-realesrgan-ncnn-vulkan \
-  -i assets/01-hook.png \
-  -o assets/01-hook-4x.png \
-  -n realesrgan-x4plus
+video-ai project select shot_007 06_video/candidates/shot_007_take_02.mp4
+video-ai project approve assets
 ```
 
----
+Save source/license/permission records in `00_admin/licenses.csv`, including
+stock, music, fonts, screenshots, likenesses, and voice references.
 
-## 8. Assemble in DaVinci Resolve
+## 9. Normalize exceptions and build the editor handoff
 
-Convert generated clips when Resolve does not handle their delivery codec
-smoothly:
+Inspect odd generated clips with `ffprobe` or `mediainfo`. When Resolve needs a
+predictable delivery file:
 
 ```sh
-video-ai proxy shots/smooth.mp4 resolve/smooth.dnxhr.mov
+video-ai normalize \
+  06_video/approved/shot_007.mp4 \
+  06_video/normalized/shot_007.mp4
 ```
 
-In Resolve:
+This makes 1080×1920 H.264/yuv420p with AAC audio while preserving source
+cadence. For a high-quality editing intermediate instead:
 
-1. Create a 1080×1920 vertical timeline.
-2. Place `audio/narration.wav` first and do not retime it casually.
-3. Put the background footage underneath the full narration.
-4. Place each meme image or generated shot at its planned narration beat.
-5. Change the visual whenever attention or meaning needs a reset—not merely on
-   a fixed timer.
-6. Import the SRT, correct it, and style captions inside the safe area.
-7. Add music and SFX below the voice, then check the mix on phone speakers.
-8. Add titles, logos, prices, and calls to action here rather than inside AI
-   imagery.
-9. Watch the full export once with sound and once muted before uploading.
+```sh
+video-ai proxy input.mp4 output.dnxhr.mov
+```
 
-Export an H.264 or H.265 vertical master appropriate for YouTube Shorts. Keep a
-copy in the project's `resolve/` directory.
+Update `asset_path` if the normalized file becomes authoritative, re-approve
+assets, then build the clean package:
 
----
+```sh
+video-ai project package
+video-ai project approve package
+```
 
-## 9. Rights, disclosure, and the feedback loop
+`09_delivery/` contains only approved images/video/audio, the narration master,
+captions, timeline, edit plan, licenses, generation log, environment snapshot,
+and SHA-256 checksums—not every failed generation.
 
-Before upload, confirm:
+## 10. Finish in DaVinci Resolve
 
-- The script is original and makes meaningful changes beyond the reference.
-- Every background clip, image, sound, font, and music track is yours, licensed,
-  or otherwise cleared for the intended use.
-- A synthetic likeness or cloned voice is not being used without permission.
-- Realistic AI-generated scenes and AI-generated music are disclosed in
-  YouTube Studio when required.
-- The description contains any required attribution.
+1. Create a 1080×1920 Rec.709 SDR timeline. Choose 24 fps for predominantly
+   Wan footage or 30 fps for a genuinely mixed 30 fps project.
+2. Put `narration_master.wav` at 00:00.000 and lock it.
+3. Import `captions.srt`; keep the upstream SRT boring and do typography here.
+4. Place visuals using `timeline.csv`; longer source clips are trimmed to the
+   authoritative intervals.
+5. Animate stills here when a crop, push, or pan is enough.
+6. Add music and SFX below the voice. Audition on phone speakers.
+7. Keep faces, evidence, and text away from platform UI-heavy edges.
+8. Watch without stopping for drift, dead stretches, repetitive synthetic
+   composition, morphing, hidden text, and cadence problems.
+9. Watch once muted: the visual logic should still read.
+10. Export H.264/AAC to `10_exports/master.mp4` and watch the exported file.
 
-A Content ID claim, copyright strike, and reused-content monetization decision
-are different systems. Permission also does not guarantee that a minimally
-changed or mass-produced channel will qualify for monetization. Build a format
-you can repeat, but give each video a distinct premise, substance, and creative
-point of view.
+```sh
+video-ai project approve master
+video-ai project status
+```
 
-Keep these current YouTube references with the workflow:
+## Rights, authenticity, and the feedback loop
 
-- Copyright and permissions:
-  <https://support.google.com/youtube/answer/2797466>
-- Copyright claims and strikes:
-  <https://support.google.com/youtube/answer/2814000>
-- Original, repetitive, and reused-content monetization rules:
-  <https://support.google.com/youtube/answer/1311392>
-- AI-content disclosure:
+The production default is Chatterbox + FLUX.2 Klein 4B + Wan 2.2 because their
+upstream code/model terms are materially clearer for commercial work than the
+restricted alternatives in this stack. This is workflow design, not legal
+advice; verify every asset and current platform rule for the actual use.
+
+Disclose realistic synthetic or altered content when required. A repeatable
+format is useful; a mass-produced noun-swapping template is not. Keep real
+point of view, evidence, performance, and editorial variation in every piece.
+
+After publishing, fill `00_admin/results.md` with retention, viewed/swiped,
+comments, confusion, and what to preserve/change. The compounding asset is the
+loop between your taste and audience evidence—not a single copied format.
+
+Current primary references:
+
+- FLUX.2 models and licenses: <https://github.com/black-forest-labs/flux2>
+- ComfyUI FLUX.2 Klein workflow/model layout:
+  <https://docs.comfy.org/tutorials/flux/flux-2-klein>
+- Wan 2.2 capabilities/license: <https://github.com/Wan-Video/Wan2.2>
+- WhisperX alignment: <https://github.com/m-bain/whisperX>
+- Chatterbox models: <https://github.com/resemble-ai/chatterbox>
+- YouTube synthetic-content disclosure:
   <https://support.google.com/youtube/answer/14328491>
-
-After publishing, record the result in `research/results.md`:
-
-```text
-Published URL:
-Published date:
-Hook:
-Length:
-Views after 24h / 7d:
-Viewed vs swiped away:
-Average view duration:
-Retention drop points:
-Comments or confusion:
-What to preserve next time:
-What to change next time:
-```
-
-The repeatable asset is not one copied script. It is the loop of finding a
-pattern, making an original version, measuring audience behavior, and improving
-the next one.
-
----
-
-## 10. Fast-path checklist
-
-Once the tools are installed and the visual style is established:
-
-```sh
-video-ai doctor
-video-ai new my-short-01
-cd ~/Games/VideoAI/projects/my-short-01
-video-ai transcript URL research/reference.txt
-
-# Claude/ChatGPT: structure → original script → shot list → image prompts
-# ChatGPT: generate and download stills into assets/
-
-video-ai-voice --text-file script.txt --output audio/narration.wav
-video-ai-caption audio/narration.wav --output_dir captions --output_format srt
-
-# Optional: ComfyUI/Wan, OBS, ACE-Step, RIFE, and Real-ESRGAN
-# Resolve: assemble, caption-style, mix, export, review, upload
-```
-
-Fifteen minutes is plausible only for a templated edit with a finished script,
-fast cloud image generations, and no local video renders. A polished original
-Short will often take longer; the goal of this system is a dependable workflow,
-not an arbitrary timer.
+- YouTube monetization/originality:
+  <https://support.google.com/youtube/answer/1311392>

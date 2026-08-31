@@ -48,6 +48,7 @@ in
       llm = "cd ~/development/llm";
       #sd    = "cd ~/development/stable-diffusion";
       comfy = "cd ~/development/stable-diffusion/ComfyUI";
+      video = "cd ~/Games/VideoAI/projects";
 
       home = "cd ~";
 

@@ -15,6 +15,7 @@ apps_manifest="${VIDEO_AI_APPS_MANIFEST:?VIDEO_AI_APPS_MANIFEST is not set}"
 models_manifest="${VIDEO_AI_MODELS_MANIFEST:?VIDEO_AI_MODELS_MANIFEST is not set}"
 workflows_manifest="${VIDEO_AI_WORKFLOWS_MANIFEST:?VIDEO_AI_WORKFLOWS_MANIFEST is not set}"
 python_cmd="${VIDEO_AI_PYTHON:-python3.11}"
+pipeline_script="${VIDEO_AI_PIPELINE_SCRIPT:?VIDEO_AI_PIPELINE_SCRIPT is not set}"
 reserve_gib="${VIDEO_AI_MIN_FREE_GIB:-100}"
 
 die() {
@@ -105,11 +106,24 @@ app_matches_selector() {
   local name="$1"
   local profile="$2"
   local selector="$3"
-  [[ "$selector" == "all" || "$selector" == "$name" || "$selector" == "$profile" ]]
+  [[ "$selector" == "all" || "$selector" == "$name" || "$selector" == "$profile" ]] && return 0
+  [[ "$selector" == "production" && "$profile" =~ ^(core|audio|enhancement)$ ]]
+}
+
+profile_matches_selector() {
+  local item_profile="$1"
+  local selector="$2"
+  [[ "$selector" == "all" || "$selector" == "$item_profile" ]] && return 0
+  [[ "$selector" == "production" && "$item_profile" =~ ^(core|stills|enhancement)$ ]]
 }
 
 sync_apps() {
   local selector="${1:-core}"
+  if [[ "$selector" == stills ]]; then
+    note "stills uses the core ComfyUI application"
+    sync_apps core
+    return
+  fi
   local matched=0
   local name profile url revision license target current actual partial
   init_layout
@@ -340,8 +354,7 @@ sync_env() {
   export UV_CACHE_DIR="$cache_root/uv"
   export HF_HOME="$cache_root/huggingface"
   case "$selector" in
-    core) sync_comfy_env ;;
-    comfyui) sync_comfy_env ;;
+    core|stills|comfyui) sync_comfy_env ;;
     audio)
       sync_chatterbox_env
       sync_locked_uv_env ace-step
@@ -352,6 +365,13 @@ sync_env() {
     wangp) sync_wangp_env ;;
     ovi) sync_ovi_env ;;
     enhancement|rife|practical-rife) sync_rife_env ;;
+    production)
+      sync_comfy_env
+      sync_chatterbox_env
+      sync_locked_uv_env ace-step
+      sync_locked_uv_env whisperx
+      sync_rife_env
+      ;;
     all)
       sync_comfy_env
       sync_chatterbox_env
@@ -404,7 +424,11 @@ sync_models() {
 
   restricted="$(jq -r --arg profile "$profile" '
     .[]
-    | select(($profile == "all" or .profile == $profile) and (.license | contains("CC-BY-NC")))
+    | select(
+        ($profile == "all" or .profile == $profile or
+          ($profile == "production" and (.profile == "core" or .profile == "stills" or .profile == "enhancement")))
+        and (.license | contains("CC-BY-NC"))
+      )
     | .name
   ' "$models_manifest")"
   if [[ -n "$restricted" && "${VIDEO_AI_ALLOW_RESTRICTED:-0}" != 1 ]]; then
@@ -413,7 +437,7 @@ sync_models() {
   fi
 
   while IFS=$'\t' read -r item_profile name url destination size sha256 license; do
-    [[ "$profile" == "all" || "$profile" == "$item_profile" ]] || continue
+    profile_matches_selector "$item_profile" "$profile" || continue
     matched=1
 
     target="$models_root/$destination"
@@ -455,8 +479,12 @@ sync_models() {
     printf '%s\t%s\t%s\n' "$name" "$sha256" "$license"
   done < <(jq -r '.[] | [.profile, .name, .url, .destination, (.size | tostring), .sha256, .license] | @tsv' "$models_manifest")
 
+  if [[ "$matched" != 1 && "$profile" =~ ^(audio|experiments)$ ]]; then
+    note "$profile uses upstream Hub weights cached on first use; there are no static manifest downloads"
+    return
+  fi
   [[ "$matched" == 1 ]] || die "unknown or empty model profile: $profile"
-  if [[ "$profile" == enhancement || "$profile" == all ]]; then
+  if [[ "$profile" == enhancement || "$profile" == production || "$profile" == all ]]; then
     prepare_rife_model
   fi
 }
@@ -465,42 +493,153 @@ sync_workflows() {
   local profile="${1:-core}"
   local destination="$state_root/comfyui/user/default/workflows/video-ai"
   local matched=0
-  local item_profile name url target partial
+  local item_profile name url transform target partial transformed
   init_layout
   mkdir -p "$destination"
-  while IFS=$'\t' read -r item_profile name url; do
-    [[ "$profile" == "all" || "$profile" == "$item_profile" ]] || continue
+  while IFS=$'\t' read -r item_profile name url transform; do
+    profile_matches_selector "$item_profile" "$profile" || continue
     matched=1
     target="$destination/$name"
     partial="$target.partial.$$"
     note "syncing workflow $name"
     curl --fail --location --retry 3 --output "$partial" "$url"
     jq -e . "$partial" >/dev/null
+    if [[ "$transform" == flux2-klein-fp8 ]]; then
+      transformed="$partial.transformed"
+      # The pinned upstream template opens with its 50-step base branch active.
+      # Keep both branches visible, but activate the four-step distilled branch
+      # and point its loader at the single verified FP8 production checkpoint.
+      jq '
+        walk(if type == "string" then gsub("flux-2-klein-4b\\.safetensors"; "flux-2-klein-4b-fp8.safetensors") else . end)
+        | .nodes |= map(
+            if (.id == 75 or .id == 9) then .mode = 4
+            elif (.id == 77 or .id == 78) then .mode = 0
+            else .
+            end
+          )
+      ' \
+        "$partial" >"$transformed"
+      mv "$transformed" "$partial"
+    elif [[ -n "$transform" ]]; then
+      die "unknown workflow transform for $name: $transform"
+    fi
     mv "$partial" "$target"
-  done < <(jq -r '.[] | [.profile, .name, .url] | @tsv' "$workflows_manifest")
+  done < <(jq -r '.[] | [.profile, .name, .url, (.transform // "")] | @tsv' "$workflows_manifest")
+  if [[ "$matched" != 1 && "$profile" =~ ^(audio|enhancement|experiments|ovi)$ ]]; then
+    note "$profile has no managed ComfyUI workflows"
+    return
+  fi
   [[ "$matched" == 1 ]] || die "unknown or empty workflow profile: $profile"
 }
 
 new_project() {
   local slug="${1:-}"
-  [[ "$slug" =~ ^[a-z0-9][a-z0-9._-]*$ ]] ||
-    die "project slug must contain only lowercase letters, numbers, dots, underscores, and hyphens"
   init_layout
-  local project="$projects_root/$slug"
-  [[ ! -e "$project" ]] || die "project already exists: $project"
-  mkdir -p \
-    "$project/research" \
-    "$project/assets" \
-    "$project/audio" \
-    "$project/captions" \
-    "$project/resolve" \
-    "$project/shots"
-  jq -n \
-    --arg slug "$slug" \
-    --arg created "$(date --iso-8601=seconds)" \
-    '{schema: 1, slug: $slug, createdAt: $created, generations: []}' >"$project/project.json"
-  chmod 700 "$project"
-  printf '%s\n' "$project"
+  "$python_cmd" "$pipeline_script" new "$slug"
+}
+
+resolve_project_path() {
+  local value="${1:-}"
+  local candidate
+  if [[ -n "$value" ]]; then
+    candidate="$value"
+    [[ -d "$candidate" ]] || candidate="$projects_root/$value"
+  else
+    candidate="$PWD"
+    while [[ "$candidate" != / && ! -f "$candidate/project.json" ]]; do
+      candidate="$(dirname "$candidate")"
+    done
+  fi
+  [[ -f "$candidate/project.json" ]] || die "project not found; cd into one or pass --project NAME"
+  realpath "$candidate"
+}
+
+project_voice_master() {
+  local project_value=""
+  if [[ "${1:-}" == --project ]]; then
+    project_value="${2:-}"
+    [[ -n "$project_value" ]] || die "--project requires a value"
+    shift 2
+  fi
+  [[ "$#" -ge 1 ]] || die "usage: video-ai project voice-master [--project NAME] INPUT.wav [...]"
+  local project target partial input index filter=""
+  project="$(resolve_project_path "$project_value")"
+  target="$project/02_voice/narration_master.wav"
+  partial="$project/02_voice/narration_master.partial.$$.wav"
+  [[ ! -e "$target" ]] || die "narration master already exists; move it aside before rebuilding"
+  local -a ffmpeg_inputs=()
+  index=0
+  for input in "$@"; do
+    [[ -f "$input" ]] || die "voice take not found: $input"
+    ffmpeg_inputs+=( -i "$input" )
+    filter+="[$index:a]"
+    index=$((index + 1))
+  done
+  if (( index == 1 )); then
+    ffmpeg -hide_banner -y "${ffmpeg_inputs[@]}" -vn -ar 48000 -ac 1 -c:a pcm_s24le "$partial"
+  else
+    filter+="concat=n=$index:v=0:a=1[outa]"
+    ffmpeg -hide_banner -y "${ffmpeg_inputs[@]}" -filter_complex "$filter" -map '[outa]' \
+      -ar 48000 -ac 1 -c:a pcm_s24le "$partial"
+  fi
+  mv "$partial" "$target"
+  sha256sum "$target"
+}
+
+project_align() {
+  local project_value=""
+  local language=""
+  local model="large-v3"
+  while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+      --project) project_value="${2:-}"; shift 2 ;;
+      --language) language="${2:-}"; shift 2 ;;
+      --model) model="${2:-}"; shift 2 ;;
+      *) die "unknown project align option: $1" ;;
+    esac
+  done
+  local project master
+  project="$(resolve_project_path "$project_value")"
+  master="$project/02_voice/narration_master.wav"
+  [[ -f "$master" ]] || die "narration master not found: $master"
+  if [[ -z "$language" ]]; then
+    language="$(jq -r '.language // "en"' "$project/project.json")"
+  fi
+  video-ai-caption "$master" \
+    --model "$model" \
+    --language "$language" \
+    --device cuda \
+    --compute_type float16 \
+    --batch_size 8 \
+    --output_dir "$project/03_alignment" \
+    --output_format json
+  "$python_cmd" "$pipeline_script" derive --project "$project" --force
+}
+
+normalize_media() {
+  local input="${1:-}"
+  local output="${2:-}"
+  [[ -f "$input" ]] || die "input video not found: $input"
+  [[ -n "$output" ]] || die "usage: video-ai normalize INPUT OUTPUT"
+  [[ "$output" == *.* ]] || die "normalized output needs a file extension"
+  mkdir -p "$(dirname "$output")"
+  local partial="${output%.*}.partial.$$.${output##*.}"
+  ffmpeg -hide_banner -y -i "$input" \
+    -map 0:v:0 -map '0:a?' \
+    -vf 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p' \
+    -c:v libx264 -preset medium -crf 18 -movflags +faststart \
+    -c:a aac -b:a 192k -ar 48000 "$partial"
+  mv "$partial" "$output"
+  ffprobe -v error -show_entries stream=codec_name,width,height,pix_fmt,r_frame_rate,avg_frame_rate \
+    -of json "$output"
+}
+
+sync_production() {
+  note "syncing the commercial-first production profile"
+  sync_apps production
+  sync_env production
+  sync_models production
+  sync_workflows production
 }
 
 make_proxy() {
@@ -623,6 +762,7 @@ transcribe_url() {
 doctor() {
   local failures=0
   local mount_target
+  mkdir -p "${NUMBA_CACHE_DIR:-$cache_root/numba}"
   printf '%-24s %s\n' 'Games root' "$games_root"
   if mount_target="$(findmnt -n -o TARGET -T "$games_root" 2>/dev/null)" && [[ "$mount_target" == "$games_root" ]]; then
     printf '%-24s %s\n' 'Games mount' 'ok'
@@ -648,6 +788,22 @@ doctor() {
       printf '%-24s %s\n' "$app environment" 'not synced'
     fi
   done
+
+  local model_destination model_size model_target actual_size
+  while IFS=$'\t' read -r model_destination model_size; do
+    model_target="$models_root/$model_destination"
+    if [[ -f "$model_target" ]]; then
+      actual_size="$(stat -c %s "$model_target")"
+      if [[ "$actual_size" == "$model_size" ]]; then
+        printf '%-24s %s\n' "$(basename "$model_destination")" 'ready'
+      else
+        printf '%-24s %s\n' "$(basename "$model_destination")" "WRONG SIZE ($actual_size)"
+        failures=$((failures + 1))
+      fi
+    else
+      printf '%-24s %s\n' "$(basename "$model_destination")" 'not synced'
+    fi
+  done < <(jq -r '.[] | select(.profile == "core" or .profile == "stills") | [.destination, (.size | tostring)] | @tsv' "$models_manifest")
 
   if [[ -x "$envs_root/comfyui/current/bin/python" ]]; then
     if "$envs_root/comfyui/current/bin/python" -c \
@@ -721,7 +877,7 @@ status_report() {
   du -sh "$models_root" "$video_ai_root" 2>/dev/null || true
   printf '\nServices:\n'
   systemctl --user --no-pager --plain --type=service --state=running \
-    'comfyui.service' 'wangp.service' 'ace-step.service' 2>/dev/null || true
+    'comfyui.service' 'wangp.service' 'ace-step.service' 'ovi.service' 2>/dev/null || true
 }
 
 usage() {
@@ -732,16 +888,26 @@ Commands:
   init                         Create the guarded Games-volume layout
   doctor                       Check mounts, capacity, NVIDIA, and environments
   status                       Show pinned revisions, disk use, and services
+  sync production              Sync the complete commercial-first stack
   apps sync [name|profile]     Sync pinned application sources (default: core)
   env sync [name|profile]      Build isolated Python environments (default: core)
   models sync [profile]        Download checksum-pinned models (default: core)
   workflows sync [profile]     Install pinned ComfyUI workflows (default: core)
   new <slug>                   Create a provenance-ready project directory
+  project status|next|check    Inspect the current project's human gates
+  project approve <gate>       Hash-lock a reviewed gate and its artifacts
+  project voice-master [wav...]  Assemble accepted takes as 48 kHz PCM24 mono
+  project align                Align the locked voice and derive timing files
+  project derive              Rebuild captions and proposed visual beats
+  project render <shot_id>     Queue a tokenized API workflow in ComfyUI
+  project select <shot> <file> Promote a human-selected candidate
+  project package             Build a clean, checksum-backed editor package
   transcript <url> [out] [lang]
                                Save clean text, source VTT, and metadata
+  normalize <input> <output>   Make a 1080x1920 H.264 file, preserving cadence
   proxy <input> [output]       Make a Resolve-friendly DNxHR/PCM intermediate
 
-Profiles: core, audio, experiments, ovi, enhancement, all
+Profiles: production, core, stills, audio, experiments, ovi, enhancement, all
 
 Restricted model artifacts are refused unless VIDEO_AI_ALLOW_RESTRICTED=1 is
 set after reviewing their license and intended use.
@@ -754,6 +920,10 @@ case "$command" in
   init) init_layout ;;
   doctor) doctor ;;
   status) status_report ;;
+  sync)
+    [[ "${1:-}" == production ]] || die "expected: video-ai sync production"
+    sync_production
+    ;;
   apps)
     [[ "${1:-}" == sync ]] || die "expected: video-ai apps sync [selector]"
     shift
@@ -775,8 +945,21 @@ case "$command" in
     sync_workflows "${1:-core}"
     ;;
   new) new_project "${1:-}" ;;
+  project)
+    subcommand="${1:-}"
+    shift || true
+    case "$subcommand" in
+      voice-master) project_voice_master "$@" ;;
+      align) project_align "$@" ;;
+      status|next|check|approve|derive|render|select|package)
+        "$python_cmd" "$pipeline_script" "$subcommand" "$@"
+        ;;
+      *) die "unknown project command: $subcommand (run video-ai help)" ;;
+    esac
+    ;;
   transcript) transcribe_url "$@" ;;
   proxy) make_proxy "${1:-}" "${2:-}" ;;
+  normalize) normalize_media "${1:-}" "${2:-}" ;;
   help|-h|--help|'') usage ;;
   *) die "unknown command: $command (run video-ai help)" ;;
 esac

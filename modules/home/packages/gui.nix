@@ -2,6 +2,7 @@
 let
   hasThinky = pkgs.thinky.appimageAvailable or false;
   hasTalysman = pkgs.talysman.appimageAvailable or false;
+  hasDreamrunner = pkgs.dreamrunner.releaseAvailable or false;
   metabasePort = "3010";
   metabaseWrapped = pkgs.symlinkJoin {
     name = "metabase-wrapped";
@@ -22,6 +23,10 @@ in
     Skipping Talysman package: AppImage source is unavailable.
     Build it from the Talysman source repo with `talysman-dist` (pnpm run release:local)
     (writes and stages pkgs/snorlax/releases/<host>.nix), then rebuild NixOS.
+  '' ++ lib.optional (!hasDreamrunner) ''
+    Skipping Dreamrunner package: local release is unavailable.
+    Run `dreamrunner-update` from the Dreamrunner checkout setup to stage the
+    Rust binary and rebuild NixOS.
   '';
 
   home.packages = with pkgs;
@@ -58,6 +63,7 @@ in
     ]
     ++ lib.optional hasThinky thinky
     ++ lib.optional hasTalysman talysman
+    ++ lib.optional hasDreamrunner dreamrunner
     ++ [
       ## Utility
       dconf-editor

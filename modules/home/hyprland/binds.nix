@@ -141,7 +141,7 @@ let
     (mkBind "ALT + SHIFT + V" (exec "vicinae cmd launch clipboard:history"))
     (mkBind "ALT + Z" (exec "toggle-monitor"))
     (mkBind "ALT + B" (exec "bluetoothctl connect 94:DB:56:F7:A5:C7"))
-    (mkBind "ALT + SHIFT + B" (exec "overskride"))
+    (mkBind "ALT + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
     (mkBind "ALT + CTRL + SHIFT + B" (exec "bluetoothctl disconnect 94:DB:56:F7:A5:C7"))
   ];
 

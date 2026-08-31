@@ -22,6 +22,8 @@ let
   workflowsManifest = ./manifests/workflows.json;
   voiceScript = ./python/voice.py;
   transcriptScript = ./python/transcript.py;
+  pipelineScript = ./python/pipeline.py;
+  projectTemplates = ./templates;
   guideDoc = ./GUIDE.md;
   workflowGuideDoc = ./WORKFLOW.md;
 
@@ -55,6 +57,10 @@ let
     export VIDEO_AI_EXPORTS=${lib.escapeShellArg exports}
     export VIDEO_AI_TMP=${lib.escapeShellArg tmp}
     export VIDEO_AI_PYTHON=${lib.escapeShellArg "${pkgs.python311}/bin/python3.11"}
+    # Numba cannot derive a writable cache location for Python modules reached
+    # through immutable Nix/store-backed environments. Give every launcher one
+    # explicit cache so audio imports and diagnostics behave identically.
+    export NUMBA_CACHE_DIR=${lib.escapeShellArg "${cache}/numba"}
     export LD_LIBRARY_PATH=${lib.escapeShellArg runtimeLibraryPath}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
   '';
 
@@ -114,6 +120,8 @@ let
       export VIDEO_AI_MODELS_MANIFEST=${lib.escapeShellArg modelsManifest}
       export VIDEO_AI_WORKFLOWS_MANIFEST=${lib.escapeShellArg workflowsManifest}
       export VIDEO_AI_TRANSCRIPT_SCRIPT=${lib.escapeShellArg transcriptScript}
+      export VIDEO_AI_PIPELINE_SCRIPT=${lib.escapeShellArg pipelineScript}
+      export VIDEO_AI_TEMPLATES=${lib.escapeShellArg projectTemplates}
     '';
   };
 

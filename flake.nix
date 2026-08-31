@@ -96,6 +96,7 @@
         inherit (pkgs)
           chatgpt-linux
           claude-desktop
+          dreamrunner
           readfence
           screenplain
           snorlax
