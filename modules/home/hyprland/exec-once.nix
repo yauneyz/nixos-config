@@ -17,10 +17,6 @@ let
     # caffeine-ng ships its own XDG autostart .desktop file, which systemd's
     # xdg-desktop-autostart.target already picks up (app-caffeine@autostart.service) --
     # launching it here too produced two tray icons.
-    # "both" also grabs the primary selection, which wl-clip-persist's own docs
-    # warn breaks the selection system in some apps; a wedged read early in
-    # startup leaves GTK apps (pgtk Emacs) unable to paste until restarted.
-    "wl-clip-persist --clipboard regular"
   ]
   ++ backendCommands
   ++ [
