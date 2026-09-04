@@ -15,24 +15,31 @@ let
   };
 in
 {
-  warnings = lib.optional (!hasThinky) ''
-    Skipping Thinky package: AppImage source is unavailable.
-    Rebuild it from the electron repo with `npm run release:local`
-    (writes and stages pkgs/thinky/releases/<host>.nix), then rebuild NixOS.
-  '' ++ lib.optional (!hasTalysman) ''
-    Skipping Talysman package: AppImage source is unavailable.
-    Build it from the Talysman source repo with `talysman-dist` (pnpm run release:local)
-    (writes and stages pkgs/snorlax/releases/<host>.nix), then rebuild NixOS.
-  '' ++ lib.optional (!hasDreamrunner) ''
-    Skipping Dreamrunner package: local release is unavailable.
-    Run `dreamrunner-update` from the Dreamrunner checkout setup to stage the
-    Rust binary and rebuild NixOS.
-  '';
+  warnings =
+    lib.optional (!hasThinky) ''
+      Skipping Thinky package: AppImage source is unavailable.
+      Rebuild it from the electron repo with `npm run release:local`
+      (writes and stages pkgs/thinky/releases/<host>.nix), then rebuild NixOS.
+    ''
+    ++ lib.optional (!hasTalysman) ''
+      Skipping Talysman package: AppImage source is unavailable.
+      Build it from the Talysman source repo with `talysman-dist` (pnpm run release:local)
+      (writes and stages pkgs/snorlax/releases/<host>.nix), then rebuild NixOS.
+    ''
+    ++ lib.optional (!hasDreamrunner) ''
+      Skipping Dreamrunner package: local release is unavailable.
+      Run `dreamrunner-update` from the Dreamrunner checkout setup to stage the
+      Rust binary and rebuild NixOS.
+    '';
 
-  home.packages = with pkgs;
+  home.packages =
+    with pkgs;
     [
       ## Browser
       google-chrome
+
+      ## VPN
+      proton-vpn
 
       ## Multimedia
       audacity
@@ -40,13 +47,16 @@ in
       gimp
       gpu-screen-recorder
       gpu-screen-recorder-gtk
+      jellyfin-desktop
+      kodi-wayland
       loupe
       media-downloader
+      moonlight-qt
       obs-studio
       pavucontrol
       shotcut
       simplescreenrecorder
-      wf-recorder   # Wayland screen recorder
+      wf-recorder # Wayland screen recorder
       spotify
       soundwireserver
       video-trimmer

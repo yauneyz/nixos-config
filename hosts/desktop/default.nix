@@ -2,6 +2,9 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./jellyfin.nix
+    ./kodi-media.nix
+    ./sunshine.nix
     ./../../modules/core
   ];
 

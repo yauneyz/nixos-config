@@ -18,6 +18,7 @@
     ./security.nix
     ./services.nix
     ./syncthing.nix
+    ./tailscale.nix
     ./steam.nix
     ./system.nix
     ./flatpak.nix
