@@ -273,7 +273,7 @@ in
     voiceLauncher
     oviLauncher
     rifeLauncher
-    pkgs.davinci-resolve
+    # pkgs.davinci-resolve # TODO: re-enable once the pinned installer hash is refreshed
     pkgs.mediainfo
     pkgs.realesrgan-ncnn-vulkan
     pkgs.vulkan-tools

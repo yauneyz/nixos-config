@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  host,
+  lib,
+  ...
+}:
 let
   lua = lib.generators.mkLuaInline;
   mkBindWith = keys: dispatcher: options: {
@@ -204,6 +209,9 @@ let
     (mkBind "ALT + mouse_up" ''hl.dsp.focus({ workspace = "e+1" })'')
     (mkBindWith "ALT + mouse:272" "hl.dsp.window.drag()" { mouse = true; })
     (mkBindWith "ALT + mouse:273" "hl.dsp.window.resize()" { mouse = true; })
+  ]
+  ++ lib.optionals (host == "desktop") [
+    (mkBind "ALT + SHIFT + M" (exec "toggle-monitor-brightness"))
   ]
   ++ backendHardwareBinds;
 in

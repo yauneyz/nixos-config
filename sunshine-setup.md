@@ -8,6 +8,9 @@ do not need Chromecast support.
 For direct library playback without screen capture, see the
 [Kodi setup](kodi-setup.md).
 
+For play/pause and other desktop media controls from an Android phone, see the
+[KDE Connect phone remote guide](kde-connect-setup.md).
+
 ## What is configured
 
 The desktop imports `hosts/desktop/sunshine.nix`, which:
@@ -15,8 +18,11 @@ The desktop imports `hosts/desktop/sunshine.nix`, which:
 - starts Sunshine with the Hyprland graphical session;
 - opens the Sunshine/Moonlight ports in the NixOS firewall;
 - captures Hyprland through the `wlr` screen-capture protocol;
-- uses the NVIDIA GPU's NVENC hardware encoder; and
-- gives `zac` access to `uinput` for forwarded controllers, keyboards, and mice.
+- pins capture to the landscape `DP-2` display;
+- builds Sunshine with scoped CUDA support and uses the NVIDIA GPU's NVENC
+  hardware encoder; and
+- gives `zac` access to `uinput` and `uhid` for forwarded controllers,
+  keyboards, and mice.
 
 The shared GUI package list installs the Moonlight client on both the desktop
 and laptop. Tailscale is enabled on those two machines so the laptop can reach
@@ -122,6 +128,19 @@ Screen capture is not the same as sending the original video file. It encodes
 what appears on the desktop, so it uses some GPU resources and the output is
 limited to the selected stream resolution and frame rate. DRM-protected video
 may intentionally produce a black image; normal VLC files are unaffected.
+
+### Control playback from a phone
+
+The desktop also runs KDE Connect. Its Android app can control VLC and other
+MPRIS-compatible players while Moonlight remains full-screen on the TV. Open
+the paired desktop in the phone app and select **Multimedia control** for
+play/pause, seeking, track selection, and volume. Full pairing and remote-use
+instructions are in the [KDE Connect phone remote guide](kde-connect-setup.md).
+
+The TCL remote's dedicated media key is not currently forwarded by Moonlight
+Android. Native TV applications such as Kodi and Jellyfin can use that remote
+directly; for a streamed desktop player, use KDE Connect or a keyboard key that
+Moonlight forwards.
 
 ## Steam gaming
 
@@ -406,20 +425,52 @@ Review the startup log for the display names/IDs Sunshine detects:
 journalctl --user -u sunshine -b
 ```
 
-Add the reported desired display to the declarative settings:
+Sunshine currently enumerates the portrait display as `DP-1` and the landscape
+display as `DP-2`. The configuration pins the stable Wayland output name:
 
 ```nix
 settings = {
   capture = "wlr";
   encoder = "nvenc";
-  output_name = "DISPLAY_REPORTED_BY_SUNSHINE";
+  output_name = "DP-2";
 };
 ```
 
-Rebuild and restart Sunshine afterward.
+The numeric ID works during Sunshine's encoder probe but is ignored by real
+wlroots streaming sessions in the currently pinned release. Use the output name
+rather than changing this back to `1`.
+
+### Darken the physical monitors without removing the streamed output
+
+Do not use the Hyprland DPMS toggle while depending on the physical output for
+Sunshine. DPMS can stop frame production or remove the output that `wlr`
+capture is using.
+
+Both LG monitors expose DDC/CI brightness control. DDC changes the physical
+panel while leaving the Hyprland output logically enabled. Press
+**Mod+Shift+M** (`Alt+Shift+M` in the Hyprland configuration) to toggle them.
+
+The `toggle-monitor-brightness` script records each connected monitor's current
+brightness under `~/.local/state/monitor-brightness-toggle/`, then sets them to
+zero. Pressing the shortcut again restores the saved per-monitor values. It
+keys values by DRM connector, so changed DDC display numbering cannot swap the
+two monitors' saved values.
+
+The same toggle can be run from a terminal:
+
+```console
+toggle-monitor-brightness
+```
+
+Brightness zero is intentionally used instead of the DDC power-off command.
+Some DisplayPort monitors disconnect their output when powered down, which
+would make Sunshine lose the selected display. This method makes the panels as
+dark as their firmware permits while preserving capture.
 
 ### The stream stutters or has high latency
 
+- Confirm the startup log contains `Found H.264 encoder: h264_nvenc [nvenc]`;
+  `libx264 [software]` means Sunshine is using the CPU instead of the RTX 4090.
 - Enable Game Mode on the TV.
 - Lower Moonlight to 1080p60 and 20 Mbps as a baseline.
 - Prefer Ethernet for the TV, or use 5/6 GHz Wi-Fi with a strong signal.

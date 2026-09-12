@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  host,
+  lib,
+  pkgs,
+  ...
+}:
 let
   scriptDir = ./scripts;
   scriptEntries = builtins.readDir scriptDir;
@@ -29,10 +34,13 @@ let
   };
 in
 {
-  home.packages = scripts ++ [
-    rebuildScript
-    llmServe
-  ];
+  home.packages =
+    scripts
+    ++ [
+      rebuildScript
+      llmServe
+    ]
+    ++ lib.optionals (host == "desktop") [ pkgs.ddcutil ];
 
   xdg.configFile."llm-serve/config.toml".source = ./llm-serve.toml;
 }

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, host, lib, ... }:
 let
   backendCommands =
     if config.zac.desktop.shell.backend == "quickshell" then
@@ -18,6 +18,7 @@ let
     # xdg-desktop-autostart.target already picks up (app-caffeine@autostart.service) --
     # launching it here too produced two tray icons.
   ]
+  ++ lib.optionals (host == "desktop") [ "kdeconnect-indicator" ]
   ++ backendCommands
   ++ [
     "udiskie --automount --notify --smart-tray"

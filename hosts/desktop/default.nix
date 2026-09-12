@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
     ./jellyfin.nix
+    ./kde-connect.nix
     ./kodi-media.nix
     ./sunshine.nix
     ./../../modules/core

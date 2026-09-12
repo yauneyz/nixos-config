@@ -12,4 +12,9 @@
         # relay traffic. Authentication is deliberately completed interactively.
         openFirewall = true;
       };
+
+  # Cross-host SSH (e.g. laptop -> desktop for ML workloads) rides Tailscale's
+  # built-in SSH server rather than OpenSSH: no authorized_keys to maintain,
+  # nothing to expose on the LAN. Run `enable-ssh-tunnel` once per machine
+  # (see modules/home/scripts/scripts/enable-ssh-tunnel.sh) to turn it on.
 }

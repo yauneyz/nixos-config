@@ -24,6 +24,7 @@ let
     "Videos" = mkDataLink "Videos";
     "Desktop" = mkDataLink "Desktop";
     "Writing" = mkDataLink "Writing";
+    "Torrents" = mkDataLink "Torrents";
     "org" = mkDataLink "org";
     "Sheet Music" = mkDataLink "Sheet Music";
     "Main" = mkDataLink "Main";
