@@ -13,6 +13,7 @@
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+    context                 # user@host, shown only over ssh or as root
     dir                     # current directory
     vcs                     # git status
     newline                 # \n
@@ -76,12 +77,22 @@
   typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
   typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_{LEFT,RIGHT}_WHITESPACE=
 
-  typeset -g POWERLEVEL9K_DIR_BACKGROUND=160
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
+  # Identical on every machine; the split is local vs. remote, not which box.
+  # Local: white path on red. Over ssh: dark path on amber, matching the
+  # `context` segment that appears alongside it.
+  if [[ -n $SSH_CONNECTION ]]; then
+    typeset -g POWERLEVEL9K_DIR_BACKGROUND=3
+    typeset -g POWERLEVEL9K_DIR_FOREGROUND=0
+    typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=236
+    typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=0
+  else
+    typeset -g POWERLEVEL9K_DIR_BACKGROUND=160
+    typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
+    typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=250
+    typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=255
+  fi
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=250
-  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=255
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
 
   typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER=".git"
