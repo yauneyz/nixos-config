@@ -2,128 +2,113 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  autoPatchelfHook,
+  buildFHSEnv,
   dpkg,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  coreutils,
-  cups,
-  dbus,
-  dconf,
-  expat,
-  git,
-  gsettings-desktop-schemas,
-  gtk3,
-  glib,
-  libdrm,
-  libgbm,
-  libGL,
-  libnotify,
-  libusb1,
-  libx11,
-  libxcb,
-  libxcomposite,
-  libxdamage,
-  libxext,
-  libxfixes,
-  libxkbcommon,
-  libxrandr,
-  nspr,
-  nss,
-  pango,
-  systemdLibs,
-  xdg-utils,
+  writeShellScript,
 }:
 
 let
   source = import ./source.nix;
+
+  # The bundled Electron binary must NOT be patched: rewriting its ELF headers
+  # makes Node's diagnostic-report generator crash with SIGILL, which kills the
+  # whole app as soon as the git repo watcher starts on an open project.
+  # Run it inside an FHS sandbox instead, the way upstream ships it.
+  unwrapped = stdenvNoCC.mkDerivation {
+    pname = "chatgpt-linux-unwrapped";
+    inherit (source) version;
+
+    src = fetchurl source.src;
+
+    nativeBuildInputs = [ dpkg ];
+
+    dontPatchELF = true;
+    dontStrip = true;
+
+    unpackPhase = ''
+      runHook preUnpack
+      dpkg-deb --fsys-tarfile "$src" | tar --extract
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/lib" "$out/share"
+      cp -r usr/lib/chatgpt "$out/lib/"
+      cp -r usr/share/applications usr/share/pixmaps "$out/share/"
+
+      runHook postInstall
+    '';
+  };
+
+  launcher = writeShellScript "chatgpt-launcher" ''
+    exec "${unwrapped}/lib/chatgpt/ChatGPT" \
+      ''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} \
+      "$@"
+  '';
 in
-stdenvNoCC.mkDerivation {
-  pname = "chatgpt-linux";
+buildFHSEnv {
+  pname = "chatgpt";
   inherit (source) version;
 
-  src = fetchurl source.src;
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      alsa-lib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      cairo
+      coreutils
+      cups
+      dbus
+      dconf
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      git
+      glib
+      gsettings-desktop-schemas
+      gtk3
+      libdrm
+      libgbm
+      libGL
+      libglvnd
+      libnotify
+      libpulseaudio
+      libusb1
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxkbcommon
+      libxrandr
+      mesa
+      nspr
+      nss
+      pango
+      systemdLibs
+      xdg-utils
+    ])
+    ++ [ pkgs.stdenv.cc.cc.lib ]
+    ++ (with pkgs.xorg; [
+      libXScrnSaver
+      libXi
+      libXrender
+      libXtst
+      libxshmfence
+    ]);
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    makeWrapper
-  ];
+  runScript = launcher;
 
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    gtk3
-    glib
-    libdrm
-    libgbm
-    libGL
-    libnotify
-    libusb1
-    libx11
-    libxcb
-    libxcomposite
-    libxdamage
-    libxext
-    libxfixes
-    libxkbcommon
-    libxrandr
-    nspr
-    nss
-    pango
-    systemdLibs
-  ];
-
-  # These shims integrate with Qt file dialogs only when a matching Qt runtime
-  # is present. ChatGPT works without either optional library.
-  autoPatchelfIgnoreMissingDeps = [
-    "libQt5Core.so.5"
-    "libQt5Gui.so.5"
-    "libQt5Widgets.so.5"
-    "libQt6Core.so.6"
-    "libQt6Gui.so.6"
-    "libQt6Widgets.so.6"
-    "libc.musl-x86_64.so.1"
-  ];
-
-  unpackPhase = ''
-    runHook preUnpack
-    dpkg-deb --fsys-tarfile "$src" | tar --extract
-    runHook postUnpack
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/bin" "$out/lib" "$out/share"
-    cp -r usr/lib/chatgpt "$out/lib/"
-    cp -r usr/share/applications usr/share/pixmaps "$out/share/"
-
-    makeWrapper "$out/lib/chatgpt/ChatGPT" "$out/bin/chatgpt" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix PATH : "${
-        lib.makeBinPath [
-          coreutils
-          git
-          xdg-utils
-        ]
-      }" \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
-      --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-
-    runHook postInstall
+  extraInstallCommands = ''
+    mkdir -p "$out/share"
+    cp -r "${unwrapped}/share/applications" "$out/share/"
+    cp -r "${unwrapped}/share/pixmaps" "$out/share/"
   '';
 
   meta = {
