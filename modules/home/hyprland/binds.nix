@@ -192,6 +192,7 @@ let
   utilityBinds = [
     (mkBind "ALT + SHIFT + S" "hl.dsp.dpms({})")
     (mkBind "ALT + SHIFT + Escape" (exec "power-menu"))
+    (mkBind "SUPER + SHIFT + G" (exec "gba-toggle"))
     (mkBind "Print" (exec "screenshot --copy"))
 
     (mkBind "ALT + CTRL + R" (exec "record-lando-video"))

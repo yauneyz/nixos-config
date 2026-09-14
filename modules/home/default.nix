@@ -36,6 +36,7 @@
     ./packages                        # other packages
     ./quickshell                     # native desktop shell + legacy backend switch
     ./retroarch.nix
+    ./gba-toggle.nix
     ./rofi/rofi.nix                   # launcher
     ./scripts/scripts.nix             # personal scripts
     ./snorlax.nix                     # Talysman browser native-messaging host
