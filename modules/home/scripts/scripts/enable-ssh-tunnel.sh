@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# One-shot setup for cross-machine SSH between nixos-config hosts (desktop <->
-# laptop). Uses Tailscale SSH instead of managing OpenSSH keys: tailscaled
-# runs its own SSH server bound to the tailnet identity, so there is no
-# authorized_keys file to maintain and no port to open on the LAN/internet.
+# Interactive Tailscale login for a machine that isn't on the tailnet yet
+# (fresh install, or after a re-auth). The SSH server itself is now declarative
+# - modules/core/tailscale.nix runs `tailscale set --ssh` on every activation -
+# so this script only covers the part that has to be done by a human.
 #
-# Run this once per machine (it's idempotent - safe to re-run).
+# Idempotent: safe to re-run.
 
-echo "Requesting Tailscale SSH access for this machine..."
+echo "Bringing this machine onto the tailnet (SSH server is enabled by NixOS)..."
 sudo tailscale up --ssh
 
 echo
 echo "Done. This machine's tailnet name/IP:"
 tailscale status --self --json | grep -E '"DNSName"|"TailscaleIPs"' || true
 echo
-echo "From the other machine (once it has also run this script), connect with:"
-echo "  ssh zac@<this-machine-tailnet-name>"
+echo "From the other machine, connect with the aliases in modules/home/ssh.nix:"
+echo "  ssh desktop   (or: ssh-desktop)"
+echo "  ssh laptop    (or: ssh-laptop)"
 echo
-echo "If the connection is refused, check the tailnet's ACL policy at"
-echo "https://login.tailscale.com/admin/acls includes an ssh rule permitting"
-echo "this - the default personal-account policy already does."
+echo "If a connection asks you to 'visit https://login.tailscale.com/a/...',"
+echo "that is the tailnet ACL policy using ssh action \"check\": approve once in"
+echo "the browser and it is cached for the policy's checkPeriod (12h by"
+echo "default). Switch that rule to action \"accept\" at"
+echo "https://login.tailscale.com/admin/acls to stop being asked."

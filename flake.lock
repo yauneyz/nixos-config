@@ -628,11 +628,11 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "lastModified": 1787611281,
-        "narHash": "sha256-wd4jSoqVyWyVI+7/T0K4yuw5mE3ZyrkDqNPw6rmQFTo=",
+        "lastModified": 1788951342,
+        "narHash": "sha256-RbPNw41QyGAK35NJOAbLz54fYo0EbqATaAl3ty+JmIM=",
         "ref": "refs/heads/main",
-        "rev": "8da3a0123328d3c191f1b4135d742041df4649d8",
-        "revCount": 127,
+        "rev": "d53cadca6a0ce81ca729b91f8c84250bdd5fcc70",
+        "revCount": 149,
         "type": "git",
         "url": "file:///home/zac/.snorlax-src"
       },
