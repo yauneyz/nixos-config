@@ -26,6 +26,5 @@
     ./wayland.nix
     ./virtualization.nix
     ./snorlax.nix
-    #./vr.nix
   ];
 }

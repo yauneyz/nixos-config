@@ -18,6 +18,7 @@ rec {
   };
   talysman = pkgs.callPackage ./snorlax { releaseHost = host; };
   talysman-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
+  talysman-firefox = pkgs.callPackage ./talysman-firefox { releaseHost = host; };
   snorlax = talysman;
   snorlax-daemon = talysman-daemon;
   thinky = pkgs.callPackage ./thinky { releaseHost = host; };
@@ -34,17 +35,6 @@ rec {
   firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {
     buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_20; };
   };
-  alvr = prev.alvr.overrideAttrs (old: {
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
-        --replace 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
-        --replace 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
-        --replace 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
-        --replace 'FF_PROFILE_HEVC_MAIN_10' 'AV_PROFILE_HEVC_MAIN_10' \
-        --replace 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
-        --replace 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
-    '';
-  });
   # ffmpeg 8+ removed the same deprecated AVCodec fields (pix_fmts,
   # sample_fmts) that simplescreenrecorder's AVWrapper.cpp reads directly.
   # Same fix as wf-recorder below: pin to ffmpeg_7 until upstream migrates.

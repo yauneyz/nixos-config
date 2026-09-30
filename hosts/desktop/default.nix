@@ -7,6 +7,7 @@
     ./kodi-media.nix
     ./sunshine.nix
     ./../../modules/core
+    ./../../modules/core/vr.nix
   ];
 
   boot.loader = {

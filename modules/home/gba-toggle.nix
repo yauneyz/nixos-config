@@ -1,6 +1,23 @@
 { pkgs, ... }:
 let
   mgbaCore = "${pkgs.libretro.mgba}/lib/retroarch/cores/mgba_libretro.so";
+  # RetroArch only honors the last --appendconfig, so passing this replaces
+  # the declarative config from retroarch.nix; repeat what gba-toggle needs.
+  gbaConfig = pkgs.writeText "retroarch-gba.cfg" ''
+    # GBA's 240x160 display at 5x gives a 1200x800 window.
+    video_scale = "5"
+    # config_save_on_exit can persist audio as disabled; force it back on.
+    audio_enable = "true"
+    audio_mute_enable = "false"
+    # The GL driver's vsync on NVIDIA + Wayland locks to 30fps (half speed).
+    video_driver = "vulkan"
+    # Pinned here: other RetroArch instances saving on exit clobber menu changes.
+    fastforward_ratio = "4.0"
+    savestate_auto_save = "true"
+    savestate_auto_load = "true"
+    network_cmd_enable = "true"
+    network_cmd_port = "55355"
+  '';
 
   gbaToggle = pkgs.writeShellApplication {
     name = "gba-toggle";
@@ -85,7 +102,7 @@ let
 
         printf '%s' "$rom" > "$last_rom_file"
 
-        setsid retroarch -L "$mgba_core" "$rom" >/dev/null 2>&1 &
+        setsid retroarch --appendconfig "${gbaConfig}" -L "$mgba_core" "$rom" >/dev/null 2>&1 &
         disown || true
         echo $! > "$pid_file"
       }

@@ -24,4 +24,9 @@ bash "$nixos_config_dir/scripts/rebuild.sh" "$host"
 # systemd's Restart=always brings the freshly rebuilt daemon back up.
 sudo pkill talysman || true
 
-echo "Talysman local release and daemon updated."
+echo "Talysman local release, daemon, and Firefox extension updated."
+# Firefox only rescans profile extensions at startup, so the new extension build
+# loads the next time Firefox Developer Edition is restarted.
+if pgrep -f firefox-devedition >/dev/null 2>&1; then
+  echo "Restart Firefox to load the new Talysman extension."
+fi

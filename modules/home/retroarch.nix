@@ -15,6 +15,12 @@
         # quit cleanly (and thus autosave) instead of killing the process.
         network_cmd_enable = "true";
         network_cmd_port = "55355";
+        # config_save_on_exit can persist audio as disabled; force it back on.
+        audio_enable = "true";
+        audio_mute_enable = "false";
+        # The GL driver's vsync on NVIDIA + Wayland locks to 30fps (half speed).
+        video_driver = "vulkan";
+        fastforward_ratio = "4.0";
       };
     })
   ];

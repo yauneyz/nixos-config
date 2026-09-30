@@ -86,7 +86,12 @@ buildFHSEnv {
       libxext
       libxfixes
       libxkbcommon
+      libxi
       libxrandr
+      libxrender
+      libxscrnsaver
+      libxshmfence
+      libxtst
       mesa
       nspr
       nss
@@ -94,14 +99,7 @@ buildFHSEnv {
       systemdLibs
       xdg-utils
     ])
-    ++ [ pkgs.stdenv.cc.cc.lib ]
-    ++ (with pkgs.xorg; [
-      libXScrnSaver
-      libXi
-      libXrender
-      libXtst
-      libxshmfence
-    ]);
+    ++ [ pkgs.stdenv.cc.cc.lib ];
 
   runScript = launcher;
 

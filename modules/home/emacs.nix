@@ -28,8 +28,6 @@
     enchant_2.dev         # Development headers - CRITICAL for pkg-config!
     aspell                # Spell checker backend for enchant
     aspellDicts.en        # English dictionary
-    aspellDicts.en-computers  # Computer terms dictionary
-    aspellDicts.en-science    # Scientific terms dictionary
 
     # Other useful Emacs dependencies
     multimarkdown         # For markdown-mode preview

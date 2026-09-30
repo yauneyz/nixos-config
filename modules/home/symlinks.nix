@@ -65,4 +65,19 @@ in
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       run ln -sfn ${development}/snorlax "$HOME/.snorlax-src"
     '';
+
+  # Syncthing shares Main and does not follow symlinks within it. Keep the real
+  # drawings there and link to them from the snorlax checkout instead.
+  # Main itself is a managed symlink on some hosts, so wait for that link.
+  home.activation.snorlaxDesignDraftsLink =
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      drafts="${home}/Main/design-drafts"
+      link="${development}/snorlax/design-drafts"
+      run mkdir -p "$drafts"
+      if [ -e "$link" ] && [ ! -L "$link" ]; then
+        echo "Cannot link design drafts: $link already exists" >&2
+        exit 1
+      fi
+      run ln -sfn "$drafts" "$link"
+    '';
 }

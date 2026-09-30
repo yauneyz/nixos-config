@@ -99,7 +99,9 @@ in
         pnpm
       ];
       text = ''
-        exec pnpm dlx vercel@59.5.0 "$@"
+        # pnpm 10+ blocks dependency build scripts by default (ERR_PNPM_IGNORED_BUILDS);
+        # vercel's esbuild dependency needs its postinstall to fetch the platform binary.
+        exec pnpm dlx --allow-build=esbuild vercel@latest "$@"
       '';
     })
     caffeine-ng                       # Tray toggle to inhibit screensaver/sleep

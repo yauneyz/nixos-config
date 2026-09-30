@@ -18,17 +18,21 @@
           ipv4 = {
             method = "manual";
             address1 = "10.1.10.188/24,10.1.10.1";
-            dns = "8.8.8.8;8.8.4.4;1.1.1.1;";
+            # Route through the local dnsmasq (see modules/core/snorlax.nix) so the
+            # Talysman DNS sinkhole actually applies; dnsmasq forwards upstream to
+            # the same resolvers this used to point at directly.
+            dns = "127.0.0.1;";
           };
           ipv6.method = "auto";
         };
       };
     };
 		nftables.enable = true;
+    # Point at the local dnsmasq (modules/core/snorlax.nix) so the Talysman DNS
+    # sinkhole for premade blocklists actually takes effect; dnsmasq forwards
+    # upstream to the resolvers these used to be set to directly.
     nameservers = [
-      "8.8.8.8"
-      "8.8.4.4"
-      "1.1.1.1"
+      "127.0.0.1"
     ];
     firewall = {
       enable = true;
