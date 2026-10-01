@@ -1,0 +1,105 @@
+diff --git a/app/scripts/fetch_xulrunner b/app/scripts/fetch_xulrunner
+--- a/app/scripts/fetch_xulrunner
++++ b/app/scripts/fetch_xulrunner
+@@ -201,11 +201,11 @@
+ 	
+ 	file="modules/ActorManagerParent.sys.mjs"
+ 	# Remove deleted actors
+-	remove_between 'AboutTranslations: \{' '^  },' $file
++	remove_between 'JSWINDOWACTORS\.AboutTranslations = \{' '^  };' $file
+ 	remove_between 'CookieBanner: \{' '^  },' $file
+-	remove_between 'PictureInPictureLauncher: \{' '^  },' $file
+-	remove_between 'PictureInPictureToggle: \{' '^  },' $file
+-	remove_between 'PictureInPicture: \{' '^  },' $file
++	remove_between 'JSWINDOWACTORS\.PictureInPictureLauncher = \{' '^  };' $file
++	remove_between 'JSWINDOWACTORS\.PictureInPictureToggle = \{' '^  };' $file
++	remove_between 'JSWINDOWACTORS\.PictureInPicture = \{' '^  };' $file
+ 	remove_between 'Thumbnails: \{' '^  },' $file
+ 	remove_between 'Translations: \{' '^  },' $file
+ 	remove_between 'TranslationsEngine: \{' '^  },' $file
+@@ -410,17 +410,19 @@
+ 	echo '.addon-detail-row-homepage .text-link { cursor: pointer; color: LinkText; }' >> $file
+ 	echo '.addon-detail-row-homepage .text-link:hover { text-decoration: underline; }' >> $file
+ 	
+-	file="chrome/toolkit/content/mozapps/extensions/aboutaddons.js"
+ 	# Hide unsigned-addon warning
+-	replace_line 'if \(!isCorrectlySigned\(addon\)\) \{' 'if (!isCorrectlySigned(addon)) {return {};' $file
++	replace_line '!isCorrectlySigned\(addon\) &&' 'false \&\& !isCorrectlySigned(addon) \&\&' chrome/toolkit/content/mozapps/extensions/aboutaddons-utils.mjs
+ 	# Hide Private Browsing setting in addon details
++	file="chrome/toolkit/content/mozapps/extensions/components/addon-details.mjs"
+ 	replace_line 'pbRow\.' '\/\/pbRow.' $file
+ 	replace_line 'let isAllowed = await isAllowedInPrivateBrowsing' '\/\/let isAllowed = await isAllowedInPrivateBrowsing' $file
+ 	# Use our own strings for the removal prompt
+-	replace_line 'let \{ BrowserAddonUI \} = windowRoot.ownerGlobal;' '' $file
++	file="chrome/toolkit/content/mozapps/extensions/components/addon-card.mjs"
++	replace_line 'let \{ BrowserAddonUI \} = windowRoot.window;' '' $file
+ 	replace_line 'await BrowserAddonUI.promptRemoveExtension' 'promptRemoveExtension' $file
+-	
++
+ 	# Customize empty-list message
++	file="chrome/toolkit/content/mozapps/extensions/components/addon-list.mjs"
+ 	replace_line 'createEmptyListMessage\(\) {' 'createEmptyListMessage() {
+         var p = document.createElement("p");
+         p.id = "empty-list-message";
+@@ -428,17 +430,18 @@
+ 	# Swap in include.js, which we need for Zotero.getString(), for abuse-reports.js, which we don't need
+ 	
+ 	# Open plugin links in external browser
++	file="chrome/toolkit/content/mozapps/extensions/components/addon-details.mjs"
+ 	replace_line 'let homepageURL = homepageRow.querySelector\(\"a\"\);' 'let homepageURL = homepageRow.querySelector(\"\.text-link\");' $file
+ 	replace_line 'homepageURL.href = addon.homepageURL;' 'homepageURL.setAttribute("href", addon.homepageURL);' $file
+ 	replace_line '<a target="_blank" dir="ltr"><\/a>' \
+ 		'<label target="_blank" class="text-link" dir="ltr"><\/label>' \
+-		chrome/toolkit/content/mozapps/extensions/aboutaddons.html
++		$file
+ 	
+ 	# Add zotero.ftl to the addons page for our own localized strings
+ 	replace_line 'href="toolkit\/about\/aboutAddons.ftl"' 'href="toolkit\/about\/aboutAddons.ftl" \/>\n    <link rel="localization" href="zotero.ftl"' \
+ 		chrome/toolkit/content/mozapps/extensions/aboutaddons.html
+ 	# Use our own localized string for blocked plugin notification
+-	file="chrome/toolkit/content/mozapps/extensions/aboutaddons.js"
++	file="chrome/toolkit/content/mozapps/extensions/aboutaddons-utils.mjs"
+ 	replace_line 'details-notification-hard-blocked-\$\{typeSuffix\}' 'plugins-blocked-plugin' $file
+ 
+ 	# TODO: Use our own strings, but for now fix the bundled English ones
+@@ -449,7 +452,7 @@
+ 	replace_line 'Select add-on to install' 'Select plugin to install' localization/en-US/toolkit/about/aboutAddons.ftl
+ 	
+ 	# Hide Recommendations tab in sidebar and recommendations in main pane
+-	replace_line 'function isDiscoverEnabled\(\) \{' 'function isDiscoverEnabled() {return false;' chrome/toolkit/content/mozapps/extensions/aboutaddonsCommon.js
++	replace_line 'function isDiscoverEnabled\(\) \{' 'function isDiscoverEnabled() {return false;' chrome/toolkit/content/mozapps/extensions/aboutaddons-utils.mjs
+ 	replace_line 'pref\("extensions.htmlaboutaddons.recommendations.enabled".+' 'pref("extensions.htmlaboutaddons.recommendations.enabled", false);' greprefs.js
+ 	
+ 	# Hide Report option
+@@ -496,8 +499,6 @@
+        }
+        popupset.appendChild(this._autoScrollPopup);' chrome/toolkit/content/global/elements/browser-custom-element.mjs
+ 	
+-	# Remove aria-autocomplete unnecessarily added to search-textbox to not confuse screen readers
+-	remove_line 'this.inputField.setAttribute\("aria-autocomplete' chrome/toolkit/content/global/elements/search-textbox.js
+ 
+ 	# Remove non-native text input styles
+ 	remove_between 'html\|input\:where\(' '^}' chrome/toolkit/skin/classic/global/global-shared.css
+@@ -511,11 +512,6 @@
+ 		overflow: var(--moz-text-control-overflow);
+ 	}' >> chrome/toolkit/res/forms.css
+ 	
+-	# By default, an autocomplete popup's width is calculated based on the input that opened it.
+-	# Allow an ancestor to designate itself as the width container instead. (For creator inputs.)
+-	replace_line 'aElement.getBoundingClientRect\(\).width' \
+-		'(aElement.closest(".autocomplete-popup-width-container") || aElement).getBoundingClientRect().width' \
+-		chrome/toolkit/content/global/elements/autocomplete-popup.js
+ 	
+ 	zip -qr9XD omni.ja *
+ 	mv omni.ja ..
+diff --git a/app/build.sh b/app/build.sh
+--- a/app/build.sh
++++ b/app/build.sh
+@@ -311,7 +311,6 @@
+ rm actors/AboutLogins{Parent,Child}.sys.mjs
+ rm actors/AboutMessagePreview{Parent,Child}.sys.mjs
+ rm actors/AboutNewTab{Parent,Child}.sys.mjs
+-rm actors/AboutPocket{Parent,Child}.sys.mjs
+ rm actors/AboutPrivateBrowsing{Parent,Child}.sys.mjs
+ rm actors/AboutProtections{Parent,Child}.sys.mjs
+ rm actors/AboutReader{Parent,Child}.sys.mjs

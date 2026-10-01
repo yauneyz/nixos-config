@@ -80,12 +80,17 @@ in
   programs.steam.extraPackages = [
     config.programs.alvr.package
     steamvrAlvr
+    pkgs.botw-vr
   ];
 
   # Use as SteamVR's launch options: steamvr-alvr %command%
   # ALVR's vrmonitor workaround avoids the incompatible Steam Linux Runtime;
   # xcb lets SteamVR's Qt UI run under Hyprland through XWayland.
-  environment.systemPackages = [ steamvrAlvr ];
+  # botw-vr: Breath of the Wild through the BetterVR mod (see vr-setup.md).
+  environment.systemPackages = [
+    steamvrAlvr
+    pkgs.botw-vr
+  ];
 
   home-manager.users.${username} = { config, lib, ... }: {
     # Keep ALVR's live session writable so the dashboard can save tuning and
@@ -97,6 +102,15 @@ in
           ${lib.escapeShellArg "${config.xdg.configHome}/alvr/session.json"}
       fi
     '';
+
+    xdg.desktopEntries.botw-vr = {
+      name = "Breath of the Wild VR";
+      comment = "BetterVR in Cemu through ALVR and SteamVR";
+      exec = "botw-vr";
+      icon = "info.cemu.Cemu";
+      terminal = false;
+      categories = [ "Game" ];
+    };
 
     # Proton's OpenXR games should use SteamVR alongside ALVR's OpenVR driver.
     xdg.configFile."openxr/1/active_runtime.json".source =

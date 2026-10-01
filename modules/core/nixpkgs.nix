@@ -25,6 +25,48 @@
           lndir = prev.lndir;
         };
 
+        # Zotero 10.0.2 targets Firefox ESR 140, but nixpkgs builds it against
+        # ESR 153, which moved several actors into `JSWINDOWACTORS.<name> = {}`
+        # assignments, split aboutaddons.js into ES modules, and dropped
+        # search-textbox. Retarget fetch_xulrunner's omni edits so it doesn't
+        # abort on patterns that no longer match.
+        zotero = prev.zotero.overrideAttrs (old: {
+          patches = (old.patches or [ ]) ++ [ ./patches/zotero-firefox-esr-153.patch ];
+        });
+
+        # buildRedistHook flattens propagatedBuildOutputs to a string for
+        # _multioutPropagateDev, but stdenv now reads it with concatTo, so the
+        # structuredAttrs array collapses to one bogus "include lib" output and
+        # every CUDA redist fails in fixup. Drop the flattening and read the
+        # array properly until nixpkgs reconciles the two.
+        _cuda = prev._cuda.extend (
+          _: cudaPrev: {
+            extensions = cudaPrev.extensions ++ [
+              (
+                _: cudaPackagesPrev:
+                let
+                  patchedHook = final.runCommand "buildRedistHook.bash" { } ''
+                    cp ${final.path}/pkgs/development/cuda-modules/buildRedist/buildRedistHook.bash $out
+                    substituteInPlace $out \
+                      --replace-fail 'preFixupHooks+=(fixupPropagatedBuildOutputsForMultipleOutputs)' "" \
+                      --replace-fail 'for output in $propagatedBuildOutputs; do' \
+                        'local -a cudaOutputs=(); concatTo cudaOutputs propagatedBuildOutputs; for output in "''${cudaOutputs[@]}"; do'
+                  '';
+                  swapHook =
+                    input: if builtins.isPath input && baseNameOf input == "buildRedistHook.bash" then patchedHook else input;
+                in
+                {
+                  buildRedist =
+                    args:
+                    (cudaPackagesPrev.buildRedist args).overrideAttrs (old: {
+                      nativeBuildInputs = map swapHook old.nativeBuildInputs;
+                    });
+                }
+              )
+            ];
+          }
+        );
+
         # These packages are not currently available from cache for the pinned
         # nixos-unstable revision. Keep rebuilds practical by skipping their
         # large/flaky upstream suites while retaining build and import checks.

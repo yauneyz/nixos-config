@@ -8,6 +8,7 @@
 }:
 rec {
   _2048 = pkgs.callPackage ./2048 { };
+  botw-vr = pkgs.callPackage ./bettervr { };
   chatgpt-linux = pkgs.callPackage ./chatgpt-linux { };
   claude-desktop = pkgs.callPackage ./claude-desktop { };
   dreamrunner = pkgs.callPackage ./dreamrunner { releaseHost = host; };

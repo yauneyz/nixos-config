@@ -128,3 +128,54 @@ timing require an actual connected Quest 3 test.
 - [SteamVR release announcements](https://store.steampowered.com/news/app/250820)
 - [Valve Proton releases](https://github.com/ValveSoftware/Proton/releases)
 - [Valve's Proton version guidance](https://github.com/ValveSoftware/Proton/wiki/Proton-Versions)
+
+## Breath of the Wild in VR (BetterVR)
+
+Reviewed October 1, 2026. [BetterVR](https://github.com/Crementif/BotW-BetterVR)
+0.9.23 adds full 6DoF stereo, hands, motion-controlled weapons and roomscale to
+BotW in Cemu. Upstream is still **Windows-only** because it uses D3D12 interop,
+and it does not work under Proton. The author has said a Linux-capable rewrite
+is in progress but not yet released ([issue #18](https://github.com/Crementif/BotW-BetterVR/issues/18)).
+
+`pkgs/bettervr` packages the native Vulkan/OpenXR community port by
+[asingleoat](https://github.com/asingleoat/BotW-BetterVR-Linux). It is based
+on upstream ~0.9.16 and was play-tested on NVIDIA + SteamVR. The package provides:
+
+- `cemu-bettervr`: Cemu 2.6 that exports the HLE symbols the layer hooks.
+  The stock `cemu` command stays unchanged for flat play.
+- The BetterVR Vulkan layer, its graphic pack, and its VR Graphics pack. Resolution
+  presets are computed for ALVR's 2560 px eye width; override them with
+  `eyeWidth`/`eyeHeight` if the ALVR resolution changes.
+- `botw-vr`, also available as the "Breath of the Wild VR" desktop entry.
+
+### Play
+
+1. Open `alvr_dashboard`, connect the Quest 3, and launch SteamVR.
+2. Run `botw-vr`. If SteamVR isn't running, it starts SteamVR through Steam.
+3. Hold **X** on the left controller for the BetterVR menu (settings and controls).
+
+`botw-vr` links the BetterVR packs into Cemu only for the session. It also
+swaps `~/.config/Cemu/settings.xml` for `settings.bettervr.xml`, and restores
+the flat profile on exit. After a crash, the next run restores it first. The
+VR profile is seeded once from the flat one with the upstream recommendations:
+BetterVR + FPS++ (120 FPS limit), BetterVR Graphics at **1.5x** (3840x4080 per
+eye) with NVIDIA FXAA, 16x AF, depth of field off, draw distance at High
+(the mod is CPU-bound), Vulkan, VSync off, and accurate barriers off. In-game
+changes to the VR profile persist. Delete `settings.bettervr.xml` to reseed it.
+
+Community BotW shader and pipeline caches are installed in
+`~/.cache/Cemu/shaderCache/transferable`. The previous caches are in `backup-2026-10-01/`.
+
+Options: `BOTW_PATH=...` (game folder), `BOTW_VR_FRAME_STATS=1`, and
+`BOTW_VR_MIRROR=1` (shows the right eye in Cemu's window for recording).
+The layer writes `BetterVR_log.txt` to the working directory.
+
+### Known limitations
+
+- Experimental port: expect occasional stutter. The port has its own
+  re-presentation path at the headset rate, so leave SteamVR motion smoothing off.
+- Steam claims controller focus for apps it owns. If controllers don't
+  reach the game, add `botw-vr` to Steam as a non-Steam game and launch it
+  from there, so that SteamVR and Cemu both run inside Steam.
+- Upstream fixes from 0.9.17–0.9.23 are missing until the port is rebased. A fork's `integration/upstream-0.9.23` branch builds
+  in CI but has not been play-tested.
