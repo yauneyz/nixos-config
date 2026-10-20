@@ -1,20 +1,17 @@
 { pkgs, userPaths, ... }:
 
 {
-  # Machine Learning and AI packages
-  # Note: CUDA support is enabled on desktop only (modules/core/nixpkgs.nix)
-  # Desktop: PyTorch with CUDA | Laptop: PyTorch CPU-only
-  # Initial build on desktop: ~2 hours, but subsequent rebuilds use cache
+  # Optional CPU ML tools use nixpkgs' default Python for binary cache reuse.
+  # CUDA PyTorch/vLLM workloads use the separate ml-env wheel environment.
 
-  home.packages = with pkgs.python312Packages; [
-    # Deep Learning Framework (with CUDA support via global config)
+  home.packages = with pkgs.python3Packages; [
+    # CPU frameworks; CUDA is deliberately not enabled globally.
     torch
     torchvision
 
     # vLLM - High-performance LLM inference engine
     # WARNING: Uncomment below to enable vLLM
-    # Initial build is ~2 hours, but only needs to happen once
-    # Once built, toggling vLLM on/off is fast
+    # Prefer the vllm-serve/ml-env launchers to reuse prebuilt CUDA wheels.
     # vllm
 
     # HuggingFace libraries

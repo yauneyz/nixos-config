@@ -12,6 +12,7 @@
     ./nh.nix
     ./stylix.nix
     ./pipewire.nix
+    ./printing.nix
     ./program.nix
     ./python-packages.nix
     ./go-packages.nix

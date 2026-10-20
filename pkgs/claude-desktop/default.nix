@@ -36,6 +36,7 @@
   nspr,
   nss,
   pango,
+  pipewire,
   systemdLibs,
   xdg-utils,
 }:
@@ -83,6 +84,7 @@ stdenvNoCC.mkDerivation {
     nspr
     nss
     pango
+    pipewire
     systemdLibs
   ];
 

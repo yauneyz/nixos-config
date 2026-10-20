@@ -129,5 +129,8 @@ in
     winetricks
     wineWow64Packages.waylandFull
     dpkg                              # dpkg-scanpackages: signed APT repo publishing (snorlax release:both)
+    rpm                               # rpmbuild: snorlax .rpm target (electron-builder via fpm)
+    libarchive                        # bsdtar: snorlax .pacman target (electron-builder via fpm)
+    zstd                              # pacman package compression
   ];
 }

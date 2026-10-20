@@ -56,7 +56,7 @@ in
       org = "cd ~/development/org";
 
       owl = "cd ~/development/clojure/owl";
-      ou = "cd ~/development/clojure/owl/electron";
+      ou = "cd ~/development/clojure/owl/apps/desktop";
       ob = "cd ~/development/clojure/owl/site";
       thc = "cd ~/.config/Thinky";
       antei = "cd ~/development/clojure/owl/antei";
@@ -71,6 +71,7 @@ in
       # Edit zsh config in NixOS (updated from ~/.bashrc)
       vbrc = "vim ~/nixos-config/modules/home/zsh/zsh.nix";
       valias = "vim ~/nixos-config/modules/home/zsh/zsh_alias.nix";
+      vrun = "vim ${userPaths.nixosConfig}/modules/home/zsh/run-commands.nix";
       vstart = "vim ~/nixos-config/modules/home/scripts/scripts/hypr-startup.sh";
 
       # Hyperland config (was i3: ii → now hh, opens Hyprland nix)

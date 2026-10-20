@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
-  pythonSystemEnv = pkgs.python312.withPackages (ps: with ps; [
+  pythonSystemEnv = pkgs.python3.withPackages (ps: with ps; [
     # Core packaging tools
     pip
     setuptools
@@ -21,5 +21,8 @@ in
 {
   environment.systemPackages = [
     pythonSystemEnv
+    # The managed vLLM/CUDA wheel environment uses Python 3.12. Keep only
+    # its interpreter; general tools use the cached default Python packages.
+    (lib.lowPrio pkgs.python312)
   ];
 }

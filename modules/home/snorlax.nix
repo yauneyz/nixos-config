@@ -37,6 +37,16 @@ in
     force = true;
   };
 
+  # The local unsigned extension build (pkgs/talysman-firefox, refreshed by `release:local`).
+  # A profile entry named exactly <id> that symlinks to the unpacked store dir: each rebuild's
+  # new store path counts as an update on Firefox's next start. A manually installed
+  # <id>.xpi in the same profile shadows this, so remove it.
+  home.file.".mozilla/firefox/default/extensions/${identities.firefoxId}" =
+    pkgs.lib.mkIf pkgs.talysman-firefox.available {
+      source = "${pkgs.talysman-firefox}/${pkgs.talysman-firefox.extensionDir}";
+      force = true;
+    };
+
   # Chromium browsers use the NativeMessagingHosts directory within their user-data root.
   home.file.".config/google-chrome/NativeMessagingHosts/${hostName}.json" = {
     text = chromiumManifest;

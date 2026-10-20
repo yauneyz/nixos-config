@@ -10,6 +10,17 @@ as `$XDG_CONFIG_HOME/llm-serve/config.toml`. The launcher is
 
 ## Everyday commands
 
+General Python tools use nixpkgs' default Python and unmodified packages to
+reuse the official binary cache. The managed `ml-env` environment keeps Python
+3.12 for its pinned PyTorch/vLLM CUDA wheels; VideoAI keeps Python 3.11 for its
+older pinned dependencies. These isolated runtimes do not require rebuilding
+the system Python package stack. The CUDA binary cache is also configured for
+Nix packages, including CUDA-enabled Ollama on the desktop.
+
+The system flake update timer runs weekly. Plain `rebuild` applies the current
+lockfile; `rebuild-update-all` explicitly updates all inputs. Desktop ChatGPT
+and Claude release checks still run during `rebuild`.
+
 ```console
 llm-serve                         # launch the configured default
 llm-serve oss                     # launch a registry nickname

@@ -4,25 +4,25 @@
     with pkgs;
     [
       # Interactive tooling
-      python312Packages.ipython
+      python3Packages.ipython
 
       # Language Server Protocol + helpers
-      python312Packages.python-lsp-server
-      python312Packages.pylsp-mypy
-      python312Packages.python-lsp-black
-      python312Packages.python-lsp-ruff
+      python3Packages.python-lsp-server
+      python3Packages.pylsp-mypy
+      python3Packages.python-lsp-black
+      python3Packages.python-lsp-ruff
 
       # Formatters, linters, and diagnostics
-      python312Packages.black
-      python312Packages.mypy
-      python312Packages.debugpy
-      python312Packages.flake8
-      python312Packages.autopep8
+      python3Packages.black
+      python3Packages.mypy
+      python3Packages.debugpy
+      python3Packages.flake8
+      python3Packages.autopep8
       ruff
 
       # Project/tooling helpers
       poetry
-      python312Packages.pipx
+      python3Packages.pipx
       uv
     ];
 }

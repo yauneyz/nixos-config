@@ -14,25 +14,13 @@ rec {
   dreamrunner = pkgs.callPackage ./dreamrunner { releaseHost = host; };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
   readfence = pkgs.callPackage ./readfence { };
-  screenplain = pkgs.callPackage ./screenplain {
-    python3Packages = pkgs.python312Packages;
-  };
+  screenplain = pkgs.callPackage ./screenplain { };
   talysman = pkgs.callPackage ./snorlax { releaseHost = host; };
   talysman-daemon = pkgs.callPackage ./snorlax-daemon { snorlaxSrc = inputs.snorlax; };
   talysman-firefox = pkgs.callPackage ./talysman-firefox { releaseHost = host; };
   snorlax = talysman;
   snorlax-daemon = talysman-daemon;
   thinky = pkgs.callPackage ./thinky { releaseHost = host; };
-  python312Packages = prev.python312Packages.overrideScope (
-    finalPy: prevPy: {
-      jaraco-test = prevPy.jaraco-test.overridePythonAttrs (_old: {
-        doCheck = false;
-      });
-      pipx = prevPy.pipx.overridePythonAttrs (_old: {
-        doCheck = false;
-      });
-    }
-  );
   firebase-tools = prev.callPackage (prev.path + "/pkgs/by-name/fi/firebase-tools/package.nix") {
     buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_20; };
   };

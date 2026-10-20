@@ -58,8 +58,8 @@ in
   systemd.timers.nixos-flake-update = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
-      OnBootSec = "10m";
-      OnUnitActiveSec = "12h";
+      OnCalendar = "Sun *-*-* 04:00:00";
+      RandomizedDelaySec = "1h";
       Persistent = true;
     };
   };
@@ -80,6 +80,7 @@ in
     wineWow64Packages.stable
     winetricks
     llamaCppPackage
+    (if host == "desktop" then ollama-cuda else ollama)
     #python3Packages.torch
   ];
 
