@@ -55,7 +55,6 @@ in
       obs-studio
       pavucontrol
       shotcut
-      simplescreenrecorder
       wf-recorder # Wayland screen recorder
       spotify
       soundwireserver
@@ -69,7 +68,8 @@ in
       gnome-calculator
       readfence
       typora
-      zotero
+      # Zotero bundles Firefox libs (e.g. libfreeblpriv3.so) that collide with nss.
+      (lib.lowPrio zotero)
     ]
     ++ lib.optional hasThinky thinky
     ++ lib.optional hasTalysman talysman

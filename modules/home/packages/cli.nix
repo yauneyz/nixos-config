@@ -90,12 +90,11 @@ in
     enchant_2                         # spellchecking utilities
     ffmpeg
     file                              # Show file information
-    firebase-tools                    # Firebase CLI
     heroku                            # Heroku CLI
     (writeShellApplication {
       name = "vercel";
       runtimeInputs = [
-        nodejs_22
+        nodejs-patched
         pnpm
       ];
       text = ''

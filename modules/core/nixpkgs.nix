@@ -24,16 +24,6 @@
           xrdb = prev.xrdb;
           lndir = prev.lndir;
         };
-
-        # Zotero 10.0.2 targets Firefox ESR 140, but nixpkgs builds it against
-        # ESR 153, which moved several actors into `JSWINDOWACTORS.<name> = {}`
-        # assignments, split aboutaddons.js into ES modules, and dropped
-        # search-textbox. Retarget fetch_xulrunner's omni edits so it doesn't
-        # abort on patterns that no longer match.
-        zotero = prev.zotero.overrideAttrs (old: {
-          patches = (old.patches or [ ]) ++ [ ./patches/zotero-firefox-esr-153.patch ];
-        });
-
       })
       (
         final: prev:

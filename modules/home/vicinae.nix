@@ -11,8 +11,8 @@
     settings = {
       font = {
         normal = {
-          family = "Maple Mono";
-          size = 13;
+          family = lib.mkForce "Maple Mono";
+          size = lib.mkForce 13;
         };
       };
 

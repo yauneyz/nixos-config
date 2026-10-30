@@ -93,6 +93,8 @@ in
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
     "pnpm-10.29.2"
+    # Zotero bundles its own Firefox ESR 140 runtime, which is now EOL.
+    "firefox-esr-140-bin-unwrapped-140.17.0esr"
   ];
   system.stateVersion = "24.05";
 }

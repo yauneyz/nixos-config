@@ -1,8 +1,8 @@
 {
-  version = "0.7.0";
+  version = "0.8.0";
   addonId = "talysman-firefox@talysman.app";
   src = builtins.fetchurl {
-    url = "file:///nix/store/ms538ala1y7lj4p87zgpbm93cf0c8jbi-talysman-firefox.xpi";
-    sha256 = "1gq0d8bqp3zp536i2ax42ck1x39r0jk7gklh3byw82bgsy59asgl";
+    url = "file:///nix/store/8ynzw143s0gv4rbyw112xx98dmclcx1f-talysman-firefox.xpi";
+    sha256 = "17mbwz4jz6pdxxinm95v8q8n5wx7150sn1mq5f8sdcqv2rs22hj7";
   };
 }

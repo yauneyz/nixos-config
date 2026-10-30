@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    nodejs_22
+    nodejs-patched
     bun
     supabase-cli
 

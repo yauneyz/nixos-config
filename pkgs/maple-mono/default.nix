@@ -101,6 +101,10 @@ stdenv.mkDerivation {
     defcon
     ttfautohint-py
     foundrytools-cli
+    # Required by the updated font build pipeline, even without CJK output.
+    py7zr
+    fontmake
+    skia-pathops
   ];
 
   buildPhase = ''
