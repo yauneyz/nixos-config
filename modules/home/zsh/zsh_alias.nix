@@ -6,7 +6,7 @@ let
   vllmServeAlias = "llm-serve qwen-vllm";
   vllmEmbeddingsServeAlias = "llm-serve embeddings";
   snorlaxSrcPath = "${userPaths.development}/snorlax";
-  updateTalysmanAlias = "cd ${userPaths.nixosConfig} && nix flake lock --allow-dirty-locks --override-input snorlax git+file://${snorlaxSrcPath}";
+  updateTalysmanAlias = "cd ${userPaths.nixosConfig} && nix flake update snorlax --allow-dirty-locks --override-input snorlax \"git+file://$HOME/.snorlax-src?rev=$(git -C $HOME/.snorlax-src rev-parse HEAD)\" && ${rebuildAlias} && sudo systemctl restart talysman";
   talysmanDistAlias = "cd ${snorlaxSrcPath} && pnpm run release:local";
 in
 {
@@ -95,7 +95,7 @@ in
       talysman-status = "systemctl status talysman";
       vblock = "vim ~/nixos-config/state/talysman-policy.json";
       blocklist-refresh = "command blocklist-refresh";
-      update-talysman = updateTalysmanAlias;   # re-lock the Talysman source flake input
+      update-talysman = updateTalysmanAlias;   # re-lock the Talysman source, rebuild, restart the daemon
       talysman-dist = talysmanDistAlias;       # build AppImage + stage release.nix
       update-snorlax = updateTalysmanAlias;    # source repo alias
       snorlax-dist = talysmanDistAlias;        # source repo alias

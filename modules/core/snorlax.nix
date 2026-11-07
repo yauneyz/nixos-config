@@ -131,6 +131,10 @@ in {
       conflicts = [ "focuslock.service" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      # Restart on every switch that changes the daemon, so a new build (e.g. updated premade
+      # lists) never keeps running the old binary.
+      restartIfChanged = true;
+      restartTriggers = [ cfg.package ];
 
       # talysman-svc shells out to nft (IP blocking) and ip (routing) at runtime.
       # The policy sync hooks use jq/coreutils.

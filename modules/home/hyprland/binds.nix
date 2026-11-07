@@ -181,7 +181,7 @@ let
   movementBinds = lib.concatMap (entry: [
     (mkBind "ALT + SHIFT + ${entry.key}" "hl.dsp.window.move({ direction = \"${entry.direction}\" })")
     (mkBind "ALT + CTRL + ${entry.key}" "hl.dsp.window.resize({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
-    (mkBind "ALT + ALT + ${entry.key}" "hl.dsp.window.move({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
+    (mkBind "ALT + CTRL + SHIFT + ${entry.key}" "hl.dsp.window.move({ x = ${toString entry.x}, y = ${toString entry.y}, relative = true })")
   ]) directions;
 
   backendHardwareBinds = lib.optionals (config.zac.desktop.shell.backend == "legacy") [

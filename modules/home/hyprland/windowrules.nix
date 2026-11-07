@@ -19,6 +19,13 @@
         tile = true;
       }
       {
+        # Source engine games (L4D2, Portal 2, ...) render at their configured
+        # fullscreen resolution; tiling them squashes the window and offsets
+        # mouse input.
+        match.class = "^(hl2_linux)$";
+        fullscreen = true;
+      }
+      {
         match.class = "^(rofi)$";
         pin = true;
       }

@@ -6,7 +6,10 @@
       # Interactive tooling
       python3Packages.ipython
 
-      # Language Server Protocol + helpers
+      # Emacs uses Pyright for types/navigation and the native Ruff server.
+      pyright
+
+      # Alternative Python LSP and its plugins (for other editors)
       python3Packages.python-lsp-server
       python3Packages.pylsp-mypy
       python3Packages.python-lsp-black

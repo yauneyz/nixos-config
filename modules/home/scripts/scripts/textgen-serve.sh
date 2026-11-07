@@ -93,6 +93,17 @@ if [[ -z "${GPU_CHOICE:-}" ]]; then
 	fi
 fi
 
+# The installer persists its first GPU choice and ignores GPU_CHOICE afterwards,
+# so an install that once landed in CPU mode stays CPU-only forever.
+installer_state="$textgen_dir/.installer_state.json"
+if [[ "$GPU_CHOICE" == "A" && -f "$installer_state" ]] && grep -q '"gpu_choice": "NONE"' "$installer_state"; then
+	cat >&2 <<EOF
+Warning: textgen was installed in CPU mode ($installer_state) but an NVIDIA GPU
+is present. Reinstall the CUDA wheels or delete installer_files and the state
+file to get GPU offload.
+EOF
+fi
+
 export HF_HOME="${HF_HOME:-$models_root/huggingface}"
 export PYTHONNOUSERSITE=1
 unset PYTHONPATH

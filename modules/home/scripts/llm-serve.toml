@@ -28,6 +28,13 @@ gpu_layers = "auto"
 fit = true
 fit_target_mib = 2048
 
+[hosts.desktop.targets.voice]
+# Overrides the desktop auto-fit above, which is too conservative for this
+# target: it left ~2.6 GiB of VRAM free while putting layers on the CPU (24
+# tok/s, 12 ms per prompt token). Every layer fits on the GPU.
+gpu_layers = 99
+fit = false
+
 [hosts.laptop.backends.llama]
 gpu_layers = 0
 fit = false
@@ -70,6 +77,44 @@ gpu_expectation = "full"
 ctx_size = 32768
 flash_attn = "on"
 jinja = true
+
+[targets.voice]
+backend = "llama"
+description = "Qwen3.8 27B UD-IQ4_XS for the voice backend; no thinking, fully on GPU beside TTS/STT"
+# Source: https://huggingface.co/unsloth/Qwen3.8-27B-GGUF
+# Downloaded with:
+#   hf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-IQ4_XS.gguf --local-dir "$LLAMA_MODELS_DIR"
+model = "Qwen3.8-27B-UD-IQ4_XS.gguf"
+served_name = "qwen3.8-27b-voice"
+# ~16 GiB is left beside the desktop, Qwen3-TTS and int8 Whisper. The 13.3 GiB
+# IQ4_XS plus KV/compute buffers fits entirely; the 15.3 GiB UD-Q4_K_M spilled
+# layers to the CPU (~12 tok/s, slow per-turn prompt processing).
+gpu_expectation = "full"
+ctx_size = 16384
+parallel = 1
+flash_attn = "on"
+# Only 16 of 64 layers use full attention, so a q8 KV cache at 16k is ~0.5 GiB.
+cache_type_k = "q8_0"
+cache_type_v = "q8_0"
+jinja = true
+# Thinking tokens delay the first spoken word by seconds; disable them.
+reasoning_budget = 0
+# Smaller batches keep the compute buffers small enough to fit beside TTS/STT.
+batch_size = 512
+ubatch_size = 512
+
+[targets.voice-fast]
+backend = "llama"
+description = "Qwen3.5 9B Q8_0; lower-latency voice fallback that fits fully beside Kokoro too"
+# Source: https://huggingface.co/unsloth/Qwen3.5-9B-GGUF
+model = "Qwen3.5-9B-Q8_0.gguf"
+served_name = "qwen3.5-9b-voice"
+gpu_expectation = "full"
+ctx_size = 16384
+parallel = 1
+flash_attn = "on"
+jinja = true
+reasoning_budget = 0
 
 [targets.qwen25]
 backend = "llama"
