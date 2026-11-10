@@ -65,12 +65,25 @@ let
           done
       }
 
+      # Recovery for a stream the client can no longer end (e.g. the TV app
+      # froze). A killed Sunshine never runs its undo command, so restore the
+      # physical monitors first, then SIGKILL Sunshine (it may be hung, and a
+      # normal stop waits out the 90s timeout) and start it fresh.
+      reset() {
+        rm -f "$session_file"
+        stop || true
+        systemctl --user kill --signal=SIGKILL sunshine.service || true
+        systemctl --user reset-failed sunshine.service || true
+        systemctl --user restart sunshine.service
+      }
+
       case "''${1:-}" in
         start) start ;;
         stop) stop ;;
         end) rm -f "$session_file"; stop ;;
+        reset) reset ;;
         watch) watch ;;
-        *) echo "usage: sunshine-display {start|stop|end|watch}" >&2; exit 2 ;;
+        *) echo "usage: sunshine-display {start|stop|end|reset|watch}" >&2; exit 2 ;;
       esac
     '';
   };
@@ -107,9 +120,13 @@ in
 
   systemd.user.services.sunshine-display-watch = {
     description = "Restore physical monitors when a Moonlight client disconnects";
+    # Tie the watcher to sunshine.service rather than graphical-session.target:
+    # sunshine is ordered after that target, and a target is implicitly ordered
+    # after the units it wants, so wantedBy the target formed an ordering cycle
+    # that made systemd drop this job at every login.
     after = [ "sunshine.service" ];
-    partOf = [ "graphical-session.target" ];
-    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "sunshine.service" ];
+    wantedBy = [ "sunshine.service" ];
     serviceConfig = {
       ExecStart = "${sunshineDisplay}/bin/sunshine-display watch";
       Restart = "on-failure";

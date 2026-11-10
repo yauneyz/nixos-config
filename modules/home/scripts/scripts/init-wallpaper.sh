@@ -2,8 +2,8 @@
 
 # Wallpaper configuration
 WP_DIR="${HOME}/nixos-config/wallpapers"
-WP_LEFT="portrait/sakura-shrine-night.png"
-WP_RIGHT="sakura-shrine-night.png"
+WP_LEFT="portrait/japanese-street-4k.jpg"
+WP_RIGHT="japanese-countryside-4k.jpg"
 
 # Query the socket directly: the daemon's process name is not stable across
 # awww versions, while a successful query proves the live instance is usable.

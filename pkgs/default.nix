@@ -28,29 +28,6 @@ rec {
       echo 'set_target_properties(muse_extensions_qml PROPERTIES UNITY_BUILD OFF)' >> muse/framework/extensions/qml/Muse/Extensions/CMakeLists.txt
     '';
   });
-  # Azure CLI's Fabric dependency requires Invoke < 3. Keep its Python
-  # environment on the supported release until Fabric supports Invoke 3.
-  azure-cli = prev.azure-cli.override {
-    # Extending all of nixpkgs here reapplies this overlay, recursively
-    # evaluating azure-cli until the evaluator exhausts memory. Compose the
-    # pin into Python's overrides, including Azure's own package overrides.
-    python3 = prev.lib.makeOverridable
-      (args: prev.python3.override (args // {
-        packageOverrides = prev.lib.composeExtensions
-          (args.packageOverrides or (_: _: { }))
-          (_: prevPython: {
-            invoke = prevPython.invoke.overridePythonAttrs (old: rec {
-              version = "2.2.1";
-              src = pkgs.fetchPypi {
-                pname = "invoke";
-                inherit version;
-                hash = "sha256-UVv0m0pIkyt5sCRZA0jaIvOcSULf+ZGtH7i4uuob5wc=";
-              };
-            });
-          });
-      }))
-      { };
-  };
   # ffmpeg 8+ removed the same deprecated AVCodec fields (pix_fmts,
   # sample_fmts) that simplescreenrecorder's AVWrapper.cpp reads directly.
   # Same fix as wf-recorder below: pin to ffmpeg_7 until upstream migrates.

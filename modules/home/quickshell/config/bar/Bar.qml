@@ -10,7 +10,7 @@ PanelWindow {
     id: root
     required property var modelData
     screen: modelData
-    color: "transparent"
+    color: Theme.background
     implicitHeight: Metrics.barHeight + Metrics.bottomMargin
     exclusiveZone: implicitHeight
     anchors {
@@ -19,6 +19,7 @@ PanelWindow {
         bottom: true
     }
     WlrLayershell.namespace: "zac-shell-bar"
+    // Keep the entire solid strip below fullscreen windows.
     WlrLayershell.layer: WlrLayer.Top
 
     property bool compact: width < 1500

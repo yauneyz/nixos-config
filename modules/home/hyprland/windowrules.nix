@@ -102,6 +102,12 @@
 
       # Window assignments carried over from i3.
       {
+        # Keep the Electron desktop UI from triggering an HDR modeset on
+        # fullscreen, which blanks the display during the transition.
+        match.class = "^(com[.]talysman[.]app)$";
+        no_auto_hdr = true;
+      }
+      {
         match.class = "(?i)thinky";
         workspace = "1";
       }

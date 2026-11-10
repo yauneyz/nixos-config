@@ -18,6 +18,11 @@ in
   wayland.windowManager.hyprland = {
     settings = {
       config = {
+        # Avoid monitor picture-profile switches (and a brief black screen)
+        # when applications enter or leave fullscreen.
+        render.send_content_type = false;
+        render.cm_auto_hdr = 0;
+
         cursor = {
           enable_hyprcursor = true;
           warp_on_change_workspace = false;

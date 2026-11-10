@@ -213,6 +213,9 @@ let
   ]
   ++ lib.optionals (host == "desktop") [
     (mkBind "ALT + SHIFT + M" (exec "toggle-monitor-brightness"))
+    # Panic button for a wedged Moonlight stream: restores the desk monitors
+    # and force-restarts Sunshine (see hosts/desktop/sunshine.nix).
+    (mkBind "ALT + CTRL + SHIFT + Escape" (exec "sunshine-display reset"))
   ]
   ++ backendHardwareBinds;
 in

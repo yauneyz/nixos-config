@@ -12,6 +12,7 @@ let
   commands = [
     "dbus-update-activation-environment --all --systemd PATH WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE"
     "systemctl --user import-environment PATH WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE"
+    "init-wallpaper"
     "nm-applet"
     "poweralertd"
     # caffeine-ng ships its own XDG autostart .desktop file, which systemd's

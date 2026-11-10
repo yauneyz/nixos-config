@@ -5,7 +5,7 @@
   ...
 }:
 let
-  wallpaperPath = ../../wallpapers/sakura-shrine-night.png;
+  wallpaperPath = ../../wallpapers/japanese-countryside-4k.jpg;
 
   # Ink-black surfaces and warm sakura accents tuned for the shrine wallpaper
   # pair.  Neutral foregrounds keep code calm and readable over translucent

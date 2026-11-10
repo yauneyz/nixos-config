@@ -14,16 +14,19 @@
           position = "0x0";
           scale = 1.5;
           transform = 3;
+          bitdepth = 10;
         }
 
         # DP-2: Right monitor (landscape, primary)
         # Position: offset by rotated DP-1's scaled width (2160/1.5 = 1440)
-        # Scale: 1.2
+        # Scale: 1.25; 10-bit SDR output
         {
           output = "DP-2";
           mode = "3840x2160@60";
           position = "1440x0";
           scale = 1.25;
+          bitdepth = 10;
+          cm = "srgb";
         }
 
         # Fallback for any other monitors

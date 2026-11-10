@@ -40,6 +40,6 @@
       '';
     })
     dolphin-emu
-    simple64
+    gopher64
   ];
 }
