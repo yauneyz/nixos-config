@@ -39,28 +39,30 @@ in
     };
   };
 
-  systemd.sleep.settings.Sleep = {
-    AllowHibernation = "no";
-    AllowHybridSleep = "no";
-    AllowSuspendThenHibernate = "no";
-  };
-
-  systemd.services.nixos-flake-update = {
-    description = "Update nixpkgs flake input for nixos-config";
-    serviceConfig = {
-      Type = "oneshot";
-      WorkingDirectory = config.zac.paths.nixosConfig;
-      ExecStart = "/run/current-system/sw/bin/nix flake lock --update-input nixpkgs --update-input claude-code --update-input codex-cli-nix";
-      User = "zac";
+  systemd = {
+    sleep.settings.Sleep = {
+      AllowHibernation = "no";
+      AllowHybridSleep = "no";
+      AllowSuspendThenHibernate = "no";
     };
-  };
 
-  systemd.timers.nixos-flake-update = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "Sun *-*-* 04:00:00";
-      RandomizedDelaySec = "1h";
-      Persistent = true;
+    services.nixos-flake-update = {
+      description = "Update nixpkgs flake input for nixos-config";
+      serviceConfig = {
+        Type = "oneshot";
+        WorkingDirectory = config.zac.paths.nixosConfig;
+        ExecStart = "/run/current-system/sw/bin/nix flake lock --update-input nixpkgs --update-input claude-code --update-input codex-cli-nix";
+        User = "zac";
+      };
+    };
+
+    timers.nixos-flake-update = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "Sun *-*-* 04:00:00";
+        RandomizedDelaySec = "1h";
+        Persistent = true;
+      };
     };
   };
 

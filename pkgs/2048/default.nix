@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Frost-Phoenix";
     repo = "2048-cli";
-    rev = "e5b5e2b";
-    sha256 = "sha256-DqOSfKQC7WdslEknzFByZPc20AsjX6+5PwKR3gqucOM=";
+    rev = "e5b5e2bd708997a55efe76cf784aad38daf5f0a5";
+    hash = "sha256-DqOSfKQC7WdslEknzFByZPc20AsjX6+5PwKR3gqucOM=";
   };
 
   nativeBuildInputs = [ perl ];

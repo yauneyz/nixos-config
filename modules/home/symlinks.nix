@@ -35,49 +35,51 @@ let
   };
 in
 {
-  # Home directory symlinks
-  # Using mkOutOfStoreSymlink to create direct symlinks instead of copying to Nix store
+  home = {
+    # Home directory symlinks
+    # Using mkOutOfStoreSymlink to create direct symlinks instead of copying to Nix store
 
-  home.file = lib.optionalAttrs (dataHome != home) dataHomeLinks // {
-    # Thinky app-state.edn is host-shared through the personal org tree.
-    ".config/Thinky/app-state.edn".source =
-      config.lib.file.mkOutOfStoreSymlink "${org}/thinky/app-state.edn";
+    file = lib.optionalAttrs (dataHome != home) dataHomeLinks // {
+      # Thinky app-state.edn is host-shared through the personal org tree.
+      ".config/Thinky/app-state.edn".source =
+        config.lib.file.mkOutOfStoreSymlink "${org}/thinky/app-state.edn";
+    };
+
+    # Stable, host-agnostic leaf symlink to the snorlax checkout, consumed by the
+    # `snorlax` flake input in flake.nix (git+file:///home/zac/.snorlax-src).
+    # Direct child of the (real) home dir, so nix's git fetcher accepts it on
+    # desktop too — where ~/development itself is a symlink and thus rejected as a
+    # parent path component. Points at the data partition on desktop, the real
+    # home tree on the laptop.
+    #
+    # This MUST be a direct filesystem symlink to the real checkout, NOT an
+    # mkOutOfStoreSymlink. mkOutOfStoreSymlink points ~/.snorlax-src at a
+    # /nix/store path first (…-home-manager-files/.snorlax-src, itself a symlink to
+    # the out-of-store target). The flake-input fetcher follows ~/.snorlax-src on
+    # disk at fetch time; when the first hop lands inside /nix/store it uses that
+    # store path directly instead of git-exporting the real repo. Eval-time reads
+    # under it — modules/home/snorlax.nix reading native/common/extension-identities.json —
+    # then resolve through the out-of-store symlink and fail with "access to
+    # absolute path … is forbidden in pure evaluation mode". A direct symlink
+    # resolves to a non-store path, forcing a clean git export.
+    activation.snorlaxSrcLink =
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        run ln -sfn ${development}/snorlax "$HOME/.snorlax-src"
+      '';
+
+    # Syncthing shares Main and does not follow symlinks within it. Keep the real
+    # drawings there and link to them from the snorlax checkout instead.
+    # Main itself is a managed symlink on some hosts, so wait for that link.
+    activation.snorlaxDesignDraftsLink =
+      lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+        drafts="${home}/Main/design-drafts"
+        link="${development}/snorlax/design-drafts"
+        run mkdir -p "$drafts"
+        if [ -e "$link" ] && [ ! -L "$link" ]; then
+          echo "Cannot link design drafts: $link already exists" >&2
+          exit 1
+        fi
+        run ln -sfn "$drafts" "$link"
+      '';
   };
-
-  # Stable, host-agnostic leaf symlink to the snorlax checkout, consumed by the
-  # `snorlax` flake input in flake.nix (git+file:///home/zac/.snorlax-src).
-  # Direct child of the (real) home dir, so nix's git fetcher accepts it on
-  # desktop too — where ~/development itself is a symlink and thus rejected as a
-  # parent path component. Points at the data partition on desktop, the real
-  # home tree on the laptop.
-  #
-  # This MUST be a direct filesystem symlink to the real checkout, NOT an
-  # mkOutOfStoreSymlink. mkOutOfStoreSymlink points ~/.snorlax-src at a
-  # /nix/store path first (…-home-manager-files/.snorlax-src, itself a symlink to
-  # the out-of-store target). The flake-input fetcher follows ~/.snorlax-src on
-  # disk at fetch time; when the first hop lands inside /nix/store it uses that
-  # store path directly instead of git-exporting the real repo. Eval-time reads
-  # under it — modules/home/snorlax.nix reading native/common/extension-identities.json —
-  # then resolve through the out-of-store symlink and fail with "access to
-  # absolute path … is forbidden in pure evaluation mode". A direct symlink
-  # resolves to a non-store path, forcing a clean git export.
-  home.activation.snorlaxSrcLink =
-    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      run ln -sfn ${development}/snorlax "$HOME/.snorlax-src"
-    '';
-
-  # Syncthing shares Main and does not follow symlinks within it. Keep the real
-  # drawings there and link to them from the snorlax checkout instead.
-  # Main itself is a managed symlink on some hosts, so wait for that link.
-  home.activation.snorlaxDesignDraftsLink =
-    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-      drafts="${home}/Main/design-drafts"
-      link="${development}/snorlax/design-drafts"
-      run mkdir -p "$drafts"
-      if [ -e "$link" ] && [ ! -L "$link" ]; then
-        echo "Cannot link design drafts: $link already exists" >&2
-        exit 1
-      fi
-      run ln -sfn "$drafts" "$link"
-    '';
 }

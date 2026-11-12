@@ -93,27 +93,29 @@ in
   ];
 
   home-manager.users.${username} = { config, lib, ... }: {
-    # Keep ALVR's live session writable so the dashboard can save tuning and
-    # trusted headsets. Rebuilds must not overwrite an existing session.
-    xdg.configFile."alvr/quest3-baseline.json".source = quest3Baseline;
+    xdg = {
+      # Keep ALVR's live session writable so the dashboard can save tuning and
+      # trusted headsets. Rebuilds must not overwrite an existing session.
+      configFile."alvr/quest3-baseline.json".source = quest3Baseline;
+
+      desktopEntries.botw-vr = {
+        name = "Breath of the Wild VR";
+        comment = "BetterVR in Cemu through ALVR and SteamVR";
+        exec = "botw-vr";
+        icon = "info.cemu.Cemu";
+        terminal = false;
+        categories = [ "Game" ];
+      };
+
+      # Proton's OpenXR games should use SteamVR alongside ALVR's OpenVR driver.
+      configFile."openxr/1/active_runtime.json".source =
+        config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/Steam/steamapps/common/SteamVR/steamxr_linux64.json";
+    };
     home.activation.alvrQuest3Defaults = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       if [ ! -e ${lib.escapeShellArg "${config.xdg.configHome}/alvr/session.json"} ]; then
         run ${pkgs.coreutils}/bin/install -Dm600 ${quest3Baseline} \
           ${lib.escapeShellArg "${config.xdg.configHome}/alvr/session.json"}
       fi
     '';
-
-    xdg.desktopEntries.botw-vr = {
-      name = "Breath of the Wild VR";
-      comment = "BetterVR in Cemu through ALVR and SteamVR";
-      exec = "botw-vr";
-      icon = "info.cemu.Cemu";
-      terminal = false;
-      categories = [ "Game" ];
-    };
-
-    # Proton's OpenXR games should use SteamVR alongside ALVR's OpenVR driver.
-    xdg.configFile."openxr/1/active_runtime.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.dataHome}/Steam/steamapps/common/SteamVR/steamxr_linux64.json";
   };
 }

@@ -55,7 +55,7 @@ rec {
               ];
             });
           });
-        }).overrideAttrs (old: rec {
+        }).overrideAttrs (_old: rec {
           version = "24.22.1";
           src = pkgs.fetchurl {
             url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
@@ -74,7 +74,7 @@ rec {
       # until upstream wf-recorder migrates to avcodec_get_supported_config.
       ffmpeg_8 = prev.ffmpeg_7;
     }).overrideAttrs
-      (old: rec {
+      (_old: rec {
         version = "0.6.0";
         src = pkgs.fetchFromGitHub {
           owner = "ammen99";

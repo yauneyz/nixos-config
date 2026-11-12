@@ -112,78 +112,80 @@ in {
       conf-file=/run/talysman/dnsmasq.conf
     '';
 
-    # dnsmasq needs /run/talysman/dnsmasq.conf to exist (even empty) before it starts,
-    # since the include above references it directly rather than via a glob.
-    systemd.tmpfiles.rules = [
-      "d /run/talysman 0755 root root -"
-      "f /run/talysman/dnsmasq.conf 0644 root root -"
-    ];
+    systemd = {
+      # dnsmasq needs /run/talysman/dnsmasq.conf to exist (even empty) before it starts,
+      # since the include above references it directly rather than via a glob.
+      tmpfiles.rules = [
+        "d /run/talysman 0755 root root -"
+        "f /run/talysman/dnsmasq.conf 0644 root root -"
+      ];
+
+      # Declarative replacement for `talysman-svcctl install`. The svcctl installer would
+      # otherwise write this unit imperatively and drop binaries under /opt; here we point
+      # ExecStart at the Nix-store binary and let systemd own the runtime/state dirs.
+      services.talysman = {
+        description = "Talysman enforcement daemon";
+        after = [ "network-online.target" "nftables.service" ];
+        conflicts = [ "focuslock.service" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        # Restart on every switch that changes the daemon, so a new build (e.g. updated premade
+        # lists) never keeps running the old binary.
+        restartIfChanged = true;
+        restartTriggers = [ cfg.package ];
+
+        # talysman-svc shells out to nft (IP blocking) and ip (routing) at runtime.
+        # The policy sync hooks use jq/coreutils.
+        path = with pkgs; [ nftables iproute2 jq coreutils ];
+
+        serviceConfig = {
+          Type = "simple";
+          ExecStartPre = importPolicy;
+          ExecStart = "${cfg.package}/bin/talysman-svc";
+          ExecStartPost = exportPolicy;
+          Restart = "always";
+          RestartSec = "1s";
+
+          # Runs as unrestricted root (matching upstream's svcctl-generated unit). The
+          # daemon needs broad privileges beyond networking: it writes paired-key files
+          # to user-owned removable mounts (CAP_DAC_OVERRIDE — restricting caps here is
+          # what caused "Could not write key file: Permission denied" on FAT/exFAT/NTFS
+          # sticks), kills blocked processes owned by the user (CAP_KILL), and drives
+          # nftables. Do not add a CapabilityBoundingSet without auditing all of these.
+          User = "root";
+
+          # RuntimeDirectory -> /run/talysman (socket: /run/talysman/talysman.sock)
+          RuntimeDirectory = "talysman";
+          RuntimeDirectoryMode = "0755";
+          # dnsmasq's talysman.conf include references /run/talysman/dnsmasq.conf directly
+          # (not a glob); don't let a talysman restart delete it out from under dnsmasq.
+          RuntimeDirectoryPreserve = "yes";
+          # StateDirectory -> /var/lib/talysman (state.json, secure-store.json, recovery-code.txt)
+          StateDirectory = "talysman";
+          StateDirectoryMode = "0750";
+        };
+      };
+
+      services.talysman-policy-sync = {
+        description = "Sync Talysman policy from daemon state into nixos-config";
+        path = with pkgs; [ jq coreutils ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = exportPolicy;
+        };
+      };
+
+      paths.talysman-policy-sync = {
+        description = "Watch Talysman state for policy changes";
+        wantedBy = [ "multi-user.target" ];
+        pathConfig = {
+          PathChanged = stateFile;
+          Unit = "talysman-policy-sync.service";
+        };
+      };
+    };
 
     # Expose talysman-svc/-svcctl/-recover/-natmsg system-wide (recovery, status, pairing).
     environment.systemPackages = [ cfg.package ];
-
-    # Declarative replacement for `talysman-svcctl install`. The svcctl installer would
-    # otherwise write this unit imperatively and drop binaries under /opt; here we point
-    # ExecStart at the Nix-store binary and let systemd own the runtime/state dirs.
-    systemd.services.talysman = {
-      description = "Talysman enforcement daemon";
-      after = [ "network-online.target" "nftables.service" ];
-      conflicts = [ "focuslock.service" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      # Restart on every switch that changes the daemon, so a new build (e.g. updated premade
-      # lists) never keeps running the old binary.
-      restartIfChanged = true;
-      restartTriggers = [ cfg.package ];
-
-      # talysman-svc shells out to nft (IP blocking) and ip (routing) at runtime.
-      # The policy sync hooks use jq/coreutils.
-      path = with pkgs; [ nftables iproute2 jq coreutils ];
-
-      serviceConfig = {
-        Type = "simple";
-        ExecStartPre = importPolicy;
-        ExecStart = "${cfg.package}/bin/talysman-svc";
-        ExecStartPost = exportPolicy;
-        Restart = "always";
-        RestartSec = "1s";
-
-        # Runs as unrestricted root (matching upstream's svcctl-generated unit). The
-        # daemon needs broad privileges beyond networking: it writes paired-key files
-        # to user-owned removable mounts (CAP_DAC_OVERRIDE — restricting caps here is
-        # what caused "Could not write key file: Permission denied" on FAT/exFAT/NTFS
-        # sticks), kills blocked processes owned by the user (CAP_KILL), and drives
-        # nftables. Do not add a CapabilityBoundingSet without auditing all of these.
-        User = "root";
-
-        # RuntimeDirectory -> /run/talysman (socket: /run/talysman/talysman.sock)
-        RuntimeDirectory = "talysman";
-        RuntimeDirectoryMode = "0755";
-        # dnsmasq's talysman.conf include references /run/talysman/dnsmasq.conf directly
-        # (not a glob); don't let a talysman restart delete it out from under dnsmasq.
-        RuntimeDirectoryPreserve = "yes";
-        # StateDirectory -> /var/lib/talysman (state.json, secure-store.json, recovery-code.txt)
-        StateDirectory = "talysman";
-        StateDirectoryMode = "0750";
-      };
-    };
-
-    systemd.services.talysman-policy-sync = {
-      description = "Sync Talysman policy from daemon state into nixos-config";
-      path = with pkgs; [ jq coreutils ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = exportPolicy;
-      };
-    };
-
-    systemd.paths.talysman-policy-sync = {
-      description = "Watch Talysman state for policy changes";
-      wantedBy = [ "multi-user.target" ];
-      pathConfig = {
-        PathChanged = stateFile;
-        Unit = "talysman-policy-sync.service";
-      };
-    };
   };
 }

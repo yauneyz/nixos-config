@@ -274,7 +274,8 @@ in
       mkft = "screenplain ~/development/screenplay/markov/markov.fountain ~/development/screenplay/markov/markov.pdf";
 
       # Jekyll
-      js = "bundle exec jekyll serve";
+      # Nix's jekyll lacks jekyll-feed; _config.local.yml (per-site) drops it.
+      js = "nix-shell -p jekyll --run \"jekyll serve --livereload --config _config.yml,_config.local.yml\"";
 
       ############################
       # System / misc tools

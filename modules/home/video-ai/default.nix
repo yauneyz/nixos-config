@@ -88,7 +88,7 @@ let
     }:
     pkgs.writeShellApplication {
       inherit name;
-      runtimeInputs = runtimeInputs;
+      inherit runtimeInputs;
       text = ''
         ${commonEnvironment}
         ${extraEnvironment}
@@ -248,58 +248,64 @@ let
     };
 in
 {
-  home.sessionVariables = {
-    VIDEO_AI_ROOT = root;
-    VIDEO_AI_GAMES_ROOT = gamesRoot;
-    VIDEO_AI_MODELS = models;
-    VIDEO_AI_APPS = apps;
-    VIDEO_AI_ENVS = envs;
-    VIDEO_AI_CACHE = cache;
-    VIDEO_AI_STATE = state;
-    VIDEO_AI_PROJECTS = projects;
-    VIDEO_AI_WORK = work;
-    VIDEO_AI_EXPORTS = exports;
-    VIDEO_AI_TMP = tmp;
+  home = {
+    sessionVariables = {
+      VIDEO_AI_ROOT = root;
+      VIDEO_AI_GAMES_ROOT = gamesRoot;
+      VIDEO_AI_MODELS = models;
+      VIDEO_AI_APPS = apps;
+      VIDEO_AI_ENVS = envs;
+      VIDEO_AI_CACHE = cache;
+      VIDEO_AI_STATE = state;
+      VIDEO_AI_PROJECTS = projects;
+      VIDEO_AI_WORK = work;
+      VIDEO_AI_EXPORTS = exports;
+      VIDEO_AI_TMP = tmp;
+    };
+
+    packages = [
+      videoAi
+      videoGuide
+      workflowGuide
+      comfyLauncher
+      wangpLauncher
+      aceStepLauncher
+      captionLauncher
+      voiceLauncher
+      oviLauncher
+      rifeLauncher
+      # pkgs.davinci-resolve # TODO: re-enable once the pinned installer hash is refreshed
+      pkgs.mediainfo
+      pkgs.realesrgan-ncnn-vulkan
+      pkgs.vulkan-tools
+    ];
+
+    activation.videoAiLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      mount_target="$(${pkgs.util-linux}/bin/findmnt -n -o TARGET -T ${lib.escapeShellArg gamesRoot})"
+      if [ "$mount_target" != ${lib.escapeShellArg gamesRoot} ]; then
+        echo "video-ai: refusing activation because ${gamesRoot} is not its own mount" >&2
+        exit 1
+      fi
+      ${pkgs.coreutils}/bin/mkdir -p \
+        ${lib.escapeShellArg root} \
+        ${lib.escapeShellArg models} \
+        ${lib.escapeShellArg state} \
+        ${lib.escapeShellArg projects} \
+        ${lib.escapeShellArg work} \
+        ${lib.escapeShellArg exports} \
+        ${lib.escapeShellArg tmp}
+      ${pkgs.coreutils}/bin/chmod 700 ${lib.escapeShellArg state} ${lib.escapeShellArg projects}
+    '';
   };
 
-  home.packages = [
-    videoAi
-    videoGuide
-    workflowGuide
-    comfyLauncher
-    wangpLauncher
-    aceStepLauncher
-    captionLauncher
-    voiceLauncher
-    oviLauncher
-    rifeLauncher
-    # pkgs.davinci-resolve # TODO: re-enable once the pinned installer hash is refreshed
-    pkgs.mediainfo
-    pkgs.realesrgan-ncnn-vulkan
-    pkgs.vulkan-tools
-  ];
-
-  xdg.configFile."video-ai/comfy-extra-model-paths.yaml".source = comfyModelPaths;
-  xdg.configFile."video-ai/apps.json".source = appsManifest;
-  xdg.configFile."video-ai/models.json".source = modelsManifest;
-  xdg.configFile."video-ai/workflows.json".source = workflowsManifest;
-
-  home.activation.videoAiLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mount_target="$(${pkgs.util-linux}/bin/findmnt -n -o TARGET -T ${lib.escapeShellArg gamesRoot})"
-    if [ "$mount_target" != ${lib.escapeShellArg gamesRoot} ]; then
-      echo "video-ai: refusing activation because ${gamesRoot} is not its own mount" >&2
-      exit 1
-    fi
-    ${pkgs.coreutils}/bin/mkdir -p \
-      ${lib.escapeShellArg root} \
-      ${lib.escapeShellArg models} \
-      ${lib.escapeShellArg state} \
-      ${lib.escapeShellArg projects} \
-      ${lib.escapeShellArg work} \
-      ${lib.escapeShellArg exports} \
-      ${lib.escapeShellArg tmp}
-    ${pkgs.coreutils}/bin/chmod 700 ${lib.escapeShellArg state} ${lib.escapeShellArg projects}
-  '';
+  xdg = {
+    configFile = {
+      "video-ai/comfy-extra-model-paths.yaml".source = comfyModelPaths;
+      "video-ai/apps.json".source = appsManifest;
+      "video-ai/models.json".source = modelsManifest;
+      "video-ai/workflows.json".source = workflowsManifest;
+    };
+  };
 
   systemd.user.services = {
     comfyui = mkGpuService {

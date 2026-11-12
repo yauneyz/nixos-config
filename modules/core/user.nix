@@ -24,10 +24,12 @@ in
     };
     users.${username} = {
       imports = if (host == "desktop") then [ ./../home/default.desktop.nix ] else [ ./../home ];
-      home.username = "${username}";
-      home.homeDirectory = userPaths.home;
-      home.enableNixpkgsReleaseCheck = false;
-      home.stateVersion = "24.05";
+      home = {
+        username = "${username}";
+        homeDirectory = userPaths.home;
+        enableNixpkgsReleaseCheck = false;
+        stateVersion = "24.05";
+      };
       programs.home-manager.enable = true;
     };
     backupFileExtension = "hm-backup";

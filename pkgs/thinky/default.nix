@@ -10,7 +10,7 @@ let
   releaseInfo = import ./release.nix { host = releaseHost; };
 
   pname = "thinky";
-  version = releaseInfo.version;
+  inherit (releaseInfo) version;
   hasFetchSource = (releaseInfo ? url) && (releaseInfo ? sha256);
   hasLegacyStorePath = releaseInfo ? storePath;
   sourceAvailable =

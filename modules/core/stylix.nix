@@ -38,17 +38,19 @@ in
     enableReleaseChecks = false;
     autoEnable = true; # Auto-theme installed applications
 
-    # Disable GRUB theming (using custom theme instead)
-    targets.grub.enable = false;
+    targets = {
+      # Disable GRUB theming (using custom theme instead)
+      grub.enable = false;
 
-    # Disable kmscon theming: stylix's kmscon module still sets the removed
-    # services.kmscon.{extraConfig,fonts} options, which newer nixpkgs rejects.
-    # We don't use kmscon, so just turn the target off.
-    targets.kmscon.enable = false;
+      # Disable kmscon theming: stylix's kmscon module still sets the removed
+      # services.kmscon.{extraConfig,fonts} options, which newer nixpkgs rejects.
+      # We don't use kmscon, so just turn the target off.
+      kmscon.enable = false;
 
-    # SDDM is our display manager. The ReGreet target still writes the renamed
-    # programs.regreet options on nixpkgs 26.11 even when ReGreet is disabled.
-    targets.regreet.enable = false;
+      # SDDM is our display manager. The ReGreet target still writes the renamed
+      # programs.regreet options on nixpkgs 26.11 even when ReGreet is disabled.
+      regreet.enable = false;
+    };
 
     # Wallpaper (required)
     image = wallpaperPath;

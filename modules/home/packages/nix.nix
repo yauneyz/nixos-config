@@ -23,5 +23,16 @@
     nix-melt                          # Ranger-like flake.lock viewer
     nix-output-monitor                # Processes output of Nix commands to show helpful and pretty information
     nixtract                          # A CLI tool to extract the graph of derivations from a Nix flake
+    statix                            # Nix linter (anti-patterns), `statix fix` autofixes
+    deadnix                           # Find unused bindings / lambda args in Nix
+    nurl                              # Generate fetcher calls with hashes: nurl <url> [rev]
+    nix-init                          # Scaffold a derivation from a URL
+    sops                              # edit encrypted secrets: sops secrets/secrets.yaml
+    age                               # age-keygen etc. for sops keys
   ];
+
+  # Lint the whole config: anti-patterns + dead code (read-only).
+  programs.zsh.shellAliases = {
+    nixlint = "statix check ~/nixos-config; deadnix --no-lambda-pattern-names ~/nixos-config/modules ~/nixos-config/hosts ~/nixos-config/pkgs ~/nixos-config/flake.nix";
+  };
 }

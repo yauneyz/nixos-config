@@ -1,0 +1,2 @@
+disabled = []
+ignore = ["result", "**/hardware-configuration.nix", ".direnv", ".emacs.d"]

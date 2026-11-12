@@ -33,11 +33,12 @@ require_command() {
 }
 
 data_home="${ZAC_DATA_HOME:-$HOME}"
-# Models live on the Games partition under the login home ($HOME/Games), not on
-# the data partition ($data_home). LLAMA_MODELS_DIR already resolves there.
+# Models, the textgen checkout, and its user data all live on the Games
+# partition under the login home ($HOME/Games), not on the data partition
+# ($data_home, which only holds the pip cache and TMPDIR below).
 models_root="${LLAMA_MODELS_DIR:-$HOME/Games/Models}"
-textgen_dir="${TEXTGEN_DIR:-$data_home/Games/LLM/textgen}"
-user_data_dir="${TEXTGEN_USER_DATA_DIR:-$data_home/Games/LLM/textgen-user-data}"
+textgen_dir="${TEXTGEN_DIR:-$HOME/Games/LLM/textgen}"
+user_data_dir="${TEXTGEN_USER_DATA_DIR:-$HOME/Games/LLM/textgen-user-data}"
 models_dir="${TEXTGEN_MODELS_DIR:-$models_root}"
 host="${TEXTGEN_HOST:-127.0.0.1}"
 port="${TEXTGEN_PORT:-7860}"

@@ -1,42 +1,75 @@
 { pkgs, username, ... }:
 {
-  programs.git = {
-    enable = true;
-    signing.format = "openpgp";
+  programs = {
+    git = {
+      enable = true;
+      signing.format = "openpgp";
 
-    settings = {
-      user = {
-        name = "Zac Yauney";
-        email = "zac.yauney@gmail.com";
+      settings = {
+        user = {
+          name = "Zac Yauney";
+          email = "zac.yauney@gmail.com";
+        };
+
+        init.defaultBranch = "master";
+        merge.conflictstyle = "diff3";
+        diff.colorMoved = "default";
+        pull.ff = "only";
+        color.ui = true;
+
+        url = {
+          "git@github.com:".insteadOf = [
+            "gh:"
+            "https://github.com/"
+          ];
+          "git@github.com:yauneyz/".insteadOf = "zy:";
+        };
+
+        core.excludesFile = "/home/${username}/.config/git/.gitignore";
       };
-
-      init.defaultBranch = "master";
-      merge.conflictstyle = "diff3";
-      diff.colorMoved = "default";
-      pull.ff = "only";
-      color.ui = true;
-
-      url = {
-        "git@github.com:".insteadOf = [
-          "gh:"
-          "https://github.com/"
-        ];
-        "git@github.com:yauneyz/".insteadOf = "zy:";
-      };
-
-      core.excludesFile = "/home/${username}/.config/git/.gitignore";
     };
-  };
 
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = true;
+    delta = {
+      enable = true;
+      enableGitIntegration = true;
 
-    options = {
-      line-numbers = true;
-      side-by-side = false;
-      diff-so-fancy = true;
-      navigate = true;
+      options = {
+        line-numbers = true;
+        side-by-side = false;
+        diff-so-fancy = true;
+        navigate = true;
+      };
+    };
+
+    zsh.shellAliases = {
+      g = "lazygit";
+      gf = "onefetch --number-of-file-churns 0 --no-color-palette";
+
+      gs = "git status --ignore-submodules";
+      gcl = "git clone";
+      gd = "git diff";
+
+      ga = "git add --all";
+      gc = "git commit -m";
+
+      gpl = "git pull";
+      gplo = "git pull origin";
+
+      gps = "git push";
+      gpso = "git push origin";
+      gpst = "git push --tags";
+      gtag = "git tag -ma";
+
+      gm = "git merge";
+      gb = "git branch";
+      gch = "git checkout";
+      gchb = "git checkout -b";
+
+      glg = "serie";
+      glog = "git log --oneline --decorate --graph";
+      glol = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'";
+      glola = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all";
+      glols = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat";
     };
   };
 
@@ -48,35 +81,4 @@
   xdg.configFile."git/.gitignore".text = ''
     .vscode
   '';
-
-  programs.zsh.shellAliases = {
-    g = "lazygit";
-    gf = "onefetch --number-of-file-churns 0 --no-color-palette";
-
-    gs = "git status --ignore-submodules";
-    gcl = "git clone";
-    gd = "git diff";
-
-    ga = "git add --all";
-    gc = "git commit -m";
-
-    gpl = "git pull";
-    gplo = "git pull origin";
-
-    gps = "git push";
-    gpso = "git push origin";
-    gpst = "git push --tags";
-    gtag = "git tag -ma";
-
-    gm = "git merge";
-    gb = "git branch";
-    gch = "git checkout";
-    gchb = "git checkout -b";
-
-    glg = "serie";
-    glog = "git log --oneline --decorate --graph";
-    glol = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'";
-    glola = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all";
-    glols = "git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat";
-  };
 }

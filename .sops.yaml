@@ -1,0 +1,7 @@
+keys:
+  - &zac age1lu5e6unw9dzq5r7c5avcl7vhmcqrdmdgq6t8qt2qng4zvumzjvysa542ut
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *zac

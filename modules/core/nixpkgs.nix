@@ -19,10 +19,10 @@
       inputs.claude-code.overlays.default
 
       # Home Manager still references deprecated xorg aliases in some modules.
-      (final: prev: {
+      (_final: prev: {
         xorg = prev.xorg // {
-          xrdb = prev.xrdb;
-          lndir = prev.lndir;
+          inherit (prev) xrdb;
+          inherit (prev) lndir;
         };
       })
       (

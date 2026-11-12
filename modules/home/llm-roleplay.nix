@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   # TabbyAPI serves the EXL3 Cydonia model to SillyTavern through either its
   # OpenAI-compatible or Kobold-compatible API. Keep it local-only because

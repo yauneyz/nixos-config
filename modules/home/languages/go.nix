@@ -1,34 +1,36 @@
 { pkgs, lib, ... }:
 {
-  home.packages = with pkgs; [
-    # Language Server Protocol + IDE helpers
-    gopls
+  home = {
+    packages = with pkgs; [
+      # Language Server Protocol + IDE helpers
+      gopls
 
-    # Debugger
-    delve
+      # Debugger
+      delve
 
-    # Linters and code quality
-    golangci-lint
-    (lib.lowPrio gotools) # includes goimports, godoc, etc. (lowPrio to avoid conflict with gopls modernize)
+      # Linters and code quality
+      golangci-lint
+      (lib.lowPrio gotools) # includes goimports, godoc, etc. (lowPrio to avoid conflict with gopls modernize)
 
-    # REPL
-    gore
+      # REPL
+      gore
 
-    # Note: Install additional tools via `go install`:
-    # - staticcheck: go install honnef.co/go/tools/cmd/staticcheck@latest
-    # - gomodifytags: go install github.com/fatih/gomodifytags@latest
-    # - impl: go install github.com/josharian/impl@latest
-    # - gotests: go install github.com/cweill/gotests/gotests@latest
-  ];
+      # Note: Install additional tools via `go install`:
+      # - staticcheck: go install honnef.co/go/tools/cmd/staticcheck@latest
+      # - gomodifytags: go install github.com/fatih/gomodifytags@latest
+      # - impl: go install github.com/josharian/impl@latest
+      # - gotests: go install github.com/cweill/gotests/gotests@latest
+    ];
 
-  # Set up Go environment variables
-  home.sessionVariables = {
-    GOPATH = "$HOME/go";
-    GOBIN = "$HOME/go/bin";
+    # Set up Go environment variables
+    sessionVariables = {
+      GOPATH = "$HOME/go";
+      GOBIN = "$HOME/go/bin";
+    };
+
+    # Add GOBIN to PATH
+    sessionPath = [
+      "$HOME/go/bin"
+    ];
   };
-
-  # Add GOBIN to PATH
-  home.sessionPath = [
-    "$HOME/go/bin"
-  ];
 }

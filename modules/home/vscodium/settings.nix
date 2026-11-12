@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   programs.vscodium.profiles.default = {
     userSettings = {

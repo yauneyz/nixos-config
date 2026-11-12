@@ -68,6 +68,41 @@ in
       gnome-calculator
       readfence
       typora
+
+      ## PDF / ebook readers
+      sioyek # PDF, built for papers: smart jump to refs/figures, portals
+      kdePackages.okular # PDF/EPUB/DjVu, best annotation + form support
+      readest # EPUB/PDF reader with cross-device sync
+      # simple GTK ebook library/reader. Its WebKitGTK page view crashes on
+      # NVIDIA + Wayland (Gdk "Error 71 (Protocol error)") via WebKit's dmabuf
+      # renderer; disabling just that renderer keeps it native Wayland.
+      (symlinkJoin {
+        name = "bookworm-wrapped";
+        paths = [
+          # Upstream bug: reading the scroll position runs JS and then reads the
+          # page title; when the title is null it calls int.parse(null) and
+          # segfaults (on Return to Library / Info / close). Treat null as "".
+          (bookworm.overrideAttrs (old: {
+            postPatch = (old.postPatch or "") + ''
+              substituteInPlace src/utils.vala \
+                --replace-fail \
+                  'selectedText = BookwormApp.AppWindow.aWebView.get_title ();' \
+                  'selectedText = BookwormApp.AppWindow.aWebView.get_title () ?? "";'
+            '';
+          }))
+        ];
+        nativeBuildInputs = [ makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/com.github.babluboy.bookworm \
+            --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+        '';
+      })
+
+      ## PDF tools
+      ocrmypdf # add a searchable text layer to scanned PDFs
+      pdfarranger # merge / split / reorder / rotate pages
+      briss # crop PDF margins (great before sending to the Kindle)
+      recoll # full-text desktop search across PDFs/EPUBs/docs
       # Zotero bundles Firefox libs (e.g. libfreeblpriv3.so) that collide with nss.
       (lib.lowPrio zotero)
     ]

@@ -31,38 +31,42 @@ let
   };
 in
 {
-  # Firefox on Linux looks up native-messaging hosts in ~/.mozilla/native-messaging-hosts.
-  home.file.".mozilla/native-messaging-hosts/${hostName}.json" = {
-    text = firefoxManifest;
-    force = true;
-  };
+  home = {
+    file = {
+      # Firefox on Linux looks up native-messaging hosts in ~/.mozilla/native-messaging-hosts.
+      ".mozilla/native-messaging-hosts/${hostName}.json" = {
+        text = firefoxManifest;
+        force = true;
+      };
 
-  # The local unsigned extension build (pkgs/talysman-firefox, refreshed by `release:local`).
-  # A profile entry named exactly <id> that symlinks to the unpacked store dir: each rebuild's
-  # new store path counts as an update on Firefox's next start. A manually installed
-  # <id>.xpi in the same profile shadows this, so remove it.
-  home.file.".mozilla/firefox/default/extensions/${identities.firefoxId}" =
-    pkgs.lib.mkIf pkgs.talysman-firefox.available {
-      source = "${pkgs.talysman-firefox}/${pkgs.talysman-firefox.extensionDir}";
-      force = true;
+      # The local unsigned extension build (pkgs/talysman-firefox, refreshed by `release:local`).
+      # A profile entry named exactly <id> that symlinks to the unpacked store dir: each rebuild's
+      # new store path counts as an update on Firefox's next start. A manually installed
+      # <id>.xpi in the same profile shadows this, so remove it.
+      ".mozilla/firefox/default/extensions/${identities.firefoxId}" =
+        pkgs.lib.mkIf pkgs.talysman-firefox.available {
+          source = "${pkgs.talysman-firefox}/${pkgs.talysman-firefox.extensionDir}";
+          force = true;
+        };
+
+      # Chromium browsers use the NativeMessagingHosts directory within their user-data root.
+      ".config/google-chrome/NativeMessagingHosts/${hostName}.json" = {
+        text = chromiumManifest;
+        force = true;
+      };
+      ".config/google-chrome-for-testing/NativeMessagingHosts/${hostName}.json" = {
+        text = chromiumManifest;
+        force = true;
+      };
+      ".config/chromium/NativeMessagingHosts/${hostName}.json" = {
+        text = chromiumManifest;
+        force = true;
+      };
+      ".config/microsoft-edge/NativeMessagingHosts/${hostName}.json" = {
+        text = chromiumManifest;
+        force = true;
+      };
     };
-
-  # Chromium browsers use the NativeMessagingHosts directory within their user-data root.
-  home.file.".config/google-chrome/NativeMessagingHosts/${hostName}.json" = {
-    text = chromiumManifest;
-    force = true;
-  };
-  home.file.".config/google-chrome-for-testing/NativeMessagingHosts/${hostName}.json" = {
-    text = chromiumManifest;
-    force = true;
-  };
-  home.file.".config/chromium/NativeMessagingHosts/${hostName}.json" = {
-    text = chromiumManifest;
-    force = true;
-  };
-  home.file.".config/microsoft-edge/NativeMessagingHosts/${hostName}.json" = {
-    text = chromiumManifest;
-    force = true;
   };
 
   # Standalone tray icon (native/linux/src/bin/tray.rs): talks directly to the daemon's socket

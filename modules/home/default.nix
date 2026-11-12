@@ -4,6 +4,7 @@
 
   imports = [
     ./aseprite/aseprite.nix           # pixel art editor
+    ./atuin.nix                       # synced shell history
     ./audacious/audacious.nix         # music player
     ./bat.nix                         # better cat command
     ./browser.nix                     # firefox based browser
@@ -53,6 +54,7 @@
     ./waybar                          # status bar
     # ./waypaper.nix                  # GUI wallpaper picker (replaced by Stylix)
     ./xresources.nix                  # X resources (xterm font, etc.)
+    ./yazi.nix                        # terminal file manager (`y`)
     ./xdg-mimes.nix                   # xdg config
     ./zathura.nix                     # PDF / document viewer
     ./zsh                             # shell

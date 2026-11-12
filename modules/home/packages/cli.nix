@@ -7,7 +7,7 @@ let
     isLinux = pkgs.stdenv.hostPlatform.isLinux;
   };
   codexLatest =
-    (inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default).override
+    inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default.override
       { stdenv = codexStdenv; };
 in
 {
@@ -49,6 +49,30 @@ in
     swappy                            # snapshot editing tool
     tdf                               # cli pdf viewer
     tokei                             # project line counter
+    mprocs                            # run several long-lived commands in one TUI
+    ouch                              # (de)compress any archive format: ouch d / ouch c
+
+    ## PDF CLI
+    qpdf                              # lossless PDF surgery: merge/split/decrypt/repair/linearize
+    mupdf                             # mutool: fast render/extract/clean + `mupdf` viewer
+    pdfgrep                           # grep inside PDFs
+    ripgrep-all                       # rga: ripgrep through PDFs, EPUBs, Office docs, archives
+    (writeShellApplication {
+      # EPUB -> audiobook with Kokoro TTS. Not in nixpkgs; uvx keeps it in its
+      # own cached venv (UV_CACHE_DIR). Use --cuda for the GPU.
+      #   audiblez book.epub -v af_heart -s 1.0 --cuda -o ~/Audiobooks
+      name = "audiblez";
+      runtimeInputs = [
+        uv
+        ffmpeg
+        espeak-ng
+      ];
+      text = ''
+        # torch/numpy wheels need libstdc++ + zlib; libcuda comes from the driver.
+        export LD_LIBRARY_PATH="/run/opengl-driver/lib:${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        exec uvx --python 3.12 audiblez "$@"
+      '';
+    })
     translate-shell                   # cli translator
     woomer
     yt-dlp-light
@@ -111,6 +135,8 @@ in
     mimeo
     openssl
     pamixer                           # pulseaudio command line mixer
+    wiremix                           # PipeWire mixer TUI
+    bluetui                           # Bluetooth TUI
     playerctl                         # controller for media players
     postgresql                        # PostgreSQL client tools (psql, etc.)
     poweralertd

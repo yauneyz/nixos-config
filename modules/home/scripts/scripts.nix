@@ -15,7 +15,7 @@ let
   shellScripts = builtins.filter (name: builtins.match ".*\\.sh$" name != null) regularFiles;
 
   mkScript = name: {
-    name = name;
+    inherit name;
     value = pkgs.writeScriptBin (builtins.replaceStrings [ ".sh" ] [ "" ] name) (
       builtins.readFile (scriptDir + "/${name}")
     );

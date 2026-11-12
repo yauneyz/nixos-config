@@ -27,5 +27,9 @@
     ./wayland.nix
     ./virtualization.nix
     ./snorlax.nix
+    ./snapshots.nix
+    ./health.nix
+    ./sops.nix
+    ./atuin-server.nix
   ];
 }

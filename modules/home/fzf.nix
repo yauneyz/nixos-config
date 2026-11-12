@@ -7,6 +7,8 @@ in
     enable = true;
 
     enableZshIntegration = true;
+    # Ctrl-R belongs to atuin (atuin.nix); fzf keeps Ctrl-T and Alt-C.
+    historyWidget.command = "";
 
     defaultCommand = "fd --hidden --strip-cwd-prefix --exclude .git";
     fileWidget.options = [
