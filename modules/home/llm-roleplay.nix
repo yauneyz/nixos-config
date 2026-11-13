@@ -1,5 +1,22 @@
-_:
+{ pkgs, ... }:
+let
+  tavernHelper = pkgs.writeText "tavern-serve.py" (builtins.readFile ./scripts/scripts/tavern-serve.py);
+  tavernStack = pkgs.writeShellApplication {
+    name = "tavern-stack";
+    runtimeInputs = [ pkgs.python3 pkgs.xdg-utils ];
+    text = ''
+      export TAVERN_NODE=${pkgs.nodejs-patched}/bin/node
+      export TAVERN_FRONTEND_ENTRY=${pkgs.sillytavern}/lib/node_modules/sillytavern/src/server-global.js
+      export TAVERN_DEFAULT_SETTINGS=${pkgs.sillytavern}/lib/node_modules/sillytavern/default/content/settings.json
+      exec python3 ${tavernHelper} "$@"
+    '';
+  };
+in
 {
+  # textgen provides its llama.cpp model loader and browser configuration UI;
+  # the CUDA-enabled system llama-server remains available through llm-serve.
+  home.packages = [ tavernStack ];
+
   # TabbyAPI serves the EXL3 Cydonia model to SillyTavern through either its
   # OpenAI-compatible or Kobold-compatible API. Keep it local-only because
   # authentication is intentionally disabled for convenient desktop use.

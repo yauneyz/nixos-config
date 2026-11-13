@@ -6,5 +6,6 @@
     ./default.nix
     ./hyprland/monitors-desktop.nix
     ./video-ai
+    ./unity.nix
   ];
 }

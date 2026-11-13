@@ -64,7 +64,7 @@ in
     # resolves to a non-store path, forcing a clean git export.
     activation.snorlaxSrcLink =
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        run ln -sfn ${development}/snorlax "$HOME/.snorlax-src"
+        run ln -sfn ${development}/product/snorlax "$HOME/.snorlax-src"
       '';
 
     # Syncthing shares Main and does not follow symlinks within it. Keep the real
@@ -73,7 +73,7 @@ in
     activation.snorlaxDesignDraftsLink =
       lib.hm.dag.entryAfter [ "linkGeneration" ] ''
         drafts="${home}/Main/design-drafts"
-        link="${development}/snorlax/design-drafts"
+        link="${development}/product/snorlax/design-drafts"
         run mkdir -p "$drafts"
         if [ -e "$link" ] && [ ! -L "$link" ]; then
           echo "Cannot link design drafts: $link already exists" >&2

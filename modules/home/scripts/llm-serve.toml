@@ -65,17 +65,20 @@ ctx_size = 8192
 
 [targets.qwen]
 backend = "llama"
-description = "Qwen3.5 9B Q4_K_M; fast general-purpose default"
-# Source: https://huggingface.co/unsloth/Qwen3.5-9B-GGUF
+description = "Qwen3.8 27B UD-Q4_K_M; general-purpose default"
+# Source: https://huggingface.co/unsloth/Qwen3.8-27B-GGUF
 # Downloaded with:
-#   hf download unsloth/Qwen3.5-9B-GGUF Qwen3.5-9B-Q4_K_M.gguf --local-dir "$LLAMA_MODELS_DIR"
-model = "Qwen3.5-9B-Q4_K_M.gguf"
-served_name = "qwen3.5-9b"
+#   hf download unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf --local-dir "$LLAMA_MODELS_DIR"
+model = "Qwen3.8-27B-UD-Q4_K_M.gguf"
+served_name = "qwen3.8-27b"
+# The 15.3 GiB quant fits on the 24 GiB RTX 4090 when nothing else (TTS/STT)
+# shares the GPU. Only 16 of 64 layers use full attention, so a q8 KV cache at
+# 32k stays around 1 GiB.
 gpu_expectation = "full"
-# The 5.68 GiB quant fits comfortably on the 24 GiB RTX 4090. Start with a
-# useful context that leaves generous room for KV cache and desktop workloads.
 ctx_size = 32768
 flash_attn = "on"
+cache_type_k = "q8_0"
+cache_type_v = "q8_0"
 jinja = true
 
 [targets.voice]
@@ -244,6 +247,7 @@ port = 7860
 
 [targets.tavern]
 backend = "command"
-description = "Legacy llama.cpp launcher for the newest tavern GGUF"
+model_env = "TEXTGEN_MODEL"
+description = "SillyTavern chat plus textgen model/loader configuration UI"
 command = ["tavern-serve"]
 gpu_expectation = "dynamic"

@@ -39,6 +39,84 @@ The main aliases (`llmserve`, `oss-serve`, `w-serve`, `c-serve`,
 `euryale-serve`, `vllmserve`, and `vllmembedserve`) now resolve through this
 registry. The older `llama-serve-*` executables remain as compatibility wrappers.
 
+## Tavern: chat and backend configuration together
+
+Run `tavern-serve` (or `llm-serve tavern`). One session starts SillyTavern on
+`http://127.0.0.1:8000` and textgen's model/loader UI on
+`http://127.0.0.1:7860`, with its OpenAI-compatible API on port 5000.
+The command opens both browser tabs after they are ready.
+
+In textgen's **Model** tab, choose a model, select its loader (for GGUF,
+`llama.cpp`), adjust context, GPU layers, cache and other backend options,
+and click **Load**. Use **Save settings for this model** to retain a loader
+configuration. Chat in SillyTavern; its **API Connections** panel is configured
+for **Chat Completion / Custom OpenAI-compatible** at
+`http://127.0.0.1:5000/v1`. Refresh the model list/connect after loading a model.
+Generation presets and characters remain controlled by SillyTavern.
+
+Models share `~/Games/Models` with the other launchers. Put new model files or
+model subdirectories there and refresh the Model dropdown. Keep all split GGUF
+shards together and select the first shard. The textgen UI also supports model
+downloads. Existing textgen user data is reused; no model copies are made.
+
+```console
+tavern-serve                           # choose a model in the browser
+tavern-serve Serenity-27B-v0.5-Q4_K_M.gguf # optionally load one at startup
+tavern-serve --no-browser              # terminal/server use
+tavern-serve --help
+```
+
+Ctrl+C stops the services this session started, including backend children.
+Compatible running services are reused and left running. An incompatible
+process on one of the ports produces an error instead of being killed.
+Only one managed Tavern session runs at a time. Logs are in
+`${XDG_STATE_HOME:-~/.local/state}/tavern-serve/`.
+
+SillyTavern is packaged by NixOS and runs with the patched Node installation.
+Its global-mode data/configuration live under
+`${XDG_DATA_HOME:-~/.local/share}/SillyTavern/`. Before wiring the connection,
+the launcher backs up existing default-user settings to
+`data/default-user/settings.before-tavern-serve.json`; unrelated settings are
+preserved. If reusing an already-running SillyTavern instance, its live settings
+are left alone and the launcher prints the connection URL.
+
+Textgen installs on first use through `textgen-serve`; subsequent launches reuse
+it. Model/loader settings are writable UI data and do not require a NixOS rebuild.
+The two UIs have separate jobs: SillyTavern handles chat and generation presets;
+textgen handles model loading and backend configuration. This is two browser tabs,
+not a new model-settings panel inside SillyTavern.
+
+The orchestration checks are runnable with
+`python3 modules/home/scripts/tests/test-tavern-serve.py` from the config repo.
+
+### Serenity preset and connection
+
+`Serenity 27B v0.5 - Recommended` is installed in SillyTavern's Chat Completion
+presets and selected for the default user. A reusable copy is versioned under
+`scripts/presets/Serenity 27B v0.5 - Recommended.json` relative to `modules/home/`.
+
+The active connection uses **Chat Completion → Custom OpenAI-compatible**,
+`http://127.0.0.1:5000/v1`, model `Serenity-27B-v0.5-Q4_K_M.gguf`, and automatic
+connection. The local backend requires no API key. The endpoint must have a model
+loaded before chat generation; model selection/loading is separate from the
+connection settings.
+
+The [model card](https://huggingface.co/ReadyArt/Serenity-27B-v0.5/blob/main/README.md)
+recommends temperature **0.8**, top-p **0.95**, and frequency/presence penalties
+**0**. The preset also applies its requested **Strict (user first, alternating
+roles; with tools)** post-processing and sends
+`chat_template_kwargs: {enable_thinking: true, reasoning_effort: medium}`.
+Unused extra sampling filters are neutral: top-k/top-a/min-p 0, repetition
+penalty 1. Context **32768** and maximum response **2048** are local starting
+values, not additional author recommendations. The backend's actual context
+allocation must accommodate the context selected in SillyTavern.
+
+The preset uses the standard SillyTavern prompt structure; no special system
+prompt or character is installed. Existing settings were backed up before the
+connection/preset selection was changed. Refresh an already-open browser tab to
+read the saved selection. Presets remain ordinary writable SillyTavern data;
+rebuilding NixOS does not overwrite subsequent edits.
+
 ## text-generation-webui
 
 The upstream project commonly called text-generation-webui is installed and
