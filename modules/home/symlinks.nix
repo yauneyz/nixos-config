@@ -40,9 +40,9 @@ in
     # Using mkOutOfStoreSymlink to create direct symlinks instead of copying to Nix store
 
     file = lib.optionalAttrs (dataHome != home) dataHomeLinks // {
-      # Thinky app-state.edn is host-shared through the personal org tree.
-      ".config/Thinky/app-state.edn".source =
-        config.lib.file.mkOutOfStoreSymlink "${org}/thinky/app-state.edn";
+      # Thinky app-state.json is host-shared through the personal org tree.
+      ".config/Thinky/app-state.json".source =
+        config.lib.file.mkOutOfStoreSymlink "${org}/thinky/app-state.json";
     };
 
     # Stable, host-agnostic leaf symlink to the snorlax checkout, consumed by the
