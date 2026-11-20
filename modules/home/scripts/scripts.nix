@@ -60,7 +60,7 @@ let
         fi
       ) 9>"$socket.lock"
 
-      for attempt in {1..20}; do
+      for _ in {1..20}; do
         if curl --noproxy '*' --silent --fail --max-time 1 "$url/system_stats" >/dev/null; then
           printf 'ComfyUI on desktop: %s\n' "$url"
           exec xdg-open "$url"
