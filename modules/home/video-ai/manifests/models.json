@@ -27,6 +27,114 @@
     "license": "Apache-2.0"
   },
   {
+    "profile": "hq",
+    "name": "Wan 2.2 I2V A14B high-noise FP8",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+    "destination": "comfy/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+    "size": 14294742832,
+    "sha256": "6122e79d55e0f235698d11d657f3b196c5273c830da00b2b013c5a048d5e6a42",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "hq",
+    "name": "Wan 2.2 I2V A14B low-noise FP8",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+    "destination": "comfy/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
+    "size": 14294742832,
+    "sha256": "5471a457b6ac404202a5fbe6c11595a3d5641fc766b00f38763f72303fffc21e",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "hq",
+    "name": "Wan 2.2 I2V LightX2V 4-step LoRA (high noise)",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
+    "destination": "comfy/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
+    "size": 1226977424,
+    "sha256": "d176c808d6fc461999b68e321efcb7501b20b8c3797523ed0df14f7d1deff11e",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "hq",
+    "name": "Wan 2.2 I2V LightX2V 4-step LoRA (low noise)",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
+    "destination": "comfy/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
+    "size": 1226977424,
+    "sha256": "024f21de095bc8fad9809ded3e9e49a2e170dcf27075da8145ba7d60d8aab7f9",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "hq",
+    "name": "Wan 2.1 VAE (used by Wan 2.2 A14B)",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/vae/wan_2.1_vae.safetensors",
+    "destination": "comfy/vae/wan_2.1_vae.safetensors",
+    "size": 253815318,
+    "sha256": "2fc39d31359a4b0a64f55876d8ff7fa8d780956ae2cb13463b0223e15148976b",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "hq",
+    "name": "Wan UMT5 XXL FP8 text encoder (shared with core)",
+    "url": "https://huggingface.co/Comfy-Org/Wan-2.2/resolve/5df3a4a3ed0628002308022198249dbbbd045d09/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "destination": "comfy/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+    "size": 6735906897,
+    "sha256": "c3355d30191f1f066b26d93fba017ae9809dce6c627dda5f6a66eaa651204f68",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "ltx",
+    "name": "LTX-2.5 22B distilled transformer INT8",
+    "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/49b093a39c19169a8a81721dcc541e07e945232f/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "destination": "comfy/diffusion_models/ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    "size": 21504034224,
+    "sha256": "c4279eeff115cbeaca494bd2183e7d768c38fe85a184dc6afbb7159157c44334",
+    "license": "LTX-2 Community License (gated; free commercial use under US$10M annual revenue)"
+  },
+  {
+    "profile": "ltx",
+    "name": "LTX-2.5 Gemma 4 12B text encoder INT8",
+    "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/49b093a39c19169a8a81721dcc541e07e945232f/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+    "destination": "comfy/text_encoders/gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+    "size": 15372969374,
+    "sha256": "6ce688a0aa98a5fa36a9f1e6c3f42152a498cc2b53ee8c15674c64244f91487f",
+    "license": "LTX-2 Community License (gated; free commercial use under US$10M annual revenue)"
+  },
+  {
+    "profile": "ltx",
+    "name": "LTX-2.5 video VAE",
+    "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/49b093a39c19169a8a81721dcc541e07e945232f/vae/ltx-2.5-video-vae-bf16.safetensors",
+    "destination": "comfy/vae/ltx-2.5-video-vae-bf16.safetensors",
+    "size": 1472223346,
+    "sha256": "847e14ca7f3355debca0cea4eaa24ac0fbcdf0061da054ac89ca638a869ddba3",
+    "license": "LTX-2 Community License (gated; free commercial use under US$10M annual revenue)"
+  },
+  {
+    "profile": "ltx",
+    "name": "LTX-2.5 audio VAE",
+    "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/49b093a39c19169a8a81721dcc541e07e945232f/vae/ltx-2.5-audio-vae-bf16.safetensors",
+    "destination": "comfy/vae/ltx-2.5-audio-vae-bf16.safetensors",
+    "size": 364866540,
+    "sha256": "c52733d37f6a7fb7949c3dc0fb468c6cb2169e4d836983a73babb9f0d54837a5",
+    "license": "LTX-2 Community License (gated; free commercial use under US$10M annual revenue)"
+  },
+  {
+    "profile": "ltx",
+    "name": "LTX-2.5 latent spatial upscaler x2",
+    "url": "https://huggingface.co/Lightricks/LTX-2.5/resolve/49b093a39c19169a8a81721dcc541e07e945232f/latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+    "destination": "comfy/latent_upscale_models/ltx-2.5-latent-spatial-upscaler-x2-bf16-1.0.safetensors",
+    "size": 995778752,
+    "sha256": "eb5a71fe4068ee87ccdb1c3aa635e547ca76bd2d30ae20ae889f2c325c0677e8",
+    "license": "LTX-2 Community License (gated; free commercial use under US$10M annual revenue)"
+  },
+  {
+    "profile": "ltx",
+    "name": "Gemma 4 E2B INT8 (LTX prompt enhancer, optional)",
+    "url": "https://huggingface.co/Comfy-Org/gemma-4/resolve/63d0f7c476756b88910170c1df75e2384ea1af31/text_encoders/gemma4_e2b_it_int8_convrot.safetensors",
+    "destination": "comfy/text_encoders/gemma4_e2b_it_int8_convrot.safetensors",
+    "size": 5199997904,
+    "sha256": "efeca0fcad2f863e5ed0a75e3af952b72bc963604c1dda6d20aee87a32b17566",
+    "license": "Apache-2.0"
+  },
+  {
     "profile": "stills",
     "name": "FLUX.2 Klein 4B distilled FP8 diffusion model",
     "url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4b-fp8/resolve/5b4408e59397a4a37ccb46afe426d8ed86379441/flux-2-klein-4b-fp8.safetensors",
@@ -54,6 +162,24 @@
     "license": "Apache-2.0"
   },
   {
+    "profile": "stills",
+    "name": "Z-Image Turbo 6B BF16 diffusion model",
+    "url": "https://huggingface.co/Comfy-Org/Z-Image-Turbo/resolve/6fc90a3b1b653e935a0d175e260736de25b84df5/split_files/diffusion_models/z_image_turbo_bf16.safetensors",
+    "destination": "comfy/diffusion_models/z_image_turbo_bf16.safetensors",
+    "size": 12309866400,
+    "sha256": "2407613050b809ffdff18a4ac99af83ea6b95443ecebdf80e064a79c825574a6",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "stills",
+    "name": "Z-Image Turbo VAE (FLUX.1 ae)",
+    "url": "https://huggingface.co/Comfy-Org/Z-Image-Turbo/resolve/6fc90a3b1b653e935a0d175e260736de25b84df5/split_files/vae/ae.safetensors",
+    "destination": "comfy/vae/ae.safetensors",
+    "size": 335304388,
+    "sha256": "afc8e28272cd15db3919bacdb6918ce9c1ed22e96cb12c4d5ed0fba823529e38",
+    "license": "Apache-2.0"
+  },
+  {
     "profile": "enhancement",
     "name": "Practical-RIFE 4.25 interpolation model",
     "url": "https://drive.usercontent.google.com/download?id=1ZKjcbmt1hypiFprJPIKW0Tt0lr_2i7bg&export=download&confirm=t",
@@ -61,6 +187,42 @@
     "size": 22919050,
     "sha256": "e63d481b7ae5d4a4e6ad7ac5b410ff78f3bf7be3b51b2e38ca8152747abde5b4",
     "license": "MIT"
+  },
+  {
+    "profile": "enhancement",
+    "name": "RelayVSR x2 LightX2V INT8 video super-resolution",
+    "url": "https://huggingface.co/Comfy-Org/RelayVSR/resolve/202c35eb0a5bb64b7017d5a09ea9acea87b7a081/diffusion_models/relayvsr_x2_lightx2v_int8_convrot.safetensors",
+    "destination": "comfy/diffusion_models/relayvsr_x2_lightx2v_int8_convrot.safetensors",
+    "size": 5163295248,
+    "sha256": "240e75e0c17cf2845d559b25254a230ff7458f81449d7a8c5e7e3fb8275c7b3c",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "enhancement",
+    "name": "RelayVSR x2 flash VAE",
+    "url": "https://huggingface.co/Comfy-Org/RelayVSR/resolve/202c35eb0a5bb64b7017d5a09ea9acea87b7a081/vae/relayvsr_flash_vae_x2_fp32.safetensors",
+    "destination": "comfy/vae/relayvsr_flash_vae_x2_fp32.safetensors",
+    "size": 127759464,
+    "sha256": "b5bb0339acb5b52545911ea29a51b4c5b805776a779222b5a14591571f42e21c",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "enhancement",
+    "name": "RelayVSR x4 INT8 video super-resolution",
+    "url": "https://huggingface.co/Comfy-Org/RelayVSR/resolve/202c35eb0a5bb64b7017d5a09ea9acea87b7a081/diffusion_models/relayvsr_x4_int8_convrot.safetensors",
+    "destination": "comfy/diffusion_models/relayvsr_x4_int8_convrot.safetensors",
+    "size": 5164179952,
+    "sha256": "21303b3c5f9ab4e1fd3fe00df5dd2e0b343f0cf2e3d269e03a9872000a313a2e",
+    "license": "Apache-2.0"
+  },
+  {
+    "profile": "enhancement",
+    "name": "RelayVSR x4 flash VAE",
+    "url": "https://huggingface.co/Comfy-Org/RelayVSR/resolve/202c35eb0a5bb64b7017d5a09ea9acea87b7a081/vae/relayvsr_flash_vae_x4_fp32.safetensors",
+    "destination": "comfy/vae/relayvsr_flash_vae_x4_fp32.safetensors",
+    "size": 127759784,
+    "sha256": "7b8b8c99275fd5c4501b0589cc7b4c4506456a5df83160ef4e207e147b30f714",
+    "license": "Apache-2.0"
   },
   {
     "profile": "ovi",
@@ -96,7 +258,7 @@
     "destination": "ovi/MMAudio/ext_weights/v1-16.pth",
     "size": 686652758,
     "sha256": "15ad082c714ccf3771898a771fc6eebdc1d9c8d5c6154726906a97f43603d62c",
-    "license": "CC-BY-NC-4.0 checkpoint; Ovi dependency only—commercial clearance required"
+    "license": "CC-BY-NC-4.0 checkpoint; Ovi dependency only\u2014commercial clearance required"
   },
   {
     "profile": "ovi",
@@ -106,5 +268,95 @@
     "size": 449217313,
     "sha256": "970ca75ee4d5ce583e9396a4534acb14971ea2b4f1c22e038f476680c868a789",
     "license": "Verify upstream audio checkpoint terms before commercial use"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 text/image-to-video W6A8",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/diffusion_models/minimax_h3_fl2va_pruned_w6a8.safetensors",
+    "destination": "comfy/diffusion_models/minimax_h3_fl2va_pruned_w6a8.safetensors",
+    "size": 15983746636,
+    "sha256": "ac746a2e41628ab25afd44d2b22a7fab8d7e66cd07a01bf89ed9d74b0d3f0c35",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 reference-to-video W6A8",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/diffusion_models/minimax_h3_ref2va_pruned_w6a8.safetensors",
+    "destination": "comfy/diffusion_models/minimax_h3_ref2va_pruned_w6a8.safetensors",
+    "size": 15983746636,
+    "sha256": "ece96bbbce76670ec782de84acc888fd9d9b210bd2ab97c1957b39896734f9f1",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 shared Qwen3-VL 32B NVFP4 text encoder",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "destination": "comfy/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "size": 15687142551,
+    "sha256": "35a88d51044231fe332301d7a62aa81e3f2cba62febeb446e2c1e3e0ef76f2c6",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 audio VAE",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/vae/minimax_h3_audio_vae_fp32.safetensors",
+    "destination": "comfy/vae/minimax_h3_audio_vae_fp32.safetensors",
+    "size": 605254808,
+    "sha256": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 video VAE INT8",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/vae/minimax_h3_video_vae_int8_convrot.safetensors",
+    "destination": "comfy/vae/minimax_h3_video_vae_int8_convrot.safetensors",
+    "size": 2811065184,
+    "sha256": "52a2c8c73583c86e4f41cdcce3a6ad0ea562987bc0bf3d60a0cef5f5c8e60c0e",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 FL2V Turbo 8-step LoRA",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+    "destination": "comfy/loras/minimax_h3_fl2v_turbo_8step_v1.0_comfyui_bf16.safetensors",
+    "size": 1956193000,
+    "sha256": "2339acdf19bfe123f46b971ea35d367a84adb85de43627e1eceafa5a5b2b111e",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 R2V Turbo 4-step LoRA",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/4b53a35191437de05370da548e59aeabe2a5a09a/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+    "destination": "comfy/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+    "size": 1956193000,
+    "sha256": "5b9ab5ade15d0775676d01a907268a69a1468dc6033b3b0d3ded5502f3ebb84c",
+    "license": "MiniMax-H3 Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 Image W4A8",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/89c635085f539d03ad35485ed542c5a286e3c6d6/diffusion_models/minimax_h3_image_pruned_w4a8.safetensors",
+    "destination": "comfy/diffusion_models/minimax_h3_image_pruned_w4a8.safetensors",
+    "size": 12549794530,
+    "sha256": "517cc19b85348386f4df7c806dce80d839d0899e7cdaa3e1dbb09de964381dbb",
+    "license": "MiniMax-H3-Image Community License Agreement"
+  },
+  {
+    "profile": "minimax",
+    "name": "Qwen3.5 9B W4A8 prompt enhancer for the H3 Image templates",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/89c635085f539d03ad35485ed542c5a286e3c6d6/text_encoders/qwen3.5_9b_w4a8_gptq.safetensors",
+    "destination": "comfy/text_encoders/qwen3.5_9b_w4a8_gptq.safetensors",
+    "size": 7343591088,
+    "sha256": "4cc6a1543ad2061806da46f35f90cadb4801dcba246c44782cf42ec0feb6407c",
+    "license": "Apache-2.0 (Qwen3.5)"
+  },
+  {
+    "profile": "minimax",
+    "name": "MiniMax H3 Image VAE",
+    "url": "https://huggingface.co/Comfy-Org/MiniMax-H3-Image/resolve/89c635085f539d03ad35485ed542c5a286e3c6d6/vae/minimax_h3_image_vae_fp16.safetensors",
+    "destination": "comfy/vae/minimax_h3_image_vae_fp16.safetensors",
+    "size": 1168505312,
+    "sha256": "d80e9c2e5cfc9844869961ff5a58c9a9e52182df6bfb30b26018dd7f348721af",
+    "license": "MiniMax-H3-Image Community License Agreement"
   }
 ]

@@ -3,14 +3,14 @@
     "name": "comfyui",
     "profile": "core",
     "url": "https://github.com/Comfy-Org/ComfyUI.git",
-    "revision": "f06a187f50f896e4a0ba5be1ce1f2d2dcd13b77b",
+    "revision": "a277b5bf213e8a44fa34817b7770b54f86ef4cea",
     "license": "GPL-3.0"
   },
   {
     "name": "wan-video-wrapper",
     "profile": "core",
     "url": "https://github.com/kijai/ComfyUI-WanVideoWrapper.git",
-    "revision": "088128b224242e110d3906c6750e9a3a348a659b",
+    "revision": "a7439db30bed0c5b5fa437d77ae8a7bb220dfd00",
     "license": "Apache-2.0"
   },
   {
@@ -35,10 +35,17 @@
     "license": "BSD-2-Clause"
   },
   {
+    "name": "qwen-tts",
+    "profile": "audio",
+    "url": "https://github.com/QwenLM/Qwen3-TTS.git",
+    "revision": "022e286b98fbec7e1e916cb940cdf532cd9f488e",
+    "license": "Apache-2.0"
+  },
+  {
     "name": "wangp",
     "profile": "experiments",
     "url": "https://github.com/deepbeepmeep/Wan2GP.git",
-    "revision": "ed94632a9ec03ee8ede1e7949de5bd62b3adfd04",
+    "revision": "f4cfc1259215577be9a2ee280c41efbedfb4459a",
     "license": "Apache-2.0"
   },
   {

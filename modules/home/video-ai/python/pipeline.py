@@ -72,7 +72,7 @@ NEXT_ACTIONS = {
     "storyboard": "Use 08_workflows/storyboard_prompt.md with your assistant, fill 04_timeline/edit_plan.csv without changing timing fields, then approve storyboard.",
     "assets": "Generate candidates, use `video-ai project select SHOT FILE` for each chosen asset, verify licenses, then approve assets.",
     "package": "Run `video-ai project package`, inspect 09_delivery in Resolve, then approve package.",
-    "master": "Finish taste work in Resolve and export 10_exports/master.mp4; watch it with sound and muted, then approve master.",
+    "master": "Finish taste work in Resolve, export DNxHR, encode 10_exports/master.mp4 with ffmpeg; watch it with sound and muted, then approve master.",
 }
 
 TIMELINE_FIELDS = (

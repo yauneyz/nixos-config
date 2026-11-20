@@ -1,7 +1,8 @@
 # Short-Form Video Workflow — Human Taste, Machine Throughput
 
 This is the production guide. Run `workflow-guide` when making a Short and
-`video-guide` for installation, maintenance, and individual tool details.
+`video-guide` for the full catalogue of installed tools, installation, and
+maintenance.
 
 The pipeline has one governing rule:
 
@@ -50,9 +51,13 @@ video-ai doctor
 
 That profile installs:
 
-- ComfyUI with FLUX.2 Klein 4B and Wan 2.2 TI2V-5B workflows/models;
-- Chatterbox Turbo/Multilingual V3, WhisperX, and ACE-Step environments;
-- Practical-RIFE and the Nix-provided Real-ESRGAN/ffmpeg/Resolve tools.
+- ComfyUI with FLUX.2 Klein 4B, Z-Image Turbo, Wan 2.2 TI2V-5B, and Wan 2.2
+  I2V A14B (FP8 + LightX2V 4-step) workflows/models;
+- Chatterbox Turbo/Multilingual V3, Qwen3-TTS, WhisperX, and ACE-Step
+  environments;
+- Practical-RIFE and RelayVSR video upscaling.
+
+Real-ESRGAN, ffmpeg, mediainfo, and DaVinci Resolve come from Nix directly.
 
 It excludes Ovi's restricted audio dependency and skips WanGP experiments.
 Those remain available as explicit optional profiles.
@@ -249,6 +254,8 @@ Use the installed `flux2-klein-4b-text-to-image.json` workflow for cheap
 candidate compositions and `flux2-klein-4b-image-edit.json` for character,
 object, environment, or style continuity from approved references. The 4B
 distilled model is the four-step Apache-2.0 production default.
+`z-image-turbo-text-to-image.json` is the alternative when you want
+photoreal stills or legible in-image text.
 
 Generate several compositions before animating anything. A still should have a
 single readable idea, strong silhouette, deliberate caption-safe negative
@@ -272,9 +279,10 @@ video-ai project select shot_003 05_stills/candidates/shot_003_take_04.png
 
 ## 8. Generate motion selectively with Wan 2.2
 
-For every `ai_i2v` shot, start from the approved FLUX still and use the
-installed Wan 2.2 TI2V-5B image-to-video workflow. The normal production target
-is portrait 704×1280 at the model's native 24 fps. Request limited, legible
+For every `ai_i2v` shot, start from the approved still. Use the Wan 2.2
+TI2V-5B image-to-video workflow for drafts and `wan22-14b-i2v.json` (A14B,
+with the LightX2V 4-step LoRAs) for finals. The normal production target is
+portrait 704×1280 at 24 fps; RelayVSR x2 can sharpen approved hero clips. Request limited, legible
 movement: a controlled push, one subject action, restrained environmental
 motion. Excess motion is where scenes melt.
 
@@ -297,8 +305,9 @@ stock, music, fonts, screenshots, likenesses, and voice references.
 
 ## 9. Normalize exceptions and build the editor handoff
 
-Inspect odd generated clips with `ffprobe` or `mediainfo`. When Resolve needs a
-predictable delivery file:
+Inspect odd generated clips with `ffprobe` or `mediainfo`. To conform a clip
+to a predictable 1080×1920 H.264/yuv420p file with AAC audio, preserving
+source cadence:
 
 ```sh
 video-ai normalize \
@@ -306,11 +315,12 @@ video-ai normalize \
   06_video/normalized/shot_007.mp4
 ```
 
-This makes 1080×1920 H.264/yuv420p with AAC audio while preserving source
-cadence. For a high-quality editing intermediate instead:
+The installed DaVinci Resolve is the free Linux edition, which cannot decode
+H.264/H.265 or AAC. Make DNxHR/PCM intermediates for anything Resolve will
+import:
 
 ```sh
-video-ai proxy input.mp4 output.dnxhr.mov
+video-ai proxy 06_video/normalized/shot_007.mp4
 ```
 
 Update `asset_path` if the normalized file becomes authoritative, re-approve
@@ -339,7 +349,14 @@ and SHA-256 checksums—not every failed generation.
 8. Watch without stopping for drift, dead stretches, repetitive synthetic
    composition, morphing, hidden text, and cadence problems.
 9. Watch once muted: the visual logic should still read.
-10. Export H.264/AAC to `10_exports/master.mp4` and watch the exported file.
+10. Export DNxHR HQ with PCM audio (`10_exports/master.mov`), encode the
+    upload file, and watch the encoded result:
+
+    ```sh
+    ffmpeg -i 10_exports/master.mov -c:v libx264 -preset slow -crf 16 \
+      -pix_fmt yuv420p -c:a aac -b:a 320k -ar 48000 -movflags +faststart \
+      10_exports/master.mp4
+    ```
 
 ```sh
 video-ai project approve master
@@ -348,7 +365,8 @@ video-ai project status
 
 ## Rights, authenticity, and the feedback loop
 
-The production default is Chatterbox + FLUX.2 Klein 4B + Wan 2.2 because their
+The production default is Chatterbox/Qwen3-TTS + FLUX.2 Klein 4B/Z-Image +
+Wan 2.2 because their
 upstream code/model terms are materially clearer for commercial work than the
 restricted alternatives in this stack. This is workflow design, not legal
 advice; verify every asset and current platform rule for the actual use.

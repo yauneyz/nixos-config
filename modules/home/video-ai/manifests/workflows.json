@@ -19,5 +19,70 @@
     "profile": "stills",
     "name": "flux2-klein-4b-image-edit.json",
     "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/e3d92b9aae04644bc4e419de1676c233c168b9e5/templates/image_flux2_klein_image_edit_4b_distilled.json"
+  },
+  {
+    "profile": "hq",
+    "name": "wan22-14b-i2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_wan2_2_14B_i2v.json"
+  },
+  {
+    "profile": "stills",
+    "name": "z-image-turbo-text-to-image.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/image_z_image_turbo.json"
+  },
+  {
+    "profile": "enhancement",
+    "name": "relayvsr-video-x2-upscale.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/utility_relayvsr_video_x2_upscale.json"
+  },
+  {
+    "profile": "enhancement",
+    "name": "relayvsr-video-x4-upscale.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/utility_relayvsr_video_x4_upscale.json"
+  },
+  {
+    "profile": "ltx",
+    "name": "ltx25-i2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_ltx2_5_i2v.json"
+  },
+  {
+    "profile": "ltx",
+    "name": "ltx25-t2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_ltx2_5_t2v.json"
+  },
+  {
+    "profile": "ltx",
+    "name": "ltx25-flf2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_ltx2_5_flf2v.json"
+  },
+  {
+    "profile": "minimax",
+    "name": "minimax-h3-t2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_minimax_h3_t2v.json",
+    "transform": "minimax-24gb"
+  },
+  {
+    "profile": "minimax",
+    "name": "minimax-h3-i2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_minimax_h3_i2v.json",
+    "transform": "minimax-24gb"
+  },
+  {
+    "profile": "minimax",
+    "name": "minimax-h3-r2v.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/video_minimax_h3_r2v.json",
+    "transform": "minimax-24gb"
+  },
+  {
+    "profile": "minimax",
+    "name": "minimax-h3-image-t2i.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/image_minimax_h3_image_t2i.json",
+    "transform": "minimax-24gb"
+  },
+  {
+    "profile": "minimax",
+    "name": "minimax-h3-image-edit.json",
+    "url": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/85984c2b1ee8c0aa39179bf122a7d01fa1b21c09/templates/image_minimax_h3_image_edit.json",
+    "transform": "minimax-24gb"
   }
 ]

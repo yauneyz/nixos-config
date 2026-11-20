@@ -18,6 +18,7 @@
   programs = {
     dconf.enable = true;
     gpu-screen-recorder.enable = true;
+    seahorse.enable = true; # GUI for gnome-keyring (e.g. blank the keyring password for autologin)
     zsh.enable = true;
     appimage = {
       enable = true;

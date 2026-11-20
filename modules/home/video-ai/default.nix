@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   userPaths,
@@ -16,6 +17,9 @@ let
   work = "${root}/work";
   exports = "${root}/exports";
   tmp = "${root}/tmp";
+  # LTX Desktop keeps its Python env (~10 GB) and model weights under
+  # $XDG_DATA_HOME/LTXDesktop; the root partition is too small for that.
+  ltxDesktopData = "${root}/ltx-desktop";
 
   appsManifest = ./manifests/apps.json;
   modelsManifest = ./manifests/models.json;
@@ -24,7 +28,7 @@ let
   transcriptScript = ./python/transcript.py;
   pipelineScript = ./python/pipeline.py;
   projectTemplates = ./templates;
-  guideDoc = ./GUIDE.md;
+  guideDoc = ./TOOLS.md;
   workflowGuideDoc = ./WORKFLOW.md;
 
   runtimeLibraryPath =
@@ -72,6 +76,7 @@ let
       clip_vision: clip_vision
       controlnet: controlnet
       diffusion_models: diffusion_models
+      latent_upscale_models: latent_upscale_models
       loras: loras
       text_encoders: text_encoders
       upscale_models: upscale_models
@@ -110,6 +115,7 @@ let
       jq
       procps
       python311
+      sox
       util-linux
       unzip
       uv
@@ -176,6 +182,16 @@ let
     '';
   };
 
+  qwenTtsLauncher = mkLauncher {
+    name = "video-ai-qwen-tts";
+    script = ./scripts/video-ai-qwen-tts.sh;
+    runtimeInputs = with pkgs; [
+      coreutils
+      ffmpeg
+      sox
+    ];
+  };
+
   oviLauncher = mkLauncher {
     name = "video-ai-ovi";
     script = ./scripts/video-ai-ovi.sh;
@@ -224,17 +240,23 @@ let
     "VIDEO_AI_TMP=${tmp}"
   ];
 
+  gpuServiceNames = [
+    "comfyui"
+    "wangp"
+    "ace-step"
+    "ovi"
+    "qwen-tts"
+  ];
+
   mkGpuService =
-    {
-      description,
-      execStart,
-      conflicts,
-    }:
+    name:
+    { description, execStart }:
     {
       Unit = {
         Description = description;
         ConditionPathIsMountPoint = gamesRoot;
-        Conflicts = conflicts;
+        # Only one large GPU service at a time: 24 GB is not shared well.
+        Conflicts = map (other: "${other}.service") (lib.remove name gpuServiceNames);
       };
       Service = {
         Type = "simple";
@@ -272,9 +294,11 @@ in
       aceStepLauncher
       captionLauncher
       voiceLauncher
+      qwenTtsLauncher
       oviLauncher
       rifeLauncher
-      # pkgs.davinci-resolve # TODO: re-enable once the pinned installer hash is refreshed
+      pkgs.ltx-desktop
+      pkgs.davinci-resolve
       pkgs.mediainfo
       pkgs.realesrgan-ncnn-vulkan
       pkgs.vulkan-tools
@@ -293,12 +317,14 @@ in
         ${lib.escapeShellArg projects} \
         ${lib.escapeShellArg work} \
         ${lib.escapeShellArg exports} \
-        ${lib.escapeShellArg tmp}
+        ${lib.escapeShellArg tmp} \
+        ${lib.escapeShellArg ltxDesktopData}
       ${pkgs.coreutils}/bin/chmod 700 ${lib.escapeShellArg state} ${lib.escapeShellArg projects}
     '';
   };
 
   xdg = {
+    dataFile."LTXDesktop".source = config.lib.file.mkOutOfStoreSymlink ltxDesktopData;
     configFile = {
       "video-ai/comfy-extra-model-paths.yaml".source = comfyModelPaths;
       "video-ai/apps.json".source = appsManifest;
@@ -307,42 +333,26 @@ in
     };
   };
 
-  systemd.user.services = {
-    comfyui = mkGpuService {
+  systemd.user.services = lib.mapAttrs mkGpuService {
+    comfyui = {
       description = "ComfyUI video generation workstation";
       execStart = "${comfyLauncher}/bin/video-ai-comfy";
-      conflicts = [
-        "wangp.service"
-        "ace-step.service"
-        "ovi.service"
-      ];
     };
-    wangp = mkGpuService {
+    wangp = {
       description = "WanGP model experimentation workstation";
       execStart = "${wangpLauncher}/bin/video-ai-wangp";
-      conflicts = [
-        "comfyui.service"
-        "ace-step.service"
-        "ovi.service"
-      ];
     };
-    ace-step = mkGpuService {
+    ace-step = {
       description = "ACE-Step local music generation API";
       execStart = "${aceStepLauncher}/bin/video-ai-ace-step";
-      conflicts = [
-        "comfyui.service"
-        "wangp.service"
-        "ovi.service"
-      ];
     };
-    ovi = mkGpuService {
+    ovi = {
       description = "Ovi synchronized audio-video workstation";
       execStart = "${oviLauncher}/bin/video-ai-ovi";
-      conflicts = [
-        "comfyui.service"
-        "wangp.service"
-        "ace-step.service"
-      ];
+    };
+    qwen-tts = {
+      description = "Qwen3-TTS voice design and cloning web UI";
+      execStart = "${qwenTtsLauncher}/bin/video-ai-qwen-tts";
     };
   };
 }

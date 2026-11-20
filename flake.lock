@@ -650,11 +650,11 @@
     "snorlax": {
       "flake": false,
       "locked": {
-        "lastModified": 1794032818,
-        "narHash": "sha256-MJ53w8v7su3mZsyQQS3oC9leKyA9bydMjsKlhkLhywM=",
+        "lastModified": 1795164918,
+        "narHash": "sha256-DHc2m5cAQdYXrj5zEoM3d+TjuDb8XIa6TD/pFBC0pMU=",
         "ref": "refs/heads/main",
-        "rev": "48a69e09d4dfc396e259fa6e72b2ce1afcb4ee22",
-        "revCount": 219,
+        "rev": "c83849d07f02719ea852133fa7de19b78029f7a7",
+        "revCount": 227,
         "type": "git",
         "url": "file:///home/zac/.snorlax-src"
       },

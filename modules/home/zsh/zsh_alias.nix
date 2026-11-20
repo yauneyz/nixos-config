@@ -30,6 +30,9 @@ in
 
       lando = "cd ~/development/Lando/lando-video";
 
+      prod = "cd ~/development/products";
+      auto = "cd ~/development/products/auto-content";
+
       gos = "cd ~/development/go/gophercises";
       com = "cd ~/development/go/compass";
       pylon = "cd ~/development/go/pylon";

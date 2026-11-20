@@ -68,6 +68,7 @@ init_layout() {
     "$models_root/comfy/clip_vision" \
     "$models_root/comfy/controlnet" \
     "$models_root/comfy/diffusion_models" \
+    "$models_root/comfy/latent_upscale_models" \
     "$models_root/comfy/loras" \
     "$models_root/comfy/mmaudio" \
     "$models_root/comfy/text_encoders" \
@@ -114,13 +115,13 @@ profile_matches_selector() {
   local item_profile="$1"
   local selector="$2"
   [[ "$selector" == "all" || "$selector" == "$item_profile" ]] && return 0
-  [[ "$selector" == "production" && "$item_profile" =~ ^(core|stills|enhancement)$ ]]
+  [[ "$selector" == "production" && "$item_profile" =~ ^(core|hq|stills|enhancement)$ ]]
 }
 
 sync_apps() {
   local selector="${1:-core}"
-  if [[ "$selector" == stills ]]; then
-    note "stills uses the core ComfyUI application"
+  if [[ "$selector" =~ ^(stills|hq|ltx)$ ]]; then
+    note "$selector uses the core ComfyUI application"
     sync_apps core
     return
   fi
@@ -166,7 +167,7 @@ env_key() {
   case "$name" in
     comfyui)
       wrapper_revision="$(manifest_app_field wan-video-wrapper revision)"
-      printf '%s-%s-cu130-v1\n' "${revision:0:12}" "${wrapper_revision:0:12}"
+      printf '%s-%s-torch211-cu130-v2\n' "${revision:0:12}" "${wrapper_revision:0:12}"
       ;;
     ace-step)
       printf '%s-reloc-v2\n' "${revision:0:12}"
@@ -176,6 +177,9 @@ env_key() {
       ;;
     practical-rife)
       printf '%s-cu130-reloc-v1\n' "${revision:0:12}"
+      ;;
+    qwen-tts)
+      printf '%s-torch211-cu130-v1\n' "${revision:0:12}"
       ;;
     *) printf '%s-v1\n' "${revision:0:12}" ;;
   esac
@@ -197,6 +201,9 @@ prepare_env() {
     return 1
   fi
 
+  if [[ -e "$target" ]]; then
+    die "$target exists but is incomplete or has a missing interpreter; run 'video-ai env repair' or move it aside"
+  fi
   local partial="$target.partial.$$"
   mkdir -p "$envs_root/$name"
   [[ ! -e "$partial" ]] || die "temporary environment path already exists: $partial"
@@ -212,9 +219,64 @@ finish_env() {
   local current="$envs_root/$name/current"
   touch "$partial/.video-ai-complete"
   mv "$partial" "$target"
+  pin_env_interpreter "$target"
   ln -sfn "$target" "$current.next"
   mv -Tf "$current.next" "$current"
   note "$name environment ready: $target"
+}
+
+python_store_path() {
+  local interpreter
+  interpreter="$(realpath "$(command -v "$python_cmd")")"
+  printf '%s\n' "${interpreter%/bin/*}"
+}
+
+# uv venvs symlink bin/python to an absolute /nix/store interpreter. Without a
+# GC root, the next `nix-collect-garbage` after a nixpkgs bump deletes that
+# interpreter and silently breaks the environment. Root it from inside the env
+# so the root lives exactly as long as the environment directory does.
+pin_env_interpreter() {
+  local env_dir="$1"
+  local store
+  store="$(readlink "$env_dir/bin/python")"
+  store="${store%/bin/*}"
+  [[ "$store" == /nix/store/* && -d "$store" ]] || return 0
+  if command -v nix-store >/dev/null 2>&1; then
+    nix-store --add-root "$env_dir/.python-gcroot" --realise "$store" >/dev/null ||
+      note "warning: could not register GC root for $env_dir"
+  fi
+}
+
+# Relink environments whose Nix interpreter was garbage-collected to the
+# current interpreter, provided the Python minor version is unchanged (wheel
+# ABI is per minor version). Rebuild instead when the minor version differs.
+repair_envs() {
+  require_safe_paths
+  local env_dir name link wanted_minor have_minor store repaired=0
+  store="$(python_store_path)"
+  wanted_minor="$("$python_cmd" -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+  for env_dir in "$envs_root"/*/current; do
+    [[ -L "$env_dir" ]] || continue
+    name="$(basename "$(dirname "$env_dir")")"
+    env_dir="$(realpath "$env_dir")"
+    link="$(readlink "$env_dir/bin/python" || true)"
+    if [[ -x "$env_dir/bin/python" ]]; then
+      pin_env_interpreter "$env_dir"
+      printf '%-16s %s\n' "$name" "ok ($link)"
+      continue
+    fi
+    have_minor="$(awk -F' = ' '$1 == "version_info" { split($2, v, "."); print v[1] "." v[2] }' "$env_dir/pyvenv.cfg")"
+    if [[ "$have_minor" != "$wanted_minor" ]]; then
+      printf '%-16s %s\n' "$name" "needs rebuild (built for Python $have_minor, have $wanted_minor)"
+      continue
+    fi
+    ln -sfn "$store/bin/python$wanted_minor" "$env_dir/bin/python"
+    sed -i "s#^home = .*#home = $store/bin#" "$env_dir/pyvenv.cfg"
+    pin_env_interpreter "$env_dir"
+    printf '%-16s %s\n' "$name" "repaired -> $store"
+    repaired=$((repaired + 1))
+  done
+  note "$repaired environment(s) relinked; run video-ai doctor to verify imports"
 }
 
 sync_comfy_env() {
@@ -233,10 +295,14 @@ sync_comfy_env() {
   uv pip install --python "$target_or_partial/bin/python" \
     --index-strategy unsafe-best-match \
     --extra-index-url https://download.pytorch.org/whl/cu130 \
-    'torch==2.10.0+cu130' 'torchvision==0.25.0+cu130' 'torchaudio==2.10.0+cu130'
+    'torch==2.11.0+cu130' 'torchvision==0.26.0+cu130' 'torchaudio==2.11.0+cu130'
+  # Keep the CUDA torch triplet fixed while resolving the unpinned upstream
+  # requirements; torchaudio has no cu130 build past 2.11, and the Wan
+  # wrapper's audio nodes import it.
   uv pip install --python "$target_or_partial/bin/python" \
     --index-strategy unsafe-best-match \
     --extra-index-url https://download.pytorch.org/whl/cu130 \
+    'torch==2.11.0+cu130' 'torchvision==0.26.0+cu130' 'torchaudio==2.11.0+cu130' \
     -r "$comfy/requirements.txt" -r "$wrapper/requirements.txt"
   finish_env comfyui "$key" "$target_or_partial"
 }
@@ -282,6 +348,22 @@ sync_locked_uv_env() {
     --python "$python_cmd" \
     --project "$source"
   finish_env "$name" "$key" "$target_or_partial"
+}
+
+sync_qwen_tts_env() {
+  sync_apps qwen-tts
+  local key target_or_partial source
+  key="$(env_key qwen-tts)"
+  if ! target_or_partial="$(prepare_env qwen-tts "$key")"; then
+    note "qwen-tts environment already present: $target_or_partial"
+    return
+  fi
+  source="$(app_current qwen-tts)"
+  uv pip install --python "$target_or_partial/bin/python" \
+    --index-strategy unsafe-best-match \
+    --extra-index-url https://download.pytorch.org/whl/cu130 \
+    'torch==2.11.0+cu130' 'torchaudio==2.11.0+cu130' "$source"
+  finish_env qwen-tts "$key" "$target_or_partial"
 }
 
 sync_wangp_env() {
@@ -354,13 +436,15 @@ sync_env() {
   export UV_CACHE_DIR="$cache_root/uv"
   export HF_HOME="$cache_root/huggingface"
   case "$selector" in
-    core|stills|comfyui) sync_comfy_env ;;
+    core|hq|ltx|stills|comfyui) sync_comfy_env ;;
     audio)
       sync_chatterbox_env
+      sync_qwen_tts_env
       sync_locked_uv_env ace-step
       sync_locked_uv_env whisperx
       ;;
     chatterbox) sync_chatterbox_env ;;
+    qwen-tts) sync_qwen_tts_env ;;
     ace-step|whisperx) sync_locked_uv_env "$selector" ;;
     wangp) sync_wangp_env ;;
     ovi) sync_ovi_env ;;
@@ -368,6 +452,7 @@ sync_env() {
     production)
       sync_comfy_env
       sync_chatterbox_env
+      sync_qwen_tts_env
       sync_locked_uv_env ace-step
       sync_locked_uv_env whisperx
       sync_rife_env
@@ -375,6 +460,7 @@ sync_env() {
     all)
       sync_comfy_env
       sync_chatterbox_env
+      sync_qwen_tts_env
       sync_locked_uv_env ace-step
       sync_locked_uv_env whisperx
       sync_wangp_env
@@ -426,7 +512,7 @@ sync_models() {
     .[]
     | select(
         ($profile == "all" or .profile == $profile or
-          ($profile == "production" and (.profile == "core" or .profile == "stills" or .profile == "enhancement")))
+          ($profile == "production" and (.profile == "core" or .profile == "hq" or .profile == "stills" or .profile == "enhancement")))
         and (.license | contains("CC-BY-NC"))
       )
     | .name
@@ -467,8 +553,22 @@ sync_models() {
       die "downloading $name would violate the ${reserve_gib} GiB Games-volume reserve"
 
     note "downloading $name to $target"
-    curl --fail --location --retry 5 --retry-delay 2 --continue-at - \
-      --output "$partial" "$url"
+    local -a auth=()
+    local auth_header=""
+    # Gated Hugging Face repos (e.g. Lightricks/LTX-2.5) need a token from an
+    # account that accepted the model license. Read it from HF_TOKEN or the
+    # VideoAI Hugging Face cache; never send it to any other host.
+    if [[ "$url" == https://huggingface.co/* ]]; then
+      local hf_token="${HF_TOKEN:-}"
+      [[ -n "$hf_token" || ! -r "$cache_root/huggingface/token" ]] ||
+        hf_token="$(<"$cache_root/huggingface/token")"
+      if [[ -n "$hf_token" ]]; then
+        auth_header="Authorization: Bearer $hf_token"
+        auth=(--header @-)
+      fi
+    fi
+    printf '%s\n' "$auth_header" | curl --fail --location --retry 5 --retry-delay 2 --continue-at - \
+      "${auth[@]}" --output "$partial" "$url"
     actual="$(sha256sum "$partial" | awk '{print $1}')"
     if [[ "$actual" != "$sha256" ]]; then
       bad="$partial.bad.$(date +%Y%m%d%H%M%S)"
@@ -519,6 +619,31 @@ sync_workflows() {
           )
       ' \
         "$partial" >"$transformed"
+      mv "$transformed" "$partial"
+    elif [[ "$transform" == minimax-24gb ]]; then
+      transformed="$partial.transformed"
+      # The packaged templates use larger diffusion weights and separate Qwen3-VL
+      # encoders. Use the quantized manifests for both loader values and model links.
+      jq --slurpfile manifests "$models_manifest" '
+        {
+          "minimax_h3_fl2va_pruned_int8_convrot.safetensors": "minimax_h3_fl2va_pruned_w6a8.safetensors",
+          "minimax_h3_ref2va_pruned_int8_convrot.safetensors": "minimax_h3_ref2va_pruned_w6a8.safetensors",
+          "minimax_h3_image_pruned_int8_convrot.safetensors": "minimax_h3_image_pruned_w4a8.safetensors",
+          "qwen3vl_32b_minimax_h3_int8_convrot.safetensors": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+        } as $names
+        | ($manifests[0] | map(select(.profile == "minimax")
+            | {key: (.destination | split("/") | last), value: .url}) | from_entries) as $urls
+        | ([.. | objects | select(.name? and .url?)
+            | ($names[.name] // .name) as $filename
+            | select($urls[$filename])
+            | {key: .url, value: $urls[$filename]}] | from_entries) as $links
+        | ($links + $names | to_entries) as $replacements
+        | walk(
+            if type == "string" then
+              reduce $replacements[] as $entry (.; split($entry.key) | join($entry.value))
+            else . end
+          )
+      ' "$partial" >"$transformed"
       mv "$transformed" "$partial"
     elif [[ -n "$transform" ]]; then
       die "unknown workflow transform for $name: $transform"
@@ -781,9 +906,12 @@ doctor() {
     failures=$((failures + 1))
   fi
 
-  for app in comfyui chatterbox ace-step whisperx wangp ovi practical-rife; do
+  for app in comfyui chatterbox qwen-tts ace-step whisperx wangp ovi practical-rife; do
     if [[ -L "$envs_root/$app/current" && -x "$envs_root/$app/current/bin/python" ]]; then
       printf '%-24s %s\n' "$app environment" 'ready'
+    elif [[ -L "$envs_root/$app/current" && -L "$envs_root/$app/current/bin/python" ]]; then
+      printf '%-24s %s\n' "$app environment" 'BROKEN (interpreter garbage-collected; run video-ai env repair)'
+      failures=$((failures + 1))
     else
       printf '%-24s %s\n' "$app environment" 'not synced'
     fi
@@ -803,7 +931,7 @@ doctor() {
     else
       printf '%-24s %s\n' "$(basename "$model_destination")" 'not synced'
     fi
-  done < <(jq -r '.[] | select(.profile == "core" or .profile == "stills") | [.destination, (.size | tostring)] | @tsv' "$models_manifest")
+  done < <(jq -r 'map(select(.profile != "ovi")) | unique_by(.destination) | .[] | [.destination, (.size | tostring)] | @tsv' "$models_manifest")
 
   if [[ -x "$envs_root/comfyui/current/bin/python" ]]; then
     if "$envs_root/comfyui/current/bin/python" -c \
@@ -820,6 +948,15 @@ doctor() {
       printf '%-24s %s\n' 'Chatterbox CUDA/imports' 'ok'
     else
       printf '%-24s %s\n' 'Chatterbox CUDA/imports' 'FAILED'
+      failures=$((failures + 1))
+    fi
+  fi
+  if [[ -x "$envs_root/qwen-tts/current/bin/python" ]]; then
+    if "$envs_root/qwen-tts/current/bin/python" -c \
+      'import torch, qwen_tts; assert torch.cuda.is_available()'; then
+      printf '%-24s %s\n' 'Qwen3-TTS CUDA/imports' 'ok'
+    else
+      printf '%-24s %s\n' 'Qwen3-TTS CUDA/imports' 'FAILED'
       failures=$((failures + 1))
     fi
   fi
@@ -877,7 +1014,7 @@ status_report() {
   du -sh "$models_root" "$video_ai_root" 2>/dev/null || true
   printf '\nServices:\n'
   systemctl --user --no-pager --plain --type=service --state=running \
-    'comfyui.service' 'wangp.service' 'ace-step.service' 'ovi.service' 2>/dev/null || true
+    'comfyui.service' 'wangp.service' 'ace-step.service' 'ovi.service' 'qwen-tts.service' 2>/dev/null || true
 }
 
 usage() {
@@ -891,6 +1028,7 @@ Commands:
   sync production              Sync the complete commercial-first stack
   apps sync [name|profile]     Sync pinned application sources (default: core)
   env sync [name|profile]      Build isolated Python environments (default: core)
+  env repair                   Relink envs whose Nix Python was garbage-collected
   models sync [profile]        Download checksum-pinned models (default: core)
   workflows sync [profile]     Install pinned ComfyUI workflows (default: core)
   new <slug>                   Create a provenance-ready project directory
@@ -907,7 +1045,7 @@ Commands:
   normalize <input> <output>   Make a 1080x1920 H.264 file, preserving cadence
   proxy <input> [output]       Make a Resolve-friendly DNxHR/PCM intermediate
 
-Profiles: production, core, stills, audio, experiments, ovi, enhancement, all
+Profiles: production, core, hq, stills, audio, enhancement, ltx, experiments, ovi, all
 
 Restricted model artifacts are refused unless VIDEO_AI_ALLOW_RESTRICTED=1 is
 set after reviewing their license and intended use.
@@ -930,9 +1068,11 @@ case "$command" in
     sync_apps "${1:-core}"
     ;;
   env)
-    [[ "${1:-}" == sync ]] || die "expected: video-ai env sync [selector]"
-    shift
-    sync_env "${1:-core}"
+    case "${1:-}" in
+      sync) shift; sync_env "${1:-core}" ;;
+      repair) repair_envs ;;
+      *) die "expected: video-ai env sync [selector] | video-ai env repair" ;;
+    esac
     ;;
   models)
     [[ "${1:-}" == sync ]] || die "expected: video-ai models sync [profile]"

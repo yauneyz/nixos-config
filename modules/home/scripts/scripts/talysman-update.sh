@@ -21,9 +21,6 @@ pnpm run release:local
 # This is the same rebuild command used by the `rebuild` shell alias.
 bash "$nixos_config_dir/scripts/rebuild.sh" "$host"
 
-# systemd's Restart=always brings the freshly rebuilt daemon back up.
-sudo pkill talysman || true
-
 echo "Talysman local release, daemon, and Firefox extension updated."
 # Firefox only rescans profile extensions at startup, so the new extension build
 # loads the next time Firefox Developer Edition is restarted.

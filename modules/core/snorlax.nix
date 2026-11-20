@@ -31,6 +31,11 @@ let
 
     mkdir -p "$state_dir"
 
+    # Let the daemon recover current state before considering any legacy files.
+    if [ ! -s "$state_file" ] && [ -s "$state_file.bak" ]; then
+      exit 0
+    fi
+
     # One-time migration from the pre-rename state directory.
     for name in state.json secure-store.json recovery-code.txt; do
       if [ -e "$legacy_state_dir/$name" ] && [ ! -e "$state_dir/$name" ]; then
@@ -42,10 +47,17 @@ let
       install -m 0644 ${escapeShellArg defaultStateFile} "$state_file"
     fi
 
+    # Only the legacy schema reads the top-level policy. Leave engine state and
+    # unreadable state to the daemon, which can recover from state.json.bak.
+    if ! ${pkgs.jq}/bin/jq -e 'type == "object" and .engine == null' "$state_file" >/dev/null 2>&1; then
+      exit 0
+    fi
+
     tmp="$(mktemp "$state_file.tmp.XXXXXX")"
+    trap 'rm -f "$tmp"' EXIT
     ${pkgs.jq}/bin/jq --slurpfile policy "$policy_file" '.policy = $policy[0]' "$state_file" > "$tmp"
-    install -m 0644 "$tmp" "$state_file"
-    rm -f "$tmp"
+    chmod 0644 "$tmp"
+    mv -f "$tmp" "$state_file"
   '';
   exportPolicy = pkgs.writeShellScript "talysman-export-policy" ''
     set -eu
