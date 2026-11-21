@@ -10,6 +10,7 @@
     ./browser.nix                     # firefox based browser
     ./btop.nix                        # resouces monitor
     ./cava.nix                        # audio visualizer
+    ./comfy-agent.nix                 # Claude Code ↔ ComfyUI (comfyui-mcp)
     ./envars.nix                      # misc environment variables
     ./path.nix                        # custom PATH entries
     ./discord.nix                     # discord

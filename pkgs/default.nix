@@ -11,6 +11,7 @@ rec {
   botw-vr = pkgs.callPackage ./bettervr { };
   chatgpt-linux = pkgs.callPackage ./chatgpt-linux { };
   claude-desktop = pkgs.callPackage ./claude-desktop { };
+  comfyui-mcp = pkgs.callPackage ./comfyui-mcp { };
   dreamrunner = pkgs.callPackage ./dreamrunner { releaseHost = host; };
   ltx-desktop = pkgs.callPackage ./ltx-desktop { };
   maple-mono-custom = pkgs.callPackage ./maple-mono { inherit inputs; };
@@ -33,39 +34,6 @@ rec {
   # sample_fmts) that simplescreenrecorder's AVWrapper.cpp reads directly.
   # Same fix as wf-recorder below: pin to ffmpeg_7 until upstream migrates.
   simplescreenrecorder = prev.simplescreenrecorder.override { ffmpeg = prev.ffmpeg_7; };
-
-  # nixpkgs' default nodejs (24.x) is behind the October 21, 2026 security
-  # release (CVE-2026-111497 Brotli OOB write, TLS hostname bypasses, ...).
-  # The 24.22.1 bump is merged in staging but hasn't reached nixos-unstable.
-  # Exposed as a separate attr so only our user packages rebuild, and it falls
-  # back to the plain nixpkgs default once that catches up.
-  # nixpkgs links node against system brotli, so the Brotli fix node vendors
-  # (upstream 0ed4268a, which also adds a constant node_zlib.cc needs) has to
-  # be applied to the brotli we hand it.
-  nodejs-patched =
-    if pkgs.lib.versionOlder prev.nodejs.version "24.22.1" then
-      prev.nodejs_24.override {
-        nodejs-slim = (prev.nodejs-slim_24.override {
-          callPackage = fn: args: prev.callPackage fn (args // {
-            brotli = prev.brotli.overrideAttrs (old: {
-              patches = (old.patches or [ ]) ++ [
-                (pkgs.fetchurl {
-                  url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
-                  hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
-                })
-              ];
-            });
-          });
-        }).overrideAttrs (_old: rec {
-          version = "24.22.1";
-          src = pkgs.fetchurl {
-            url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
-            sha256 = "4f5379796280cdaeb0c2f358fd04b6a16cc4fb7dfa83b5a8c91a9d963b435231";
-          };
-        });
-      }
-    else
-      prev.nodejs;
 
   wf-recorder =
     (prev.wf-recorder.override {

@@ -118,7 +118,7 @@ in
     (writeShellApplication {
       name = "vercel";
       runtimeInputs = [
-        nodejs-patched
+        nodejs
         pnpm
       ];
       text = ''

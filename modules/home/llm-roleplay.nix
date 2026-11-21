@@ -5,7 +5,7 @@ let
     name = "tavern-stack";
     runtimeInputs = [ pkgs.python3 pkgs.xdg-utils ];
     text = ''
-      export TAVERN_NODE=${pkgs.nodejs-patched}/bin/node
+      export TAVERN_NODE=${pkgs.nodejs}/bin/node
       export TAVERN_FRONTEND_ENTRY=${pkgs.sillytavern}/lib/node_modules/sillytavern/src/server-global.js
       export TAVERN_DEFAULT_SETTINGS=${pkgs.sillytavern}/lib/node_modules/sillytavern/default/content/settings.json
       exec python3 ${tavernHelper} "$@"
